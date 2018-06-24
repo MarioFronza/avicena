@@ -1,0 +1,23 @@
+RF01 - O Sistema deve manter pacientes;
+RF02 - O Sistema deve manter médicos
+RF03 - O Sistema deve manter atendentes
+RF04 - O Sistema deve manter enfermeiros 
+RF05 - O Sistema deve agendar consultas 
+RF06 - O Sistema deve gerar histórico do paciente
+RF07 - O Sistema deve gerar consultas diárias 
+RF08 - O Sistema deve manter diagnóstico
+
+RN01 - São dados do paciente nome, cpf, codigo, telefone, endereço, estado 
+civíl;
+RN02 - No cadastro do passiente é feito pelo atendente; 
+RN03 - São dados do médico, nome, cpf, codigo, telefone, endereço, estado 
+civíl, crm e especialização;
+RN04 - São dados do atendente, nome, cpf, codigo, telefone, endereço, estado 
+civíl, carga horária, salário, hora extra, número carteira de trabalho; 
+RN05 - São dados do enfermeiro, nome, cpf, codigo, telefone, endereço, estado 
+civíl, formação, horas cursadas; 
+RN06 - A cadastro da consulta é feito pelo atendente; 
+RN07 - O médico e enfermeiro podem gerar diferentes diagnósticos; 
+RN08 - Somente o médico pode gerar uma receita médica; 
+RN09 - O atendenre gera histórico do paciente;  
+RN10 - Após o diagnóstico o médico gera uma receita médica;
