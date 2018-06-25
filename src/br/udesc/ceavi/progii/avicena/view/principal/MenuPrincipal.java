@@ -147,7 +147,7 @@ public class MenuPrincipal extends JMenuBar{
         
         menuAjuda.setIcon(new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/help.png")));
         menuItemSobre.setIcon(new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/information.png")));
-        menuAjuda.setToolTipText("Não ajuda poha nenhuma, eu ajudo mais que isso!!!");
+        menuAjuda.setToolTipText("Ajuda do sistema");
         menuAjuda.add(menuItemSobre);
         
         super.add(menuAjuda);
