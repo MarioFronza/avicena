@@ -28,5 +28,9 @@ public class Paciente extends Pessoa{
     public Paciente(String nome, String cpf, long codigo, String telefone, Endereco endereco, EstadoCivil estadoCivil) {
         super(nome, cpf, codigo, telefone, endereco, estadoCivil);
     }
+
+    public void setEstadoCivil(String estado) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
    
 }
