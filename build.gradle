@@ -1,0 +1,31 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+application {
+    mainClass = 'br.udesc.ceavi.progii.avicena.main.AvicenaMain'
+}
+
+dependencies {
+    implementation 'org.eclipse.persistence:eclipselink:2.7.13'
+    implementation 'org.postgresql:postgresql:42.7.4'
+    implementation 'com.itextpdf:itextpdf:5.5.9'
+
+    testImplementation platform('org.junit:junit-bom:5.11.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}
