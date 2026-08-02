@@ -18,4 +18,24 @@ public class Patient {
         this.address = address;
         this.maritalStatus = maritalStatus;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
+    }
 }
