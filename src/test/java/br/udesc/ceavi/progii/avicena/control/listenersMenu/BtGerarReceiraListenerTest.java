@@ -5,9 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Endereco;
-import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
 import br.udesc.ceavi.progii.avicena.model.Medico;
-import br.udesc.ceavi.progii.avicena.model.Paciente;
+import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -36,7 +37,8 @@ class BtGerarReceiraListenerTest {
     void rejectsAConsultaWhosePacienteHasNoEndereco() {
         Consulta consulta = new Consulta();
         consulta.setMedico(medico());
-        consulta.setPaciente(new Paciente("Paciente Teste", "11111111111", 0, "480000000", null, EstadoCivil.SOLTEIRO));
+        consulta.setPaciente(
+                new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE));
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
     }
@@ -59,9 +61,9 @@ class BtGerarReceiraListenerTest {
         return medico;
     }
 
-    private Paciente paciente() {
-        Paciente paciente = new Paciente("Paciente Teste", "11111111111", 0, "480000000", null, EstadoCivil.SOLTEIRO);
-        paciente.setEndereco(new Endereco(2, "Casa", "88000001", "Rua Paciente", "Centro", "Florianopolis"));
-        return paciente;
+    private PatientEntity paciente() {
+        AddressEntity address =
+                new AddressEntity(null, 2, "Casa", "88000001", "Rua Paciente", "Centro", "Florianopolis");
+        return new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", address, MaritalStatus.SINGLE);
     }
 }
