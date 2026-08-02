@@ -18,7 +18,7 @@ application {
 }
 
 dependencies {
-    implementation("org.eclipse.persistence:eclipselink:2.7.13")
+    implementation("org.eclipse.persistence:eclipselink:5.0.1")
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("com.itextpdf:itextpdf:5.5.13.6")
 

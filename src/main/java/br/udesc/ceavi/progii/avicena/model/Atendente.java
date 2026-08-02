@@ -5,7 +5,7 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Esta Classe contem os atributos e métodos para todo Atendente

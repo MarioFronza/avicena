@@ -7,10 +7,10 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 
 import br.udesc.ceavi.avicena.control.exceptions.ValorNuloException;
 import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Query;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 
 /**
  * Esta classe define as operações do tipo DAO para os objetos do tipo Enfermeiro.
