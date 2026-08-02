@@ -10,12 +10,12 @@ import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.JPADAO;
 import br.udesc.ceavi.progii.avicena.control.dao.MedicoDAO;
-import br.udesc.ceavi.progii.avicena.control.dao.PacienteDAO;
+import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
 import br.udesc.ceavi.progii.avicena.model.Medico;
-import br.udesc.ceavi.progii.avicena.model.Paciente;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameConsultaNova;
 import java.awt.event.ActionEvent;
@@ -23,6 +23,7 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -153,7 +154,6 @@ public class ListenerCRUDConsulta {
             JPADAO jpadao = new JPADAO();
             DAO daoMedico = new MedicoDAO();
             DAO daoEnfermeiro = new EnfermeiroDAO();
-            DAO daoPaciente = new PacienteDAO();
             enfermeiros = daoEnfermeiro.getList();
             medicos = daoMedico.getList();
             consulta = new Consulta();
@@ -166,7 +166,16 @@ public class ListenerCRUDConsulta {
             System.out.println(tela.getCbEnfermeiro().getSelectedIndex());
             consulta.setMedico(medicos.get(tela.getCbMedico().getSelectedIndex()));
             System.out.println(tela.getCbMedico().getSelectedIndex());
-            List<Paciente> pacientes = daoPaciente.getList();
+            EntityManager entityManager =
+                    PersistenceConfig.createEntityManagerFactory().createEntityManager();
+            List<PatientEntity> pacientes;
+            try {
+                pacientes = entityManager
+                        .createQuery("SELECT p FROM PatientEntity p", PatientEntity.class)
+                        .getResultList();
+            } finally {
+                entityManager.close();
+            }
             for (int i = 0; i < pacientes.size(); i++) {
                 if (pacientes.get(i).getCpf().equals(tela.getTfPaciente().getText())) {
                     consulta.setPaciente(pacientes.get(i));

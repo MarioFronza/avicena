@@ -41,7 +41,7 @@ public class BtGerarReceiraListener implements ActionListener {
         if (consulta.getMedico() == null || consulta.getMedico().getEndereco() == null) {
             throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
         }
-        if (consulta.getPaciente() == null || consulta.getPaciente().getEndereco() == null) {
+        if (consulta.getPaciente() == null || consulta.getPaciente().getAddress() == null) {
             throw new IllegalStateException("Paciente ou endereço do paciente não cadastrado");
         }
 
@@ -54,9 +54,9 @@ public class BtGerarReceiraListener implements ActionListener {
         lines.add("Telefone: (479921-00081)");
         lines.add("CRM " + consulta.getMedico().getCrm());
         lines.add("------------------------------------------------------------------");
-        lines.add("Paciente " + consulta.getPaciente().getNome());
-        lines.add("Rua " + consulta.getPaciente().getEndereco().getRua() + " , "
-                + consulta.getPaciente().getEndereco().getBairro());
+        lines.add("Paciente " + consulta.getPaciente().getName());
+        lines.add("Rua " + consulta.getPaciente().getAddress().getStreet() + " , "
+                + consulta.getPaciente().getAddress().getNeighborhood());
         lines.add("Remédios:");
         lines.add(" ");
         lines.add("________________________");
