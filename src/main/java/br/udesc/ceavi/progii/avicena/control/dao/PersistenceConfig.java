@@ -25,7 +25,10 @@ public final class PersistenceConfig {
     }
 
     private static void putIfPresent(Map<String, String> overrides, String property, String envVar) {
-        String value = System.getenv(envVar);
+        String value = System.getProperty(envVar);
+        if (value == null) {
+            value = System.getenv(envVar);
+        }
         if (value != null) {
             overrides.put(property, value);
         }

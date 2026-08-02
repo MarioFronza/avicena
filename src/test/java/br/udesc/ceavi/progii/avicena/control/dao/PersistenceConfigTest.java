@@ -1,13 +1,23 @@
 package br.udesc.ceavi.progii.avicena.control.dao;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class PersistenceConfigTest {
+
+    private static final String URL_PROPERTY = "AVICENA_DB_URL";
+
+    @AfterEach
+    void clearSystemProperties() {
+        System.clearProperty(URL_PROPERTY);
+    }
 
     @Test
     void connectsToPostgresAndRunsAQuery() {
@@ -21,5 +31,16 @@ class PersistenceConfigTest {
         emf.close();
 
         assertTrue(result instanceof Long);
+    }
+
+    @Test
+    void honorsSystemPropertyOverrideForJdbcUrl() {
+        System.setProperty(URL_PROPERTY, "jdbc:postgresql://localhost:1/doesnotexist");
+
+        assertThrows(PersistenceException.class, () -> {
+            EntityManagerFactory emf = PersistenceConfig.createEntityManagerFactory();
+            EntityManager em = emf.createEntityManager();
+            em.createQuery("SELECT COUNT(p) FROM Paciente p").getSingleResult();
+        });
     }
 }
