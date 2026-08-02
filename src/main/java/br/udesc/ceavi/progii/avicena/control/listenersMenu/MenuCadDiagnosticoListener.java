@@ -44,7 +44,7 @@ public class MenuCadDiagnosticoListener extends MenuActionListener {
             FrameCadastroDiagnostico.getInstance()
                     .getCbConsulta()
                     .addItem(consultas.get(i).getHora() + " - "
-                            + consultas.get(i).getPaciente().getNome());
+                            + consultas.get(i).getPaciente().getName());
         }
 
         if (frame.isVisible()) {
