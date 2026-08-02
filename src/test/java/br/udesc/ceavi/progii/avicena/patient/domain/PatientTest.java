@@ -15,6 +15,20 @@ class PatientTest {
     }
 
     @Test
+    void rejectsBlankCpf() {
+        assertThrows(
+                InvalidPatientDataException.class,
+                () -> new Patient("Maria Teste", "", "48999990000", null, MaritalStatus.SINGLE));
+    }
+
+    @Test
+    void rejectsBlankPhone() {
+        assertThrows(
+                InvalidPatientDataException.class,
+                () -> new Patient("Maria Teste", "12345678900", "", null, MaritalStatus.SINGLE));
+    }
+
+    @Test
     void exposesFieldsAfterValidConstruction() {
         Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
 

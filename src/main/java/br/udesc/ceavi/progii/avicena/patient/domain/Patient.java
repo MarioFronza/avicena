@@ -12,6 +12,12 @@ public class Patient {
         if (name == null || name.isBlank()) {
             throw new InvalidPatientDataException("Patient name must not be blank");
         }
+        if (cpf == null || cpf.isBlank()) {
+            throw new InvalidPatientDataException("Patient cpf must not be blank");
+        }
+        if (phone == null || phone.isBlank()) {
+            throw new InvalidPatientDataException("Patient phone must not be blank");
+        }
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;
