@@ -20,9 +20,9 @@ application {
 dependencies {
     implementation("org.eclipse.persistence:eclipselink:2.7.13")
     implementation("org.postgresql:postgresql:42.7.4")
-    implementation("com.itextpdf:itextpdf:5.5.9")
+    implementation("com.itextpdf:itextpdf:5.5.13.6")
 
-    testImplementation(platform("org.junit:junit-bom:5.11.3"))
+    testImplementation(platform("org.junit:junit-bom:6.1.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
