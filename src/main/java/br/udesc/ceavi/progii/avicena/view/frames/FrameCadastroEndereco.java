@@ -28,7 +28,7 @@ public class FrameCadastroEndereco extends FrameCRUD{
     private static FrameCadastroEndereco instancia;
     
     private static final String titulo = "Cadastro de Endereço";
-    private static final Dimension dimension = new Dimension(300, 200);
+    private static final Dimension dimension = new Dimension(400, 280);
 
     private Endereco endereco;
 
