@@ -7,7 +7,6 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 
 import br.udesc.ceavi.avicena.control.exceptions.ValorIncorretoException;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
-import br.udesc.ceavi.progii.avicena.model.Medico;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,42 +18,41 @@ import javax.persistence.Query;
  * @since 29/05/2018
  * @version 1.0
  */
-public class ConsultaDAO implements DAO<Consulta>{
+public class ConsultaDAO implements DAO<Consulta> {
 
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
     public ConsultaDAO() {
         super();
-        emf = javax.persistence.Persistence.createEntityManagerFactory("AvicenaBD");
+        emf = PersistenceConfig.createEntityManagerFactory();
         em = emf.createEntityManager();
-    
     }
-    
-    
-    
+
     @Override
     public boolean inserir(Consulta obj) throws ValorIncorretoException {
-        
-        if(obj.getPaciente().getCpf().length() < 11)
-            throw new ValorIncorretoException("Valor incorreto cpf");
+
+        if (obj.getPaciente().getCpf().length() < 11) throw new ValorIncorretoException("Valor incorreto cpf");
 
         return true;
     }
 
     @Override
     public boolean atualizar(Consulta obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(Consulta obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Consulta pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -63,5 +61,4 @@ public class ConsultaDAO implements DAO<Consulta>{
         List<Consulta> consultas = query.getResultList();
         return consultas;
     }
-    
 }

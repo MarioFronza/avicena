@@ -18,21 +18,27 @@ import javax.persistence.*;
 @Entity
 @Table(name = "endereco")
 public class Endereco implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "codigo_endereco")
     private long codigo;
+
     @Column(name = "numero")
     private int numero;
-    @Column(name = "complento" )
+
+    @Column(name = "complento")
     private String complemento;
+
     @Column(name = "cep")
     private String cep;
+
     @Column(name = "rua")
     private String rua;
+
     @Column(name = "bairro")
     private String bairro;
+
     @Column(name = "cidade")
     private String cidade;
 
@@ -149,16 +155,7 @@ public class Endereco implements Serializable {
 
     @Override
     public String toString() {
-        return "Endereco{" + "numero=" + numero + ", complemento=" + complemento + ", cep=" + cep + ", rua=" + rua + ", bairro=" + bairro + ", cidade=" + cidade + '}';
+        return "Endereco{" + "numero=" + numero + ", complemento=" + complemento + ", cep=" + cep + ", rua=" + rua
+                + ", bairro=" + bairro + ", cidade=" + cidade + '}';
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 }

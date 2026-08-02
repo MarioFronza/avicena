@@ -15,14 +15,17 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "atendente")
-public class Atendente extends Pessoa{
-    
+public class Atendente extends Pessoa {
+
     @Column(name = "carga_horaria")
     private int cargaHoraria;
+
     @Column(name = "salario")
     private float salario;
+
     @Column(name = "hora_extra")
     private int horaExtra;
+
     @Column(name = "numero_carteira_de_trabalho")
     private int numeroCarteiraDeTrabalho;
 
@@ -109,7 +112,7 @@ public class Atendente extends Pessoa{
 
     @Override
     public String toString() {
-        return "Funcionario{" + "cargaHoraria=" + cargaHoraria + ", salario=" + salario + ", horaExtra=" + horaExtra + ", numeroCarteiraDeTrabalho=" + numeroCarteiraDeTrabalho + '}';
-    }    
-    
+        return "Funcionario{" + "cargaHoraria=" + cargaHoraria + ", salario=" + salario + ", horaExtra=" + horaExtra
+                + ", numeroCarteiraDeTrabalho=" + numeroCarteiraDeTrabalho + '}';
+    }
 }

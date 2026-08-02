@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
 import java.awt.event.ActionEvent;
@@ -17,7 +16,7 @@ import javax.swing.JOptionPane;
  * @since 13/04/2018
  * @version 1.0
  */
-public class MenuSobreListener extends MenuActionListener{
+public class MenuSobreListener extends MenuActionListener {
 
     public MenuSobreListener(FrameSistema tela) {
         super(tela);
@@ -25,10 +24,11 @@ public class MenuSobreListener extends MenuActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        JOptionPane.showMessageDialog(MenuPrincipal.getInstance().getFrame(), "Desenvolvido na disciplina de Programação II - PRO2\n"
-        +"Universidade do Estado de Santa Catarina \n"
-        +"Centro de Educação Superior do Alto Vale do Itajaí");
+
+        JOptionPane.showMessageDialog(
+                MenuPrincipal.getInstance().getFrame(),
+                "Desenvolvido na disciplina de Programação II - PRO2\n"
+                        + "Universidade do Estado de Santa Catarina \n"
+                        + "Centro de Educação Superior do Alto Vale do Itajaí");
     }
-    
 }

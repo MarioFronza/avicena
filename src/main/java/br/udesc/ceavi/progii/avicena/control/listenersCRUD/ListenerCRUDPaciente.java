@@ -27,97 +27,100 @@ import javax.swing.JOptionPane;
  * @version 1.0
  */
 public class ListenerCRUDPaciente {
-    
+
     private static ListenerCRUDPaciente instancia;
-    
+
     private Paciente paciente;
     private final FrameCRUD tela;
-    
-    public void setPaciente(Paciente paciente){
-        this.paciente = paciente; 
+
+    public void setPaciente(Paciente paciente) {
+        this.paciente = paciente;
     }
 
     public ListenerCRUDPaciente(Paciente paciente, FrameCRUD tela) {
         this.paciente = paciente;
         this.paciente = new Paciente();
         this.tela = tela;
-        
+
         addCRUDListeners();
     }
-    
-    public Paciente getPaciente(){
-                return paciente;
-     }
-    
-    public static ListenerCRUDPaciente getInstance(Paciente paciente, FrameCRUD tela){
-        if(instancia == null){
-            instancia = new ListenerCRUDPaciente(paciente, tela);    
+
+    public Paciente getPaciente() {
+        return paciente;
+    }
+
+    public static ListenerCRUDPaciente getInstance(Paciente paciente, FrameCRUD tela) {
+        if (instancia == null) {
+            instancia = new ListenerCRUDPaciente(paciente, tela);
         }
         return instancia;
     }
-    
-    public static ListenerCRUDPaciente getInstance(){
+
+    public static ListenerCRUDPaciente getInstance() {
 
         return instancia;
     }
-    
-    private void addCRUDListeners(){
+
+    private void addCRUDListeners() {
         JButton botao;
-        
-        //Carrega e define o comportamento para o botão Cancelar
+
+        // Carrega e define o comportamento para o botão Cancelar
         botao = tela.getPanelBotoesCRUD().getBtCancelar();
         botao.addActionListener(new btCancelarActionListener());
-        //Carrega e define o comportamento para o botão Novo
+        // Carrega e define o comportamento para o botão Novo
         botao = tela.getPanelBotoesCRUD().getBtNovo();
         botao.addActionListener(new btNovoActionListener());
-        //Carrega e define o comportamento para o botão Excluir
+        // Carrega e define o comportamento para o botão Excluir
         botao = tela.getPanelBotoesCRUD().getBtExcluir();
         botao.addActionListener(new btExcluirActionListener());
-        //Carrega e define o comportamento para o botão Gravar
+        // Carrega e define o comportamento para o botão Gravar
         botao = tela.getPanelBotoesCRUD().getBtGravar();
         botao.addActionListener(new btGravarActionListener());
-        
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Cancelar
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btCancelarActionListener implements ActionListener{
+    private class btCancelarActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja realmente fechar a janela?", 
-                                                                "Confirmar Fechamento", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja realmente fechar a janela?",
+                    "Confirmar Fechamento",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
-                //chama a classe controller  que faz a exclusão do objeto    
+                // chama a classe controller  que faz a exclusão do objeto
                 tela.dispose();
                 tela.limparCampos();
-            }        
+            }
         }
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Excluir
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btExcluirActionListener implements ActionListener{
+    private class btExcluirActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja exluir este Paciente?", 
-                                                                "Confirmar Exclusão", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja exluir este Paciente?",
+                    "Confirmar Exclusão",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
                 JPADAO jpadao = new JPADAO();
-                    try {
+                try {
                     jpadao.deletar(paciente);
                 } catch (Exception ex) {
                     Logger.getLogger(ListenerCRUDPaciente.class.getName()).log(Level.SEVERE, null, ex);
@@ -125,16 +128,15 @@ public class ListenerCRUDPaciente {
                 tela.limparCampos();
             }
         }
-    
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Novo
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btNovoActionListener implements ActionListener{
+    private class btNovoActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -142,7 +144,8 @@ public class ListenerCRUDPaciente {
             DAO dao = new PacienteDAO();
             paciente.setNome(FrameCadastroPaciente.getInstance().getTfNome().getText());
             paciente.setCpf(FrameCadastroPaciente.getInstance().getTfCpf().getText());
-            paciente.setTelefone(FrameCadastroPaciente.getInstance().getTfTelefone().getText());
+            paciente.setTelefone(
+                    FrameCadastroPaciente.getInstance().getTfTelefone().getText());
             int estado = FrameCadastroPaciente.getInstance().getCbEstadoCivil().getSelectedIndex();
             switch (estado) {
                 case 0:
@@ -163,37 +166,36 @@ public class ListenerCRUDPaciente {
             }
             ListenerCRUDEndereco frameCRUD = ListenerCRUDEndereco.getInstance();
             paciente.setEndereco(frameCRUD.getEndereco());
- 
+
             try {
                 dao.inserir(paciente);
                 jpadao.inserir(paciente);
                 JOptionPane.showMessageDialog(tela, "Paciente Gravado");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(tela, ex.getMessage());
-               
             }
-            
+
             tela.limparCampos();
         }
-    
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Gravar
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btGravarActionListener implements ActionListener{
+    private class btGravarActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             DAO dao = new PacienteDAO();
             JPADAO jpadao = new JPADAO();
             paciente = new Paciente();
- 
+
             paciente.setNome(FrameCadastroPaciente.getInstance().getTfNome().getText());
             paciente.setCpf(FrameCadastroPaciente.getInstance().getTfCpf().getText());
-            paciente.setTelefone(FrameCadastroPaciente.getInstance().getTfTelefone().getText());
+            paciente.setTelefone(
+                    FrameCadastroPaciente.getInstance().getTfTelefone().getText());
             int estado = FrameCadastroPaciente.getInstance().getCbEstadoCivil().getSelectedIndex();
             switch (estado) {
                 case 0:
@@ -214,8 +216,8 @@ public class ListenerCRUDPaciente {
             }
             ListenerCRUDEndereco frameCRUD = ListenerCRUDEndereco.getInstance();
             paciente.setEndereco(frameCRUD.getEndereco());
-            //verificar estado
-            //paciente.setEstadoCivil();
+            // verificar estado
+            // paciente.setEstadoCivil();
             try {
                 dao.inserir(paciente);
                 jpadao.inserir(paciente);
@@ -223,15 +225,7 @@ public class ListenerCRUDPaciente {
                 tela.limparCampos();
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(tela, ex.getMessage());
-               
             }
-
-            
         }
-        
-    
     }
-    
-    
-    
 }

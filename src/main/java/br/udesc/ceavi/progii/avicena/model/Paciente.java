@@ -5,9 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 import javax.persistence.*;
 
 /**
@@ -18,9 +15,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "paciente")
-public class Paciente extends Pessoa{
-    
-    
+public class Paciente extends Pessoa {
+
     public Paciente() {
         super();
     }
@@ -30,7 +26,7 @@ public class Paciente extends Pessoa{
     }
 
     public void setEstadoCivil(String estado) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-   
 }

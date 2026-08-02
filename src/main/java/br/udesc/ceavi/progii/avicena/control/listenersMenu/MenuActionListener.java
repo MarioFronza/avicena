@@ -8,7 +8,6 @@ package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameSemCRUD;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -17,8 +16,8 @@ import java.awt.event.ActionListener;
  * @since 13/04/2018
  * @version 1.0
  */
-public abstract class MenuActionListener implements ActionListener{
-    
+public abstract class MenuActionListener implements ActionListener {
+
     protected FrameCRUD frame;
     protected FrameSemCRUD frame2;
 
@@ -26,7 +25,5 @@ public abstract class MenuActionListener implements ActionListener{
 
     public MenuActionListener(FrameSistema tela) {
         this.tela = tela;
-
     }
-
 }

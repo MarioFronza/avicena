@@ -8,7 +8,6 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Query;
 
 /**
  * Esta Interface define as funções básicas de inserçao, consulta, alteração e exclusão de objetos utilizando o padrão JPA
@@ -16,7 +15,7 @@ import javax.persistence.Query;
  * @since 29/05/2018
  * @version 1.0
  */
-public class JPADAO<X> implements DAO{
+public class JPADAO<X> implements DAO {
     private static final EntityManagerFactory emf = PersistenceConfig.createEntityManagerFactory();
 
     @Override
@@ -31,7 +30,7 @@ public class JPADAO<X> implements DAO{
         } catch (Exception e) {
             System.out.println(e.getMessage());
             em.getTransaction().rollback();
-        } finally{
+        } finally {
             em.close();
         }
 
@@ -94,8 +93,7 @@ public class JPADAO<X> implements DAO{
 
     @Override
     public List getList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
-    
 }

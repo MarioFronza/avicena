@@ -19,39 +19,38 @@ public class EnderecoDAO implements DAO<Endereco> {
 
     @Override
     public boolean inserir(Endereco obj) throws ValorNuloException {
-        if(obj.getBairro().isEmpty())
-            throw new ValorNuloException("Bairro em aberto");
-        
-        if(obj.getCep().isEmpty())
-            throw new ValorNuloException("Cep em aberto");
-        
-        if(obj.getCidade().isEmpty())
-            throw new ValorNuloException("Cidade em aberto");
-        
-        if(obj.getComplemento().isEmpty())
-            throw new ValorNuloException("Complemento em aberto");
-        
+        if (obj.getBairro().isEmpty()) throw new ValorNuloException("Bairro em aberto");
+
+        if (obj.getCep().isEmpty()) throw new ValorNuloException("Cep em aberto");
+
+        if (obj.getCidade().isEmpty()) throw new ValorNuloException("Cidade em aberto");
+
+        if (obj.getComplemento().isEmpty()) throw new ValorNuloException("Complemento em aberto");
+
         return true;
     }
 
     @Override
     public boolean atualizar(Endereco obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(Endereco obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Endereco> getList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Endereco pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
 }

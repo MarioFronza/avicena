@@ -14,31 +14,35 @@ import java.util.List;
  * @since 29/05/2018
  * @version 1.0
  */
-public class DiagnosticoPrimarioDAO implements DAO<DiagnosticoPrimario>{
+public class DiagnosticoPrimarioDAO implements DAO<DiagnosticoPrimario> {
 
     @Override
     public boolean inserir(DiagnosticoPrimario obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean atualizar(DiagnosticoPrimario obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(DiagnosticoPrimario obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public DiagnosticoPrimario pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<DiagnosticoPrimario> getList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
 }

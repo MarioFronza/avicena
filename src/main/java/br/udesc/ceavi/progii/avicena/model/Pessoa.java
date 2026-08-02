@@ -18,20 +18,25 @@ import javax.persistence.*;
 @Table(name = "Pessoa")
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Pessoa {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "codigo")
     private long codigo;
-    @Column(name = "nome" , nullable = false)
+
+    @Column(name = "nome", nullable = false)
     private String nome;
-    @Column(name = "cpf" , nullable = false)
+
+    @Column(name = "cpf", nullable = false)
     private String cpf;
-    @Column(name = "telefone" , nullable = false)
+
+    @Column(name = "telefone", nullable = false)
     private String telefone;
+
     @ManyToOne
     @JoinColumn(name = "codigo_endereco")
     private Endereco endereco;
+
     @Column(name = "estado_civil")
     private EstadoCivil estadoCivil;
 
@@ -97,8 +102,6 @@ public abstract class Pessoa {
         this.estadoCivil = estadoCivil;
     }
 
-    
-    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -146,10 +149,7 @@ public abstract class Pessoa {
 
     @Override
     public String toString() {
-        return "Pessoa{" + "nome=" + nome + ", cpf=" + cpf + ", codigo=" + codigo + ", telefone=" + telefone + ", endereco=" + endereco + ", estadoCivil=" + estadoCivil + '}';
+        return "Pessoa{" + "nome=" + nome + ", cpf=" + cpf + ", codigo=" + codigo + ", telefone=" + telefone
+                + ", endereco=" + endereco + ", estadoCivil=" + estadoCivil + '}';
     }
-    
-    
-    
-    
 }

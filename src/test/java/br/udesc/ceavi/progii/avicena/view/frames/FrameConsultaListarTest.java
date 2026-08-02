@@ -15,10 +15,11 @@ class FrameConsultaListarTest {
         Consulta consulta = new Consulta();
         consulta.setData("02/08/2026");
         consulta.setHora("10:00");
-        consulta.setPaciente(new Paciente("Paciente Teste", "11111111111", 0, "48900000000", null, EstadoCivil.SOLTEIRO));
+        consulta.setPaciente(
+                new Paciente("Paciente Teste", "11111111111", 0, "48900000000", null, EstadoCivil.SOLTEIRO));
 
         String[] row = assertDoesNotThrow(() -> FrameConsultaListar.toTableRow(consulta));
 
-        assertArrayEquals(new String[]{"02/08/2026", "10:00", "Paciente Teste", "-", "-"}, row);
+        assertArrayEquals(new String[] {"02/08/2026", "10:00", "Paciente Teste", "-", "-"}, row);
     }
 }

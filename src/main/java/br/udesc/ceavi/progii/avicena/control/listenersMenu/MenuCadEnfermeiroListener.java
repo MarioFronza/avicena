@@ -17,7 +17,7 @@ import java.awt.event.ActionEvent;
  * @since 13/04/2018
  * @version 1.0
  */
-public class MenuCadEnfermeiroListener extends MenuActionListener{
+public class MenuCadEnfermeiroListener extends MenuActionListener {
 
     public MenuCadEnfermeiroListener(FrameSistema tela) {
         super(tela);
@@ -26,18 +26,15 @@ public class MenuCadEnfermeiroListener extends MenuActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         frame = FrameCadastroEnfermeiro.getInstance();
-        
+
         Enfermeiro enfermeiro = new Enfermeiro();
-        
+
         ListenerCRUDEnfermeiro listenerEnfermeiro = ListenerCRUDEnfermeiro.getInstance(enfermeiro, frame);
-     
-        if(frame.isVisible()){
-        }else{
+
+        if (frame.isVisible()) {
+        } else {
             tela.adicionarFrameInterno(frame);
             frame.setVisible(true);
         }
-        
-        
     }
-    
 }

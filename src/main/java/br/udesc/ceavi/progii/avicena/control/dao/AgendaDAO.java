@@ -15,7 +15,7 @@ import java.util.List;
  * @since 29/05/2018
  * @version 1.0
  */
-public class AgendaDAO implements DAO<Consulta>{
+public class AgendaDAO implements DAO<Consulta> {
 
     @Override
     public boolean inserir(Consulta obj) throws ValorNuloException {
@@ -24,22 +24,25 @@ public class AgendaDAO implements DAO<Consulta>{
 
     @Override
     public boolean atualizar(Consulta obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(Consulta obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Consulta pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Consulta> getList() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
 }

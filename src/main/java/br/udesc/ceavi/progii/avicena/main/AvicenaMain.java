@@ -19,11 +19,8 @@ public class AvicenaMain {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+
         FrameSistema frameSistema = new FrameSistema();
         frameSistema.setVisible(true);
-        
-
     }
-    
 }

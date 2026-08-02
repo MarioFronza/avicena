@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.view.frames;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -25,56 +24,96 @@ import javax.swing.JTextField;
  * @since 13/04/2018
  * @version 1.0
  */
-public class FrameHistoricoPaciente extends FrameSemCRUD{
-    
+public class FrameHistoricoPaciente extends FrameSemCRUD {
+
     private static FrameHistoricoPaciente instancia;
-    
+
     private static final String titulo = "Lista de Consultas";
     private static final Dimension dimension = new Dimension(720, 480);
-    
+
     private JLabel lbCpf;
     private JButton btCpf;
-    private JTextField tfCpf; 
+    private JTextField tfCpf;
     private JPanel panelFormulario;
     private JPanel panel;
     private JTable tabela;
-    private JScrollPane barraRolagem;   
+    private JScrollPane barraRolagem;
     private GridBagConstraints cons;
     private LayoutManager layout;
 
-
     public FrameHistoricoPaciente(String titulo, Dimension dimension) throws HeadlessException {
         super(titulo, dimension);
-        
+
         initializeComponents();
         addComponents();
     }
 
     @Override
-    public void limparCampos() {
-
-    }
+    public void limparCampos() {}
 
     @Override
-    public void carregarCampos() {
+    public void carregarCampos() {}
 
-    }
-    
     String[] colHeads = {"Data", "Sintomas"};
-    Object[][] data = {{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},
-    {"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},
-    {"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},
-    {"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},{"19/04","dor nas articulações"},};
-    public static FrameHistoricoPaciente getInstance(){
-        if(instancia == null)
-            instancia = new FrameHistoricoPaciente(titulo, dimension);
-       
+    Object[][] data = {
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+        {"19/04", "dor nas articulações"},
+    };
+
+    public static FrameHistoricoPaciente getInstance() {
+        if (instancia == null) instancia = new FrameHistoricoPaciente(titulo, dimension);
+
         return instancia;
     }
 
     private void initializeComponents() {
-       panelFormulario = new JPanel();
-       panelFormulario.setLayout(new GridLayout(1,1));
+        panelFormulario = new JPanel();
+        panelFormulario.setLayout(new GridLayout(1, 1));
         tabela = new JTable(data, colHeads);
         barraRolagem = new JScrollPane(tabela);
         lbCpf = new JLabel("Cpf: ");
@@ -91,7 +130,7 @@ public class FrameHistoricoPaciente extends FrameSemCRUD{
         cons.gridy = 0;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panel.add(lbCpf, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 0;
@@ -99,18 +138,15 @@ public class FrameHistoricoPaciente extends FrameSemCRUD{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 200;
         panel.add(tfCpf, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 3;
         cons.gridy = 0;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panel.add(btCpf, cons);
-        
 
-        
-        panelFormulario.add(barraRolagem); 
-        super.addFormulario2("Center",panelFormulario);
-        super.addFormulario2("North",panel);
+        panelFormulario.add(barraRolagem);
+        super.addFormulario2("Center", panelFormulario);
+        super.addFormulario2("North", panel);
     }
-    
 }

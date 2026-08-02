@@ -12,32 +12,31 @@ import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- * Esta classe define o painel para as funcionalidades CRUD 
+ * Esta classe define o painel para as funcionalidades CRUD
  * @author Adroan, Mário, Vini, Raphael
  * @since 13/04/2018
  * @version 1.0
  */
-public class CRUDActionPanel extends JPanel implements ActionListener{
-    
+public class CRUDActionPanel extends JPanel implements ActionListener {
+
     private JButton btCancelar;
     private JButton btNovo;
     private JButton btGravar;
     private JButton btExcluir;
-    
+
     private LayoutManager layout;
 
     private Dimension dimensaoBotao;
     private Dimension dimensaoPainel;
-    
+
     private Container parent;
-    
+
     public CRUDActionPanel(Container parent) {
         this.parent = parent;
-        
+
         initComponents();
         addComponents();
 
@@ -46,9 +45,9 @@ public class CRUDActionPanel extends JPanel implements ActionListener{
     }
 
     private void initComponents() {
-        dimensaoBotao = new Dimension(100,20);
+        dimensaoBotao = new Dimension(100, 20);
         dimensaoPainel = new Dimension(parent.getWidth(), 30);
-        
+
         layout = new FlowLayout(FlowLayout.CENTER);
 
         btCancelar = new JButton("Cancelar");
@@ -62,7 +61,7 @@ public class CRUDActionPanel extends JPanel implements ActionListener{
 
         btExcluir = new JButton("Excluir");
         btExcluir.setSize(dimensaoBotao);
-        
+
         btNovo.addActionListener(this);
         btCancelar.addActionListener(this);
         btGravar.addActionListener(this);
@@ -76,7 +75,7 @@ public class CRUDActionPanel extends JPanel implements ActionListener{
         this.add(btExcluir);
         this.add(btGravar);
     }
-    
+
     public JButton getBtCancelar() {
         return btCancelar;
     }
@@ -95,17 +94,14 @@ public class CRUDActionPanel extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-      
-        /*if(e.getSource() == btCancelar){
-           int aux = JOptionPane.showConfirmDialog(null,"Deseja realmente sair?","Fechar Janela",JOptionPane.YES_NO_OPTION);
-           if(aux == 0){
-                parent.setVisible(false);
-           }
-          
-       }
-*/
-    }
 
-    
-    
+        /*if(e.getSource() == btCancelar){
+                   int aux = JOptionPane.showConfirmDialog(null,"Deseja realmente sair?","Fechar Janela",JOptionPane.YES_NO_OPTION);
+                   if(aux == 0){
+                        parent.setVisible(false);
+                   }
+
+               }
+        */
+    }
 }

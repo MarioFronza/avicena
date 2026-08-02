@@ -16,15 +16,12 @@ import java.awt.HeadlessException;
 import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 
 /**
  * Frame de tela de cadastro de Enfermeiro
@@ -32,13 +29,13 @@ import javax.swing.text.MaskFormatter;
  * @since 13/04/2018
  * @version 1.0
  */
-public class FrameCadastroEnfermeiro extends FrameCRUD{
-    
+public class FrameCadastroEnfermeiro extends FrameCRUD {
+
     private static FrameCadastroEnfermeiro instancia;
-    
+
     private static final String titulo = "Cadastro de Enfermeiro";
     private static final Dimension dimension = new Dimension(370, 270);
-    
+
     private JLabel lbNome;
     private JLabel lbCpf;
     private JLabel lbCodigo;
@@ -56,40 +53,35 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
     private JTextField tfHrCursadas;
     private JButton btEndereco;
     private JComboBox cbEstadoCivil;
-    
+
     private JPanel panelFormulario;
     private LayoutManager layout;
     private GridBagConstraints cons;
-    
+
     private FrameSistema frame = MenuPrincipal.getInstance().getFrame();
 
     public FrameCadastroEnfermeiro(String titulo, Dimension dimension) throws HeadlessException {
         super(titulo, dimension);
-        
+
         initializeComponents();
         addComponents();
         adicionarListener();
     }
 
     @Override
-    public void limparCampos() {
-
-    }
+    public void limparCampos() {}
 
     @Override
-    public void carregarCampos() {
+    public void carregarCampos() {}
 
-    }
-    
-    public static FrameCadastroEnfermeiro getInstance(){
-        if(instancia == null)
-            instancia = new FrameCadastroEnfermeiro(titulo, dimension);
-       
+    public static FrameCadastroEnfermeiro getInstance() {
+        if (instancia == null) instancia = new FrameCadastroEnfermeiro(titulo, dimension);
+
         return instancia;
     }
 
     private void initializeComponents() {
-        
+
         lbNome = new JLabel("Nome:");
         lbCpf = new JLabel("CPF:");
         lbCodigo = new JLabel("Código:");
@@ -106,23 +98,20 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         tfFormacao = new JTextField();
         tfHrCursadas = new JTextField();
         btEndereco = new JButton("Adicionar");
-        btEndereco.setSize(100,20);
+        btEndereco.setSize(100, 20);
         cbEstadoCivil = new JComboBox(EstadoCivil.values());
         cbEstadoCivil.setSelectedIndex(-1);
-        
-      
-        
+
         layout = new GridBagLayout();
         panelFormulario = new JPanel(layout);
 
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Dados do Enfermeiro"));
-
     }
 
     private void addComponents() {
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 1;
@@ -131,7 +120,7 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbNome, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 1;
@@ -139,9 +128,9 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 200;
         panelFormulario.add(tfNome, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 2;
@@ -150,18 +139,18 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbCpf, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 2;
         cons.gridwidth = 1;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 105;
-        cons.insets = new Insets(0,0,0,10);
+        cons.insets = new Insets(0, 0, 0, 10);
         panelFormulario.add(tfCpf, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         btPesquisar.setEnabled(false);
         cons.gridx = 2;
@@ -170,9 +159,9 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         panelFormulario.add(btPesquisar, cons);
-       
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 3;
@@ -181,7 +170,7 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbTelefone, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 3;
@@ -189,9 +178,9 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
         panelFormulario.add(tfTelefone, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 4;
@@ -200,7 +189,7 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbFormacao, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 4;
@@ -208,9 +197,9 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
         panelFormulario.add(tfFormacao, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 5;
@@ -219,16 +208,16 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbHrCursadas, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 5;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(tfHrCursadas, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 6;
@@ -237,16 +226,16 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 20;
         panelFormulario.add(lbEstadoCivil, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 6;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(cbEstadoCivil, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 7;
@@ -255,16 +244,15 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbEndereco, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 7;
         cons.gridwidth = 1;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(btEndereco, cons);
-        
-        super.addFormulario(panelFormulario);
 
+        super.addFormulario(panelFormulario);
     }
 
     private void adicionarListener() {
@@ -299,10 +287,4 @@ public class FrameCadastroEnfermeiro extends FrameCRUD{
     public JComboBox getCbEstadoCivil() {
         return cbEstadoCivil;
     }
-    
-    
-    
-    
-    
-    
 }

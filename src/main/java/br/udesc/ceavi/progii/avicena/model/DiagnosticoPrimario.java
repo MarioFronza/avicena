@@ -21,24 +21,30 @@ public class DiagnosticoPrimario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "codigo")
     private long codigo;
+
     @Column(name = "pressao")
     private float pressao;
+
     @Column(name = "temperatura")
     private int temperatura;
+
     @Column(name = "altura")
     private int altura;
+
     @Column(name = "peso")
     private int peso;
+
     @Column(name = "historico_remedio")
     private String Descricao;
+
     @ManyToOne
     @JoinColumn(name = "id_consulta")
     private Consulta consulta;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_diagnostico_final")
     private DiagnosticoFinal diagnosticoFinal;
-    
-    
+
     public DiagnosticoPrimario() {
         super();
     }
@@ -120,10 +126,6 @@ public class DiagnosticoPrimario {
         this.diagnosticoFinal = diagnosticoFinal;
     }
 
-
-    
-    
-
     @Override
     public int hashCode() {
         int hash = 7;
@@ -167,7 +169,7 @@ public class DiagnosticoPrimario {
 
     @Override
     public String toString() {
-        return "DiagnosticoPrimario{" + "pressao=" + pressao + ", temperatura=" + temperatura + ", altura=" + altura + ", peso=" + peso + ", historicoRemedio=" + Descricao + '}';
+        return "DiagnosticoPrimario{" + "pressao=" + pressao + ", temperatura=" + temperatura + ", altura=" + altura
+                + ", peso=" + peso + ", historicoRemedio=" + Descricao + '}';
     }
-    
 }

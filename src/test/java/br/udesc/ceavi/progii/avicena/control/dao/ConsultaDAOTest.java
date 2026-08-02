@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.model.Consulta;
+import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
 import br.udesc.ceavi.progii.avicena.model.Paciente;
-import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,8 @@ class ConsultaDAOTest {
 
     @Test
     void gravarPersistsAConsultaThatIsRetrievableAfterward() throws Exception {
-        Paciente paciente = new Paciente("Paciente Consulta", "65465465600", 0, "48944445555", null, EstadoCivil.SOLTEIRO);
+        Paciente paciente =
+                new Paciente("Paciente Consulta", "65465465600", 0, "48944445555", null, EstadoCivil.SOLTEIRO);
         new JPADAO<Paciente>().inserir(paciente);
 
         Consulta consulta = new Consulta();

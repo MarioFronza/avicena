@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
 
@@ -22,15 +21,18 @@ public class DiagnosticoFinal {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "codigo")
     private long codigo;
+
     @Column(name = "doenca")
     private String doenca;
+
     @Column(name = "remedios")
     private String remedios;
+
     @Column(name = "descricao")
     private String descricao;
+
     @Column(name = "exame")
     private String exames;
-    
 
     public DiagnosticoFinal() {
         super();
@@ -118,9 +120,7 @@ public class DiagnosticoFinal {
 
     @Override
     public String toString() {
-        return "DiagnosticoFinal{" + "doenca=" + doenca + ", remedios=" + remedios + ", descricao=" + descricao + ", exames=" + exames + '}';
+        return "DiagnosticoFinal{" + "doenca=" + doenca + ", remedios=" + remedios + ", descricao=" + descricao
+                + ", exames=" + exames + '}';
     }
-    
-
-   
 }

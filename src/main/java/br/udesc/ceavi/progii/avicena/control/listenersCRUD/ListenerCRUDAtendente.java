@@ -27,79 +27,82 @@ import javax.swing.JOptionPane;
  * @version 1.0
  */
 public class ListenerCRUDAtendente {
-    
+
     private static ListenerCRUDAtendente instancia;
-    
+
     private Atendente atendente;
     private final FrameCRUD tela;
 
     public ListenerCRUDAtendente(Atendente atendente, FrameCRUD tela) {
         this.atendente = atendente;
         this.tela = tela;
-        
+
         addCRUDListeners();
     }
-    
-    public static ListenerCRUDAtendente getInstance(Atendente atendente, FrameCRUD tela){
-        if(instancia == null){
-            instancia = new ListenerCRUDAtendente(atendente, tela);    
+
+    public static ListenerCRUDAtendente getInstance(Atendente atendente, FrameCRUD tela) {
+        if (instancia == null) {
+            instancia = new ListenerCRUDAtendente(atendente, tela);
         }
         return instancia;
     }
-    
-    private void addCRUDListeners(){
+
+    private void addCRUDListeners() {
         JButton botao;
-        
-        //Carrega e define o comportamento para o botão Cancelar
+
+        // Carrega e define o comportamento para o botão Cancelar
         botao = tela.getPanelBotoesCRUD().getBtCancelar();
         botao.addActionListener(new btCancelarActionListener());
-        //Carrega e define o comportamento para o botão Novo
+        // Carrega e define o comportamento para o botão Novo
         botao = tela.getPanelBotoesCRUD().getBtNovo();
         botao.addActionListener(new btNovoActionListener());
-        //Carrega e define o comportamento para o botão Excluir
+        // Carrega e define o comportamento para o botão Excluir
         botao = tela.getPanelBotoesCRUD().getBtExcluir();
         botao.addActionListener(new btExcluirActionListener());
-        //Carrega e define o comportamento para o botão Gravar
+        // Carrega e define o comportamento para o botão Gravar
         botao = tela.getPanelBotoesCRUD().getBtGravar();
         botao.addActionListener(new btGravarActionListener());
-        
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Cancelar
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btCancelarActionListener implements ActionListener{
+    private class btCancelarActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja realmente fechar a janela?", 
-                                                                "Confirmar Fechamento", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja realmente fechar a janela?",
+                    "Confirmar Fechamento",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
-                //chama a classe controller  que faz a exclusão do objeto    
+                // chama a classe controller  que faz a exclusão do objeto
                 tela.dispose();
-            }        
+            }
         }
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Excluir
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btExcluirActionListener implements ActionListener{
+    private class btExcluirActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja exluir este Paciente?", 
-                                                                "Confirmar Exclusão", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja exluir este Paciente?",
+                    "Confirmar Exclusão",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
                 JPADAO jpadao = new JPADAO();
                 try {
@@ -110,7 +113,6 @@ public class ListenerCRUDAtendente {
                 tela.limparCampos();
             }
         }
-
     }
 
     /**
@@ -119,34 +121,34 @@ public class ListenerCRUDAtendente {
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btNovoActionListener implements ActionListener{
+    private class btNovoActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(tela, "Novo Atendente");
         }
-
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Gravar
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btGravarActionListener implements ActionListener{
+    private class btGravarActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             DAO dao = new AtendenteDAO();
             JPADAO jpadao = new JPADAO();
-            
+
             atendente = new Atendente();
             FrameCadastroAtendente telaFrame = FrameCadastroAtendente.getInstance();
             atendente.setNome(telaFrame.getTfNome().getText());
             atendente.setTelefone(telaFrame.getTfTelefone().getText());
             atendente.setCpf(telaFrame.getTfCpf().getText());
             atendente.setHoraExtra(Integer.parseInt(telaFrame.getTfHoraExtra().getText()));
-            atendente.setNumeroCarteiraDeTrabalho(Integer.parseInt(telaFrame.getTfNumCartTrabalho().getText()));
+            atendente.setNumeroCarteiraDeTrabalho(
+                    Integer.parseInt(telaFrame.getTfNumCartTrabalho().getText()));
             atendente.setSalario(Float.parseFloat(telaFrame.getTfSalario().getText()));
             int estado = FrameCadastroAtendente.getInstance().getCbEstadoCivil().getSelectedIndex();
             switch (estado) {
@@ -177,7 +179,5 @@ public class ListenerCRUDAtendente {
                 JOptionPane.showMessageDialog(tela, ex.getMessage());
             }
         }
-    
     }
-    
 }
