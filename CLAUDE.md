@@ -15,43 +15,33 @@ delivery — see "Known issues / refactor targets" below for where the interesti
 
 ## Build & run
 
-This is a NetBeans `j2seproject` (`nbproject/project.xml`), driven by Ant
-(`build.xml` imports the NetBeans-generated `nbproject/build-impl.xml`). Standard
-targets: `ant` (build), `ant run`, `ant clean`, `ant jar`, `ant test`.
+Gradle (Kotlin DSL: `build.gradle.kts`, `settings.gradle.kts`), Java 17 via a Gradle
+toolchain (auto-provisioned through the `foojay-resolver-convention` plugin — no local
+JDK 17 install required). Standard tasks: `./gradlew build`, `./gradlew run`,
+`./gradlew test`, `./gradlew clean`.
 
-**The build does not currently work headless/CLI on a fresh machine:**
-- `javac.classpath` in `nbproject/project.properties` references
-  `${libs.eclipselink.classpath}` and `${libs.eclipselinkmodelgen.classpath}` —
-  NetBeans *global* library definitions, not bundled in the repo. Without the NetBeans
-  IDE (or a hand-built `~/.netbeans/<ver>/build.properties` defining those libraries),
-  EclipseLink won't be on the classpath.
-- `nbproject/private/private.properties` has **unresolved git merge-conflict markers**
-  committed to source (multiple `<<<<<<< HEAD` / `=======` / `>>>>>>>` blocks), left
-  over from past merges of each contributor's machine-local paths
-  (`file.reference.postgresql-42.2.2.jar`, `user.properties.file`, etc.). This file is
-  NetBeans-private/per-machine and normally gitignored — it shouldn't have been
-  committed in the first place.
-- `javac.source`/`javac.target` are `1.8`; the local JDK is 26. Expect
-  `release version 8 not supported` or similar until this is bumped or an 8-compatible
-  toolchain is configured.
-- Two copies of the PostgreSQL driver and the iText PDF jar are vendored at the repo
-  root (`postgresql-42.2.2.jar`, `itextpdf-5.5.9.jar`) and referenced by
-  `file.reference.*` properties that also point at contributors' old local paths
-  (`C:\Users\...`) — the repo-root copies are the ones that actually resolve.
-- Runtime DB config is in `src/META-INF/persistence.xml`
-  (`jdbc:postgresql://localhost:5432/AvicenaBD`, user `postgres`, **password
-  hardcoded in source**). `schema-generation.database.action=create` — EclipseLink
-  creates/updates the schema from the `@Entity` classes on `EntityManagerFactory`
-  creation, there's no separate migration step.
-- No `test/` sources exist despite `test.src.dir=test` being configured — `ant test`
-  has nothing to run.
-- Entry point: `br.udesc.ceavi.progii.avicena.main.AvicenaMain` (declared as
-  `main.class` in `nbproject/project.properties`), just opens `FrameSistema`.
+Runtime Postgres is a Docker Compose service (`docker-compose.yml`,
+`postgres:16-alpine`). `docker compose up -d` before `./gradlew run`. Connection
+details in `src/main/resources/META-INF/persistence.xml` default to
+`jdbc:postgresql://localhost:5432/AvicenaBD` / `postgres` / a hardcoded password
+matching `docker-compose.yml`; override via `AVICENA_DB_URL` / `AVICENA_DB_USER` /
+`AVICENA_DB_PASSWORD` env vars or matching Java system properties (system properties
+win — see `PersistenceConfig`). `schema-generation.database.action=create` — EclipseLink
+creates/updates the schema from `@Entity` classes on `EntityManagerFactory` creation,
+no separate migration step.
 
-If you need a working build, the realistic paths are: (a) open in NetBeans so its
-library manager resolves `libs.eclipselink.classpath`, or (b) migrate the classpath to
-Maven/Gradle with explicit EclipseLink/PostgreSQL/iText coordinates — likely one of the
-first refactors worth doing.
+Tests are real integration tests against Postgres, no mocks. A JUnit 5 extension
+(`PostgresContainerExtension`, auto-registered for every test class via the service
+loader) starts its own Testcontainers Postgres and points `AVICENA_DB_URL`/`USER`/
+`PASSWORD` at it before any test runs, so `./gradlew test` works with no docker-compose
+running at all — the docker-compose Postgres is for `./gradlew run`, not for tests.
+
+CI (`.github/workflows/ci.yml`, GitHub Actions) runs `./gradlew build` — Spotless
+formatting check (`palantir-java-format`, run `./gradlew spotlessApply` to fix
+locally) plus the full test suite — on every push and PR to `master`. Branch
+protection requires it to pass before merging.
+
+Entry point: `br.udesc.ceavi.progii.avicena.main.AvicenaMain`, opens `FrameSistema`.
 
 ## Architecture
 
@@ -76,10 +66,12 @@ instead — a naming inconsistency from early development, not a deliberate spli
     `pesquisarPorId` throw `UnsupportedOperationException`. Whether a given entity
     actually gets saved depends on which of the two DAOs its `ListenerCRUD*` calls for
     that operation — check both before assuming persistence works.
-  - Both `JPADAO` and the per-entity DAOs hold their own **static**
-    `EntityManager`/`EntityManagerFactory`, created fresh in the constructor and
-    `.close()`d in a `finally` after the *first* call — reused static state plus
-    closed-on-first-use is a latent bug source across concurrent/sequential DAO use.
+  - `JPADAO` holds a shared `EntityManagerFactory` singleton but opens/closes a fresh
+    `EntityManager` per method call. The per-entity DAOs still hold their own
+    **static** `EntityManager`/`EntityManagerFactory`, reassigned every time a new
+    instance is constructed and never explicitly closed — reused static state across
+    instances is still a latent bug source there, just not the closed-on-first-use
+    variant `JPADAO` used to have.
 
 - **`control/listenersCRUD/`** — The real controllers. One class per entity
   (`ListenerCRUDPaciente`, `ListenerCRUDConsulta`, ...), typically a lazy singleton
@@ -100,9 +92,9 @@ instead — a naming inconsistency from early development, not a deliberate spli
   screens (agenda, histórico, listagens). `view/principal/FrameSistema` is the MDI main
   window hosting the menu bar and internal frames.
 
-- **PDF generation** — `BtGerarReceiraListener` (in `listenersMenu/`) uses the vendored
-  `itextpdf-5.5.9.jar` to generate a prescription PDF (see `Receira-Avicena.pdf` at
-  repo root for an example output).
+- **PDF generation** — `BtGerarReceiraListener` (in `listenersMenu/`) uses iText
+  (`com.itextpdf:itextpdf:5.5.9`, a Gradle dependency) to generate a prescription PDF
+  (see `Receira-Avicena.pdf` at repo root for an example output).
 
 ## Known issues / refactor targets
 
@@ -111,10 +103,33 @@ worth knowing before touching code (not an exhaustive list, but the ones that sh
 architecture decisions):
 
 - Duplicate/inconsistent DAO layer (`JPADAO` vs per-entity DAOs) — pick one pattern.
-- Static, close-after-first-use `EntityManager` fields in DAOs.
-- Hardcoded DB credentials in `src/META-INF/persistence.xml`.
-- Broken/non-portable build (`nbproject/project.properties` depends on NetBeans global
-  libraries; `nbproject/private/private.properties` has committed merge conflicts).
+- Static `EntityManager`/`EntityManagerFactory` fields, reassigned per instance and
+  never closed, in the per-entity DAOs (`ConsultaDAO`, `MedicoDAO`, `EnfermeiroDAO`,
+  `PacienteDAO`).
+- Hardcoded default DB credentials in `src/main/resources/META-INF/persistence.xml`
+  (overridable via env var/system property, see Build & run, but the default itself is
+  still a plaintext password in source).
 - Dead code: `control/listenersCRUD/exceptions/*`, `Paciente.setEstadoCivil()` (throws
   `UnsupportedOperationException` unconditionally).
-- No automated tests.
+- Test coverage is thin: DAOs, `Medico.equals()`, and a couple of listener/frame
+  bugfixes have integration tests; most of `control/listenersCRUD/` and `view/frames/`
+  have none.
+
+### Kotlin-migration sequencing
+
+If/when part of this codebase moves to Kotlin, fix these first — each one makes the
+migration harder the longer it's deferred, since Kotlin interop means migrating
+class-by-class while both languages coexist:
+
+1. **DAO duality.** Pick `JPADAO` or the per-entity DAOs, not both. Migrating a class
+   that's only half-wired to persistence (per-entity DAO stubs that validate but never
+   `em.persist()`) produces a Kotlin class with the same silent gap.
+2. **Package split.** Consolidate `br.udesc.ceavi.avicena.control.exceptions` into
+   `br.udesc.ceavi.progii.avicena` before it's a Kotlin package importing from a
+   differently-rooted Java package for no reason.
+3. **Dead code.** Delete `control/listenersCRUD/exceptions/*` and
+   `Paciente.setEstadoCivil()` rather than translating dead code to Kotlin.
+
+Module boundaries (splitting `model`/`control`/`view` into separate Gradle modules) are
+a reasonable next step after that, so migration can happen module-by-module — worth a
+scoped follow-up rather than doing it speculatively here.
