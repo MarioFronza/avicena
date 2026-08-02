@@ -26,7 +26,7 @@ public class ConsultaDAO implements DAO<Consulta>{
 
     public ConsultaDAO() {
         super();
-        emf = javax.persistence.Persistence.createEntityManagerFactory("AvicenaBD");
+        emf = PersistenceConfig.createEntityManagerFactory();
         em = emf.createEntityManager();
     
     }

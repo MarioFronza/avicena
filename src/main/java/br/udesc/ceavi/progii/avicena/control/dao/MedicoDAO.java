@@ -25,7 +25,7 @@ public class MedicoDAO implements DAO<Medico>{
     
     public MedicoDAO() {
         super();
-        emf = javax.persistence.Persistence.createEntityManagerFactory("AvicenaBD");
+        emf = PersistenceConfig.createEntityManagerFactory();
         em = emf.createEntityManager();
     }
 

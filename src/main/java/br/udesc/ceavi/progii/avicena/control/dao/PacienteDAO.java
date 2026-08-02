@@ -25,7 +25,7 @@ public class PacienteDAO implements DAO<Paciente>{
 
     public PacienteDAO() {
         super();
-        emf = javax.persistence.Persistence.createEntityManagerFactory("AvicenaBD");
+        emf = PersistenceConfig.createEntityManagerFactory();
         em = emf.createEntityManager();
     }
 
