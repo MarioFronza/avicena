@@ -8,7 +8,6 @@ package br.udesc.ceavi.progii.avicena.control.listenersCRUD;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.JPADAO;
-import static br.udesc.ceavi.progii.avicena.model.Consulta_.medico;
 import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
 import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
