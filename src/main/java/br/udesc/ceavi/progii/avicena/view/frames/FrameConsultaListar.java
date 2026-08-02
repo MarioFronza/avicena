@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.view.frames;
 import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
+import br.udesc.ceavi.progii.avicena.model.Pessoa;
 import java.awt.Dimension;
 
 
@@ -69,14 +70,23 @@ public class FrameConsultaListar extends FrameSemCRUD{
         DAO dao = new ConsultaDAO();
         List<Consulta> consultas = dao.getList();
         for (int i = 0; i < consultas.size(); i++) {
-            String data = consultas.get(i).getData();
-            String hora = consultas.get(i).getHora();
-            String paciente = consultas.get(i).getPaciente().getNome();
-            String medico = consultas.get(i).getMedico().getNome();
-            String enfermeiro = consultas.get(i).getEnfermeiro().getNome();
-            dtm.addRow(new String[]{data, hora, paciente, medico, enfermeiro});
+            dtm.addRow(toTableRow(consultas.get(i)));
         }
-        
+
+    }
+
+    static String[] toTableRow(Consulta consulta) {
+        return new String[]{
+            consulta.getData(),
+            consulta.getHora(),
+            nomeOuPlaceholder(consulta.getPaciente()),
+            nomeOuPlaceholder(consulta.getMedico()),
+            nomeOuPlaceholder(consulta.getEnfermeiro())
+        };
+    }
+
+    private static String nomeOuPlaceholder(Pessoa pessoa) {
+        return pessoa == null ? "-" : pessoa.getNome();
     }
     public static FrameConsultaListar getInstance(){
         if(instancia == null)
