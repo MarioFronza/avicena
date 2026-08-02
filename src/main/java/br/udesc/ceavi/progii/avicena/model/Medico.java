@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-import static com.itextpdf.text.pdf.PdfName.ID;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
@@ -57,6 +56,7 @@ public class Medico extends Pessoa{
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.crm);
         hash = 97 * hash + Objects.hashCode(this.especializacao);
         return hash;
     }
@@ -73,7 +73,7 @@ public class Medico extends Pessoa{
             return false;
         }
         final Medico other = (Medico) obj;
-        if (this.crm != other.crm) {
+        if (!Objects.equals(this.crm, other.crm)) {
             return false;
         }
         if (!Objects.equals(this.especializacao, other.especializacao)) {
