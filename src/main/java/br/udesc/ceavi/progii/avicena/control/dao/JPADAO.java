@@ -62,7 +62,7 @@ public class JPADAO<X> implements DAO{
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
-            em.remove(obj);
+            em.remove(em.merge(obj));
             em.getTransaction().commit();
 
             return true;
