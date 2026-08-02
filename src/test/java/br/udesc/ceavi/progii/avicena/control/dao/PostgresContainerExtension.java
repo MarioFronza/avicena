@@ -2,11 +2,11 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 
 import org.junit.jupiter.api.extension.BeforeAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 
 public class PostgresContainerExtension implements BeforeAllCallback {
 
-    private static final PostgreSQLContainer<?> CONTAINER = new PostgreSQLContainer<>("postgres:16-alpine")
+    private static final PostgreSQLContainer CONTAINER = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("AvicenaBD")
             .withUsername("postgres")
             .withPassword("CasaAmarela");
