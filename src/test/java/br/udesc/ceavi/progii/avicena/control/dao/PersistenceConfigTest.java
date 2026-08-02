@@ -36,7 +36,7 @@ class PersistenceConfigTest {
         EntityManagerFactory emf = PersistenceConfig.createEntityManagerFactory();
         EntityManager em = emf.createEntityManager();
 
-        Query query = em.createQuery("SELECT COUNT(p) FROM Paciente p");
+        Query query = em.createQuery("SELECT COUNT(p) FROM PatientEntity p");
         Object result = query.getSingleResult();
 
         em.close();
@@ -52,7 +52,7 @@ class PersistenceConfigTest {
         assertThrows(PersistenceException.class, () -> {
             EntityManagerFactory emf = PersistenceConfig.createEntityManagerFactory();
             EntityManager em = emf.createEntityManager();
-            em.createQuery("SELECT COUNT(p) FROM Paciente p").getSingleResult();
+            em.createQuery("SELECT COUNT(p) FROM PatientEntity p").getSingleResult();
         });
     }
 }
