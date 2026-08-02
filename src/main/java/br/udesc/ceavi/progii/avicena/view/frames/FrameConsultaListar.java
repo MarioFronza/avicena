@@ -4,6 +4,7 @@ import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Pessoa;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
@@ -71,6 +72,10 @@ public class FrameConsultaListar extends FrameSemCRUD {
 
     private static String nomeOuPlaceholder(Pessoa pessoa) {
         return pessoa == null ? "-" : pessoa.getNome();
+    }
+
+    private static String nomeOuPlaceholder(PatientEntity patient) {
+        return patient == null ? "-" : patient.getName();
     }
 
     public static FrameConsultaListar getInstance() {
