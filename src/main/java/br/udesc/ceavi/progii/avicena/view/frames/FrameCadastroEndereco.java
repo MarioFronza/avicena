@@ -9,7 +9,6 @@ import br.udesc.ceavi.progii.avicena.model.Endereco;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Label;
 import java.awt.LayoutManager;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -22,11 +21,10 @@ import javax.swing.JTextField;
  * @since 13/04/2018
  * @version 1.0
  */
+public class FrameCadastroEndereco extends FrameCRUD {
 
-public class FrameCadastroEndereco extends FrameCRUD{
-    
     private static FrameCadastroEndereco instancia;
-    
+
     private static final String titulo = "Cadastro de Endereço";
     private static final Dimension dimension = new Dimension(400, 280);
 
@@ -39,14 +37,12 @@ public class FrameCadastroEndereco extends FrameCRUD{
     private JLabel lbBairro;
     private JLabel lbCidade;
 
-
     private JTextField tfCep;
     private JTextField tfRua;
     private JTextField tfNumero;
     private JTextField tfComplemento;
     private JTextField tfBairro;
     private JTextField tfCidade;
-
 
     private JPanel panelFormulario;
     private LayoutManager layout;
@@ -59,18 +55,13 @@ public class FrameCadastroEndereco extends FrameCRUD{
 
         initializeComponents();
         addComponents();
-
-        
     }
-    
-    
-
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
         carregarCampos();
     }
-    
+
     private void initializeComponents() {
         lbCep = new JLabel("Cep:");
         lbRua = new JLabel("             Rua:");
@@ -92,19 +83,15 @@ public class FrameCadastroEndereco extends FrameCRUD{
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Dados do Endereço"));
     }
 
-
     @Override
-    public void limparCampos() {
-        
-    }
-    
-       public static FrameCadastroEndereco getInstance(){
-        if(instancia == null)
-            instancia = new FrameCadastroEndereco(titulo, dimension);
+    public void limparCampos() {}
+
+    public static FrameCadastroEndereco getInstance() {
+        if (instancia == null) instancia = new FrameCadastroEndereco(titulo, dimension);
 
         return instancia;
     }
-    
+
     private void addComponents() {
         cons = new GridBagConstraints();
         cons.gridx = 0;
@@ -200,14 +187,11 @@ public class FrameCadastroEndereco extends FrameCRUD{
         cons.ipadx = 100;
         panelFormulario.add(tfCidade, cons);
 
-
         super.addFormulario(panelFormulario);
     }
 
     @Override
-    public void carregarCampos() {
-
-    }
+    public void carregarCampos() {}
 
     public JTextField getTfCep() {
         return tfCep;
@@ -232,7 +216,4 @@ public class FrameCadastroEndereco extends FrameCRUD{
     public JTextField getTfCidade() {
         return tfCidade;
     }
-    
-    
-    
 }

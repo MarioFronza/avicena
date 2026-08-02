@@ -18,8 +18,8 @@ import javax.persistence.Query;
  * @since 29/05/2018
  * @version 1.0
  */
-public class PacienteDAO implements DAO<Paciente>{
-    
+public class PacienteDAO implements DAO<Paciente> {
+
     private static EntityManagerFactory emf;
     private static EntityManager em;
 
@@ -31,31 +31,31 @@ public class PacienteDAO implements DAO<Paciente>{
 
     @Override
     public boolean inserir(Paciente obj) throws ValorNuloException {
-        if(obj.getNome().isEmpty())
-            throw new ValorNuloException("Nome do paciente em aberto");
-        
-        if(obj.getCpf().isEmpty())
-            throw  new ValorNuloException("Cpf em aberto");
-        
-        if(obj.getTelefone().isEmpty())
-            throw  new ValorNuloException("Telefone em aberto");
-            
+        if (obj.getNome().isEmpty()) throw new ValorNuloException("Nome do paciente em aberto");
+
+        if (obj.getCpf().isEmpty()) throw new ValorNuloException("Cpf em aberto");
+
+        if (obj.getTelefone().isEmpty()) throw new ValorNuloException("Telefone em aberto");
+
         return true;
     }
 
     @Override
     public boolean atualizar(Paciente obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(Paciente obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Paciente pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -64,5 +64,4 @@ public class PacienteDAO implements DAO<Paciente>{
         List<Paciente> pacientes = query.getResultList();
         return pacientes;
     }
-    
 }

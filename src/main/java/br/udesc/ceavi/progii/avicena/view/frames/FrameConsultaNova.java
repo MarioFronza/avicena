@@ -1,7 +1,5 @@
 package br.udesc.ceavi.progii.avicena.view.frames;
 
-import br.udesc.ceavi.progii.avicena.control.dao.DAO;
-import br.udesc.ceavi.progii.avicena.control.dao.MedicoDAO;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
 import br.udesc.ceavi.progii.avicena.model.Medico;
 import java.awt.Dimension;
@@ -16,7 +14,6 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
@@ -27,9 +24,8 @@ import javax.swing.text.MaskFormatter;
  * @since 13/04/2018
  * @version 1.0
  */
-
 public class FrameConsultaNova extends FrameCRUD {
-    
+
     private static FrameConsultaNova instancia;
     private static final String titulo = "Cadastro de Consulta";
     private static final Dimension dimension = new Dimension(630, 230);
@@ -56,18 +52,17 @@ public class FrameConsultaNova extends FrameCRUD {
     private JTextField tfDiagnosticoPrimario;
     private JTextField tfDiagnosticoFinal;
     private JComboBox cbEstadoPaciente;
-    
+
     private JPanel panelFormulario;
     private LayoutManager layout;
-    private GridBagConstraints cons;    
+    private GridBagConstraints cons;
 
-
-    public FrameConsultaNova(String titulo, Dimension dimension){
+    public FrameConsultaNova(String titulo, Dimension dimension) {
         super(titulo, dimension);
         initializeComponents();
-        addComponents();        
-    }        
-    
+        addComponents();
+    }
+
     @Override
     public void limparCampos() {
         tfData.setText(null);
@@ -78,18 +73,15 @@ public class FrameConsultaNova extends FrameCRUD {
     }
 
     @Override
-    public void carregarCampos() {
-        
-    }
-    
-    public static FrameConsultaNova getInstance(){
-            if(instancia == null)
-                instancia = new FrameConsultaNova(titulo, dimension);
-                
-            return instancia;
-    }    
+    public void carregarCampos() {}
 
-     private void initializeComponents() {
+    public static FrameConsultaNova getInstance() {
+        if (instancia == null) instancia = new FrameConsultaNova(titulo, dimension);
+
+        return instancia;
+    }
+
+    private void initializeComponents() {
         lbData = new JLabel("Data:");
         lbHora = new JLabel("Hora:");
         lbSintomas = new JLabel("Sintomas:");
@@ -110,62 +102,61 @@ public class FrameConsultaNova extends FrameCRUD {
         cbMedico = new JComboBox();
         tfDiagnosticoPrimario = new JTextField();
         tfDiagnosticoFinal = new JTextField();
-        
-        try{
-            MaskFormatter hora= new MaskFormatter("##:##");
-            MaskFormatter data= new MaskFormatter("##/##/####");
+
+        try {
+            MaskFormatter hora = new MaskFormatter("##:##");
+            MaskFormatter data = new MaskFormatter("##/##/####");
             tfData = new JFormattedTextField(data);
             tfHora = new JFormattedTextField(hora);
+        } catch (ParseException e) {
         }
-        catch (ParseException e){
-        }
-        
+
         cbEstadoPaciente = new JComboBox(EstadoPaciente.values());
-        
+
         layout = new GridBagLayout();
         panelFormulario = new JPanel(layout);
 
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Dados da Consulta"));        
+        panelFormulario.setBorder(BorderFactory.createTitledBorder("Dados da Consulta"));
     }
-    
+
     private void addComponents() {
-        
-        //Data
+
+        // Data
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 0;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(lbData, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 0;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 200;
-        panelFormulario.add(tfData, cons);        
-        
-        //================================
-        
-        //Hora
+        panelFormulario.add(tfData, cons);
+
+        // ================================
+
+        // Hora
         cons = new GridBagConstraints();
         cons.gridx = 3;
         cons.gridy = 0;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         cons.ipady = 10;
-        cons.insets = new Insets(0,20,0,0);
+        cons.insets = new Insets(0, 20, 0, 0);
         panelFormulario.add(lbHora, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 4;
         cons.gridy = 0;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
-        panelFormulario.add(tfHora, cons);                
-        
-        //ID
+        panelFormulario.add(tfHora, cons);
+
+        // ID
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 1;
@@ -174,18 +165,18 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbId, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 1;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
-        panelFormulario.add(tfId, cons);           
-        
-        //================================         
-        
-        //Paciente
+        panelFormulario.add(tfId, cons);
+
+        // ================================
+
+        // Paciente
         cons = new GridBagConstraints();
         cons.gridx = 3;
         cons.gridy = 1;
@@ -193,20 +184,20 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         cons.ipady = 10;
-        cons.insets = new Insets(0,20,0,0);
+        cons.insets = new Insets(0, 20, 0, 0);
         panelFormulario.add(lbPaciente, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 4;
         cons.gridy = 1;
         cons.gridwidth = 3;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
-        panelFormulario.add(tfPaciente, cons);        
-        
-        //================================
-        
-        //Sintomas
+        panelFormulario.add(tfPaciente, cons);
+
+        // ================================
+
+        // Sintomas
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 2;
@@ -215,18 +206,18 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbSintomas, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 2;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
-        panelFormulario.add(tfSintomas, cons);        
-        
-        //================================   
-        
-        //EstadoPaciente
+        panelFormulario.add(tfSintomas, cons);
+
+        // ================================
+
+        // EstadoPaciente
         cons = new GridBagConstraints();
         cons.gridx = 3;
         cons.gridy = 2;
@@ -234,20 +225,20 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         cons.ipady = 10;
-        cons.insets = new Insets(0,20,0,0);
+        cons.insets = new Insets(0, 20, 0, 0);
         panelFormulario.add(lbEstadoPaciente, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 4;
         cons.gridy = 2;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
-        panelFormulario.add(cbEstadoPaciente, cons);        
-        
-        //================================    
-        
-        //Médico
+        panelFormulario.add(cbEstadoPaciente, cons);
+
+        // ================================
+
+        // Médico
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 3;
@@ -256,7 +247,7 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.ipadx = 10;
         cons.ipady = 20;
         panelFormulario.add(lbMedico, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 3;
@@ -264,11 +255,10 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
         panelFormulario.add(cbMedico, cons);
-        
-         //================================    
-   
-        
-        //Enfermeiro
+
+        // ================================
+
+        // Enfermeiro
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 4;
@@ -277,7 +267,7 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbEnfermeiro, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 4;
@@ -285,7 +275,7 @@ public class FrameConsultaNova extends FrameCRUD {
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 50;
         panelFormulario.add(cbEnfermeiro, cons);
-        super.addFormulario(panelFormulario);        
+        super.addFormulario(panelFormulario);
     }
 
     public JTextField getTfData() {
@@ -315,13 +305,4 @@ public class FrameConsultaNova extends FrameCRUD {
     public JComboBox getCbEnfermeiro() {
         return cbEnfermeiro;
     }
-
-    
-    
-    
-
-    
-
-   
-
 }

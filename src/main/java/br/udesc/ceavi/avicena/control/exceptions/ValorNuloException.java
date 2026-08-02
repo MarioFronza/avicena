@@ -11,8 +11,8 @@ package br.udesc.ceavi.avicena.control.exceptions;
  * @version 1.0
  * @since 28/05/2018
  */
-public class ValorNuloException extends Exception{
-    
+public class ValorNuloException extends Exception {
+
     public ValorNuloException(String message) {
         super(message);
     }
@@ -22,7 +22,7 @@ public class ValorNuloException extends Exception{
     }
 
     public ValorNuloException() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
 }

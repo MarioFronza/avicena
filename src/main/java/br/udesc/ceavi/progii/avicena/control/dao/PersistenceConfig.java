@@ -9,8 +9,7 @@ public final class PersistenceConfig {
 
     private static final String PERSISTENCE_UNIT = "AvicenaBD";
 
-    private PersistenceConfig() {
-    }
+    private PersistenceConfig() {}
 
     public static EntityManagerFactory createEntityManagerFactory() {
         return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, overrides());

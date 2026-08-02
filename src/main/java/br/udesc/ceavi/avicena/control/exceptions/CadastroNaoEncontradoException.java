@@ -11,6 +11,4 @@ package br.udesc.ceavi.avicena.control.exceptions;
  * @since 29/05/2018
  * @version 1.0
  * */
-public class CadastroNaoEncontradoException {
-    
-}
+public class CadastroNaoEncontradoException {}

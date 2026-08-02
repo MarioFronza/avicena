@@ -17,26 +17,25 @@ import java.awt.event.ActionEvent;
  * @since 13/04/2018
  * @version 1.0
  */
+public class MenuCadAtendenteListener extends MenuActionListener {
 
-public class MenuCadAtendenteListener extends MenuActionListener{
-    
-    public MenuCadAtendenteListener(FrameSistema tela){
+    public MenuCadAtendenteListener(FrameSistema tela) {
         super(tela);
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         frame = FrameCadastroAtendente.getInstance();
-        
+
         Atendente atendente = new Atendente();
-        
+
         ListenerCRUDAtendente listenerAtendente = ListenerCRUDAtendente.getInstance(atendente, frame);
-    
-        if(frame.isVisible()){
-            
-        }else{
+
+        if (frame.isVisible()) {
+
+        } else {
             tela.adicionarFrameInterno(frame);
             frame.setVisible(true);
         }
     }
-    
 }

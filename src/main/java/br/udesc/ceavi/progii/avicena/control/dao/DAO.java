@@ -13,11 +13,14 @@ import java.util.List;
  * @version 1.0
  */
 public interface DAO<X> {
-    
+
     boolean inserir(X obj) throws Exception;
-    boolean atualizar(X obj)throws Exception;
+
+    boolean atualizar(X obj) throws Exception;
+
     boolean deletar(X obj) throws Exception;
+
     List<X> getList();
+
     X pesquisarPorId(Class tipo, long id) throws Exception;
-    
 }

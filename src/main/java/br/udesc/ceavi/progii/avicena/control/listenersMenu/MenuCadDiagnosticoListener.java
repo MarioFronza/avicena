@@ -22,34 +22,36 @@ import java.util.List;
  * @since 13/04/2018
  * @version 1.0
  */
+public class MenuCadDiagnosticoListener extends MenuActionListener {
 
-public class MenuCadDiagnosticoListener extends MenuActionListener{
-    
-    public MenuCadDiagnosticoListener(FrameSistema tela){
+    public MenuCadDiagnosticoListener(FrameSistema tela) {
         super(tela);
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         frame = FrameCadastroDiagnostico.getInstance();
         DiagnosticoFinal diagnosticoFinal = new DiagnosticoFinal();
         DiagnosticoPrimario diagnosticoPrimario = new DiagnosticoPrimario();
-        ListenerCRUDDiagnostico listenerCRUDDiagnosticoFinal = ListenerCRUDDiagnostico.getInstance(diagnosticoPrimario, diagnosticoFinal, frame);
-       
+        ListenerCRUDDiagnostico listenerCRUDDiagnosticoFinal =
+                ListenerCRUDDiagnostico.getInstance(diagnosticoPrimario, diagnosticoFinal, frame);
+
         DAO dao = new ConsultaDAO();
         List<Consulta> consultas = dao.getList();
         FrameCadastroDiagnostico.getInstance().getCbConsulta().removeAllItems();
-        
+
         for (int i = 0; i < consultas.size(); i++) {
-            FrameCadastroDiagnostico.getInstance().getCbConsulta().addItem(consultas.get(i).getHora() +" - "+consultas.get(i).getPaciente().getNome());
+            FrameCadastroDiagnostico.getInstance()
+                    .getCbConsulta()
+                    .addItem(consultas.get(i).getHora() + " - "
+                            + consultas.get(i).getPaciente().getNome());
         }
-        
-        if(frame.isVisible()){
-            
-        }else{
+
+        if (frame.isVisible()) {
+
+        } else {
             tela.adicionarFrameInterno(frame);
             frame.setVisible(true);
         }
     }
-    
 }

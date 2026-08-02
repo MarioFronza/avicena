@@ -13,13 +13,11 @@ import javax.persistence.*;
  * @since 24/03/2018
  * @version 1.0
  */
-
 public enum EstadoPaciente {
-
-    EMERGENCIA ("Emergência"), 
-    URGENCIA ("Urgência"),
-    POUCOURGENTE ("Pouco urgente"),
-    NAOURGENTE ("Não urgente");
+    EMERGENCIA("Emergência"),
+    URGENCIA("Urgência"),
+    POUCOURGENTE("Pouco urgente"),
+    NAOURGENTE("Não urgente");
 
     private int id;
     private String estadoPaciente;
@@ -32,8 +30,4 @@ public enum EstadoPaciente {
     public String toString() {
         return estadoPaciente;
     }
-
-    
-    
-    
 }

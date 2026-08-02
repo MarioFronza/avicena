@@ -11,8 +11,8 @@ package br.udesc.ceavi.avicena.control.exceptions;
  * @version 1.0
  * @since 28/05/2018
  */
-public class ValorIncorretoException extends Exception{
-    
+public class ValorIncorretoException extends Exception {
+
     public ValorIncorretoException(String message) {
         super("Valor digitado incorretamente, favor informe um valor númerico " + message);
     }
@@ -22,7 +22,7 @@ public class ValorIncorretoException extends Exception{
     }
 
     public ValorIncorretoException() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
-    
 }

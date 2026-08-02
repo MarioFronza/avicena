@@ -7,9 +7,9 @@ package br.udesc.ceavi.progii.avicena.view.frames;
 
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.BtEnderecoListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.ListenerBtPesquisarPaciente;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
 import br.udesc.ceavi.progii.avicena.model.Paciente;
+import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -18,15 +18,12 @@ import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.ParseException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
 
 /**
  * Frame de tela de cadastro de Paciente
@@ -34,13 +31,13 @@ import javax.swing.text.MaskFormatter;
  * @since 13/04/2018
  * @version 1.0
  */
-public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
-    
+public class FrameCadastroPaciente extends FrameCRUD implements ActionListener {
+
     private static FrameCadastroPaciente instancia;
     private Paciente paciente;
     private static final String titulo = "Cadastro de Paciente";
     private static final Dimension dimension = new Dimension(360, 240);
-    
+
     private JLabel lbNome;
     private JLabel lbCpf;
     private JLabel lbTelefone;
@@ -53,17 +50,16 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
     private JTextField tfTelefone;
     private JButton btEndereco;
     private JComboBox cbEstadoCivil;
-    
+
     private JPanel panelFormulario;
     private LayoutManager layout;
     private GridBagConstraints cons;
-    
+
     private FrameSistema frame = MenuPrincipal.getInstance().getFrame();
-    
-    
+
     public FrameCadastroPaciente(String titulo, Dimension dimension) {
         super(titulo, dimension);
-        
+
         initializeComponents();
         addComponents();
         adicionarListener();
@@ -74,17 +70,12 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         tfNome.setText(null);
         tfCpf.setText(null);
         tfTelefone.setText(null);
-        
     }
-    
-    
 
     @Override
-    public void carregarCampos() {
-    
-    }
-    
-    public Paciente getPaciente(){
+    public void carregarCampos() {}
+
+    public Paciente getPaciente() {
         return paciente;
     }
 
@@ -96,33 +87,31 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         lbEnderecoInfo = new JLabel("");
         lbEstadoCivil = new JLabel("Estado Cívil:");
         btPesquisar = new JButton("Buscar");
-        
-        
+
         tfNome = new JTextField();
         tfCpf = new JTextField();
         tfTelefone = new JTextField();
         btEndereco = new JButton("Adicionar");
-        btEndereco.setSize(100,20);
+        btEndereco.setSize(100, 20);
         cbEstadoCivil = new JComboBox(EstadoCivil.values());
         cbEstadoCivil.setSelectedIndex(-1);
 
-        
         layout = new GridBagLayout();
         panelFormulario = new JPanel(layout);
 
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Dados do Paciente"));
     }
-    
-    public JButton getBtEndereco(){
+
+    public JButton getBtEndereco() {
         return btEndereco;
     }
 
-    public static FrameCadastroPaciente getInstance(){
-        if(instancia == null)
-            instancia = new FrameCadastroPaciente(titulo, dimension);
+    public static FrameCadastroPaciente getInstance() {
+        if (instancia == null) instancia = new FrameCadastroPaciente(titulo, dimension);
 
         return instancia;
     }
+
     private void addComponents() {
         cons = new GridBagConstraints();
         cons.gridx = 0;
@@ -132,7 +121,7 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbNome, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 0;
@@ -140,9 +129,9 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 200;
         panelFormulario.add(tfNome, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 1;
@@ -151,18 +140,18 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbCpf, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 1;
         cons.gridwidth = 1;
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 105;
-        cons.insets = new Insets(0,0,0,10);
+        cons.insets = new Insets(0, 0, 0, 10);
         panelFormulario.add(tfCpf, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 2;
         cons.gridy = 1;
@@ -170,9 +159,9 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         panelFormulario.add(btPesquisar, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 2;
@@ -181,7 +170,7 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.ipadx = 10;
         cons.ipady = 10;
         panelFormulario.add(lbTelefone, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 2;
@@ -189,12 +178,11 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 100;
         panelFormulario.add(tfTelefone, cons);
-       
-        //================================
 
-        
-        //================================
-        
+        // ================================
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 6;
@@ -203,16 +191,16 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.ipadx = 10;
         cons.ipady = 20;
         panelFormulario.add(lbEstadoCivil, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 6;
         cons.gridwidth = 2;
         cons.fill = GridBagConstraints.HORIZONTAL;
         panelFormulario.add(cbEstadoCivil, cons);
-        
-        //================================
-        
+
+        // ================================
+
         cons = new GridBagConstraints();
         cons.gridx = 0;
         cons.gridy = 7;
@@ -220,7 +208,7 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.fill = GridBagConstraints.HORIZONTAL;
         cons.ipadx = 10;
         panelFormulario.add(lbEndereco, cons);
-        
+
         cons = new GridBagConstraints();
         cons.gridx = 1;
         cons.gridy = 7;
@@ -228,18 +216,16 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         cons.fill = GridBagConstraints.HORIZONTAL;
         btEndereco.addActionListener(this);
         panelFormulario.add(btEndereco, cons);
-        
-        //================================
-                
+
+        // ================================
+
         super.addFormulario(panelFormulario);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        
-        if (e.getSource() == btEndereco) {
-          
-        }
+
+        if (e.getSource() == btEndereco) {}
     }
 
     private void adicionarListener() {
@@ -273,7 +259,6 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
         this.tfTelefone = tfTelefone;
     }
 
- 
     public JComboBox getCbEstadoCivil() {
         return cbEstadoCivil;
     }
@@ -285,8 +270,4 @@ public class FrameCadastroPaciente extends FrameCRUD implements ActionListener{
     public JButton getBtPesquisar() {
         return btPesquisar;
     }
-    
-    
-    
-    
 }

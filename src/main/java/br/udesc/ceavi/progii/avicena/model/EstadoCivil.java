@@ -5,21 +5,18 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-
 /**
  * Esta Classe contem estados civis para toda Pessoa
  * @author Mário, Adroan, Vini e Raphael
  * @since 24/03/2018
  * @version 1.0
  */
-
 public enum EstadoCivil {
-    
-    SOLTEIRO ("Solteiro"), 
-    CASADO ("Casado"),
-    DIVORCIADO ("Divorciado"),
-    VIUVO ("Viuvo"),
-    OUTRO ("Outro");
+    SOLTEIRO("Solteiro"),
+    CASADO("Casado"),
+    DIVORCIADO("Divorciado"),
+    VIUVO("Viuvo"),
+    OUTRO("Outro");
 
     private int id;
 
@@ -33,10 +30,4 @@ public enum EstadoCivil {
     public String toString() {
         return estadoCivil;
     }
-
- 
-    
-    
-    
-    
 }

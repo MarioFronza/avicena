@@ -18,49 +18,46 @@ import javax.persistence.Query;
  * @since 29/05/2018
  * @version 1.0
  */
-public class MedicoDAO implements DAO<Medico>{
+public class MedicoDAO implements DAO<Medico> {
 
     private static EntityManagerFactory emf;
     private static EntityManager em;
-    
+
     public MedicoDAO() {
         super();
         emf = PersistenceConfig.createEntityManagerFactory();
         em = emf.createEntityManager();
     }
 
-    
-    
     @Override
     public boolean inserir(Medico obj) throws ValorNuloException {
-        if(obj.getNome().isEmpty())
-            throw new ValorNuloException("Nome do Médico em aberto");
-        
-        if(obj.getCpf().isEmpty())
-            throw  new ValorNuloException("Cpf em aberto");
-        
-        if(obj.getTelefone().isEmpty())
-            throw  new ValorNuloException("Telefone em aberto");
-        
-        if(obj.getEspecializacao().isEmpty())
-            throw  new ValorNuloException("Especialização do médico em aberto");
-        
+        if (obj.getNome().isEmpty()) throw new ValorNuloException("Nome do Médico em aberto");
+
+        if (obj.getCpf().isEmpty()) throw new ValorNuloException("Cpf em aberto");
+
+        if (obj.getTelefone().isEmpty()) throw new ValorNuloException("Telefone em aberto");
+
+        if (obj.getEspecializacao().isEmpty()) throw new ValorNuloException("Especialização do médico em aberto");
+
         return true;
     }
 
     @Override
     public boolean atualizar(Medico obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public boolean deletar(Medico obj) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public Medico pesquisarPorId(Class tipo, long id) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException(
+                "Not supported yet."); // To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -69,9 +66,4 @@ public class MedicoDAO implements DAO<Medico>{
         List<Medico> medicos = query.getResultList();
         return medicos;
     }
-
-    
-    
-    
-    
 }

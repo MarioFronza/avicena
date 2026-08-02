@@ -10,23 +10,21 @@ import java.awt.event.ActionEvent;
  * @since 13/04/2018
  * @version 1.0
  */
+public class MenuConsultaListarListener extends MenuActionListener {
 
-public class MenuConsultaListarListener extends MenuActionListener{
-    
-    public MenuConsultaListarListener(FrameSistema tela){
+    public MenuConsultaListarListener(FrameSistema tela) {
         super(tela);
-    }    
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         frame2 = FrameConsultaListar.getInstance();
-        
-        if(frame2.isVisible()){
-            
-        }else{
+
+        if (frame2.isVisible()) {
+
+        } else {
             tela.adicionarFrameInterno(frame2);
             frame2.setVisible(true);
-        }    
+        }
     }
-
 }

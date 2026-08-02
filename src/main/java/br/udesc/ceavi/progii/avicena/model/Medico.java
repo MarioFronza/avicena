@@ -17,13 +17,13 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "medico")
-public class Medico extends Pessoa{
-   
-    
+public class Medico extends Pessoa {
+
     @Column(name = "crm")
     private String crm;
+
     @Column(name = "especializacao")
-    private String especializacao; 
+    private String especializacao;
 
     public Medico() {
         super();
@@ -34,8 +34,6 @@ public class Medico extends Pessoa{
         this.crm = crm;
         this.especializacao = especializacao;
     }
-
-    
 
     public String getCrm() {
         return crm;
@@ -79,7 +77,7 @@ public class Medico extends Pessoa{
         if (!Objects.equals(this.especializacao, other.especializacao)) {
             return false;
         }
-       
+
         return true;
     }
 
@@ -87,11 +85,4 @@ public class Medico extends Pessoa{
     public String toString() {
         return "Medico{" + "crm=" + crm + ", especializacao=" + especializacao + '}';
     }
-
-    
-
-
-    
-
-    
 }

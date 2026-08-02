@@ -6,11 +6,10 @@ import org.testcontainers.containers.PostgreSQLContainer;
 
 public class PostgresContainerExtension implements BeforeAllCallback {
 
-    private static final PostgreSQLContainer<?> CONTAINER =
-            new PostgreSQLContainer<>("postgres:16-alpine")
-                    .withDatabaseName("AvicenaBD")
-                    .withUsername("postgres")
-                    .withPassword("CasaAmarela");
+    private static final PostgreSQLContainer<?> CONTAINER = new PostgreSQLContainer<>("postgres:16-alpine")
+            .withDatabaseName("AvicenaBD")
+            .withUsername("postgres")
+            .withPassword("CasaAmarela");
 
     @Override
     public void beforeAll(ExtensionContext context) {

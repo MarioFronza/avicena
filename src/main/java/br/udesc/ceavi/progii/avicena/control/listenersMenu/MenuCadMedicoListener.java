@@ -17,28 +17,25 @@ import java.awt.event.ActionEvent;
  * @since 13/04/2018
  * @version 1.0
  */
-public class MenuCadMedicoListener extends MenuActionListener{
-    
+public class MenuCadMedicoListener extends MenuActionListener {
+
     public MenuCadMedicoListener(FrameSistema tela) {
         super(tela);
     }
-    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         frame = FrameCadastroMedico.getInstance();
-        
+
         Medico medico = new Medico();
-     
+
         ListenerCRUDMedico listenerMedico = ListenerCRUDMedico.getInstance(medico, frame);
-        
-        if(frame.isVisible()){
-            
-        }else{
+
+        if (frame.isVisible()) {
+
+        } else {
             tela.adicionarFrameInterno(frame);
             frame.setVisible(true);
         }
     }
-    
-    
-    
 }

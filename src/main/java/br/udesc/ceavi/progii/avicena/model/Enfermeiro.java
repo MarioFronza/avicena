@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.*;
@@ -18,11 +17,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "enfermeiro")
-public class Enfermeiro extends Pessoa{
-    
-    @Column(name = "formacao" , nullable = false)
+public class Enfermeiro extends Pessoa {
+
+    @Column(name = "formacao", nullable = false)
     private String formacao;
-    @Column(name = "hr_cursadas" , nullable = false)
+
+    @Column(name = "hr_cursadas", nullable = false)
     private int hrCursadas;
 
     public Enfermeiro() {
@@ -35,7 +35,15 @@ public class Enfermeiro extends Pessoa{
         this.hrCursadas = hrCursadas;
     }
 
-    public Enfermeiro(int id, String formacao, int hrCursadas, List<Consulta> consultas, int cargaHoraria, float salario, int horaExtra, int numeroCarteiraDeTrabalho) {
+    public Enfermeiro(
+            int id,
+            String formacao,
+            int hrCursadas,
+            List<Consulta> consultas,
+            int cargaHoraria,
+            float salario,
+            int horaExtra,
+            int numeroCarteiraDeTrabalho) {
         this.formacao = formacao;
         this.hrCursadas = hrCursadas;
     }
@@ -55,10 +63,6 @@ public class Enfermeiro extends Pessoa{
     public void setHrCursadas(int hrCursadas) {
         this.hrCursadas = hrCursadas;
     }
-    
-    
- 
-
 
     @Override
     public int hashCode() {
@@ -86,7 +90,7 @@ public class Enfermeiro extends Pessoa{
         if (!Objects.equals(this.formacao, other.formacao)) {
             return false;
         }
-      
+
         return true;
     }
 
@@ -94,13 +98,4 @@ public class Enfermeiro extends Pessoa{
     public String toString() {
         return "Enfermeiro{" + "formacao=" + formacao + ", hrCursadas=" + hrCursadas + '}';
     }
-
-    
-
-    
-    
-    
-
-    
-    
 }

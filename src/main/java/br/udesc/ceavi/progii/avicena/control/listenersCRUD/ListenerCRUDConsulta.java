@@ -7,13 +7,10 @@ package br.udesc.ceavi.progii.avicena.control.listenersCRUD;
 
 import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
-import br.udesc.ceavi.progii.avicena.control.dao.EnderecoDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.JPADAO;
 import br.udesc.ceavi.progii.avicena.control.dao.MedicoDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.PacienteDAO;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.ListenerBtPesquisarPaciente;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuConsultaNovaListener;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
@@ -37,79 +34,82 @@ import javax.swing.JOptionPane;
  * @version 1.0
  */
 public class ListenerCRUDConsulta {
-    
+
     private static ListenerCRUDConsulta instancia;
-    
+
     private Consulta consulta;
     private final FrameCRUD tela;
 
     public ListenerCRUDConsulta(Consulta consulta, FrameCRUD tela) {
         this.consulta = consulta;
         this.tela = tela;
-        
+
         addCRUDListeners();
     }
-    
-    public static ListenerCRUDConsulta getInstance(Consulta consulta, FrameCRUD tela){
-        if(instancia == null){
-            instancia = new ListenerCRUDConsulta(consulta, tela);    
+
+    public static ListenerCRUDConsulta getInstance(Consulta consulta, FrameCRUD tela) {
+        if (instancia == null) {
+            instancia = new ListenerCRUDConsulta(consulta, tela);
         }
         return instancia;
     }
-    
-    private void addCRUDListeners(){
+
+    private void addCRUDListeners() {
         JButton botao;
-        
-        //Carrega e define o comportamento para o botão Cancelar
+
+        // Carrega e define o comportamento para o botão Cancelar
         botao = tela.getPanelBotoesCRUD().getBtCancelar();
         botao.addActionListener(new btCancelarActionListener());
-        //Carrega e define o comportamento para o botão Novo
+        // Carrega e define o comportamento para o botão Novo
         botao = tela.getPanelBotoesCRUD().getBtNovo();
         botao.addActionListener(new btNovoActionListener());
-        //Carrega e define o comportamento para o botão Excluir
+        // Carrega e define o comportamento para o botão Excluir
         botao = tela.getPanelBotoesCRUD().getBtExcluir();
         botao.addActionListener(new btExcluirActionListener());
-        //Carrega e define o comportamento para o botão Gravar
+        // Carrega e define o comportamento para o botão Gravar
         botao = tela.getPanelBotoesCRUD().getBtGravar();
         botao.addActionListener(new btGravarActionListener());
-        
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Cancelar
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btCancelarActionListener implements ActionListener{
+    private class btCancelarActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja realmente fechar a janela?", 
-                                                                "Confirmar Fechamento", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja realmente fechar a janela?",
+                    "Confirmar Fechamento",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
-                //chama a classe controller  que faz a exclusão do objeto    
+                // chama a classe controller  que faz a exclusão do objeto
                 tela.dispose();
-            }        
+            }
         }
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Excluir
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btExcluirActionListener implements ActionListener{
+    private class btExcluirActionListener implements ActionListener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            int resposta = JOptionPane.showConfirmDialog(tela, "Deseja exluir este Consulta?", 
-                                                                "Confirmar Exclusão", 
-                                                                JOptionPane.YES_NO_OPTION, 
-                                                                JOptionPane.QUESTION_MESSAGE);
+            int resposta = JOptionPane.showConfirmDialog(
+                    tela,
+                    "Deseja exluir este Consulta?",
+                    "Confirmar Exclusão",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
                 JPADAO jpadao = new JPADAO();
                 try {
@@ -120,23 +120,21 @@ public class ListenerCRUDConsulta {
                 tela.limparCampos();
             }
         }
-
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Novo
      * @author Mário, Vini, Adroan, Raphael
      * @version 1.0
      * @since 06/05/2018
      */
-    private class btNovoActionListener implements ActionListener{
+    private class btNovoActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane.showMessageDialog(tela, "Nova consulta");
         }
-    
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Gravar
      * @author Mário, Vini, Adroan, Raphael
@@ -144,11 +142,13 @@ public class ListenerCRUDConsulta {
      * @since 06/05/2018
      */
     List<Enfermeiro> enfermeiros;
+
     List<Medico> medicos;
-    private class btGravarActionListener implements ActionListener{
+
+    private class btGravarActionListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            
+
             DAO dao = new ConsultaDAO();
             JPADAO jpadao = new JPADAO();
             DAO daoMedico = new MedicoDAO();
@@ -167,13 +167,13 @@ public class ListenerCRUDConsulta {
             consulta.setMedico(medicos.get(tela.getCbMedico().getSelectedIndex()));
             System.out.println(tela.getCbMedico().getSelectedIndex());
             List<Paciente> pacientes = daoPaciente.getList();
-                for (int i = 0; i < pacientes.size(); i++) {
-                     if(pacientes.get(i).getCpf().equals(tela.getTfPaciente().getText())){
-                           consulta.setPaciente(pacientes.get(i));
-                           System.out.println("paciente encontrado");
-                           break;
-                         }
-                 }
+            for (int i = 0; i < pacientes.size(); i++) {
+                if (pacientes.get(i).getCpf().equals(tela.getTfPaciente().getText())) {
+                    consulta.setPaciente(pacientes.get(i));
+                    System.out.println("paciente encontrado");
+                    break;
+                }
+            }
             try {
                 dao.inserir(consulta);
                 jpadao.inserir(consulta);
@@ -181,12 +181,8 @@ public class ListenerCRUDConsulta {
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(tela, "CPF incorreto");
             }
-            
-            
-           
+
             tela.limparCampos();
         }
-    
     }
-    
 }

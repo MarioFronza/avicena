@@ -5,11 +5,9 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-
 import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
-import br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroDiagnostico;
 import com.itextpdf.text.Document;
@@ -35,7 +33,7 @@ import javax.swing.JOptionPane;
  * @since 13/04/2018
  * @version 1.0
  */
-public class BtGerarReceiraListener implements ActionListener{
+public class BtGerarReceiraListener implements ActionListener {
 
     private DiagnosticoPrimario diagnosticoPrimario;
 
@@ -51,12 +49,14 @@ public class BtGerarReceiraListener implements ActionListener{
         lines.add("Receira Médica - AVICENA");
         lines.add("------------------------------------------------------------------");
         lines.add("Dr. " + consulta.getMedico().getNome());
-        lines.add("Rua. " + consulta.getMedico().getEndereco().getRua() + " , " + consulta.getMedico().getEndereco().getBairro());
+        lines.add("Rua. " + consulta.getMedico().getEndereco().getRua() + " , "
+                + consulta.getMedico().getEndereco().getBairro());
         lines.add("Telefone: (479921-00081)");
         lines.add("CRM " + consulta.getMedico().getCrm());
         lines.add("------------------------------------------------------------------");
         lines.add("Paciente " + consulta.getPaciente().getNome());
-        lines.add("Rua " + consulta.getPaciente().getEndereco().getRua() + " , " + consulta.getPaciente().getEndereco().getBairro());
+        lines.add("Rua " + consulta.getPaciente().getEndereco().getRua() + " , "
+                + consulta.getPaciente().getEndereco().getBairro());
         lines.add("Remédios:");
         lines.add(" ");
         lines.add("________________________");
@@ -75,7 +75,8 @@ public class BtGerarReceiraListener implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         DAO dao = new ConsultaDAO();
         List<Consulta> consultas = dao.getList();
-        int selectedIndex = FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex();
+        int selectedIndex =
+                FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex();
         if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
             JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), "Selecione uma consulta válida");
             return;
