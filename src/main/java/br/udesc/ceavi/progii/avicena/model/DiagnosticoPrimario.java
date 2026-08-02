@@ -5,8 +5,8 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
+import jakarta.persistence.*;
 import java.util.Objects;
-import javax.persistence.*;
 
 /**
  * Esta Classe contem os atributos e métodos para toda Diagnostico Primario

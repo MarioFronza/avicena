@@ -1,9 +1,9 @@
 package br.udesc.ceavi.progii.avicena.control.dao;
 
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 import java.util.HashMap;
 import java.util.Map;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 public final class PersistenceConfig {
 
@@ -17,9 +17,9 @@ public final class PersistenceConfig {
 
     private static Map<String, String> overrides() {
         Map<String, String> overrides = new HashMap<>();
-        putIfPresent(overrides, "javax.persistence.jdbc.url", "AVICENA_DB_URL");
-        putIfPresent(overrides, "javax.persistence.jdbc.user", "AVICENA_DB_USER");
-        putIfPresent(overrides, "javax.persistence.jdbc.password", "AVICENA_DB_PASSWORD");
+        putIfPresent(overrides, "jakarta.persistence.jdbc.url", "AVICENA_DB_URL");
+        putIfPresent(overrides, "jakarta.persistence.jdbc.user", "AVICENA_DB_USER");
+        putIfPresent(overrides, "jakarta.persistence.jdbc.password", "AVICENA_DB_PASSWORD");
         return overrides;
     }
 

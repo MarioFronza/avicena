@@ -5,9 +5,9 @@
  */
 package br.udesc.ceavi.progii.avicena.control.dao;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 /**
  * Esta Interface define as funções básicas de inserçao, consulta, alteração e exclusão de objetos utilizando o padrão JPA
