@@ -43,6 +43,10 @@ public class DiagnosticoFinal {
         this.descricao = descricao;
     }
 
+    public long getCodigo() {
+        return codigo;
+    }
+
     public String getDoenca() {
         return doenca;
     }

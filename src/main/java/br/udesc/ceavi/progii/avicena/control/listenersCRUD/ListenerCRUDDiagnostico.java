@@ -126,7 +126,12 @@ public class ListenerCRUDDiagnostico {
                                                                 JOptionPane.YES_NO_OPTION, 
                                                                 JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
-                //chama a classe controller  que faz a exclusão do objeto  
+                JPADAO jpadao = new JPADAO();
+                try {
+                    jpadao.deletar(diagnosticoPrimario);
+                } catch (Exception ex) {
+                    Logger.getLogger(ListenerCRUDDiagnostico.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 tela.limparCampos();
             }
         }

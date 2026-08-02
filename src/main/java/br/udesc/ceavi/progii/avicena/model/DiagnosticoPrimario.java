@@ -52,6 +52,10 @@ public class DiagnosticoPrimario {
         this.Descricao = historicoRemedio;
     }
 
+    public long getCodigo() {
+        return codigo;
+    }
+
     public float getPressao() {
         return pressao;
     }
