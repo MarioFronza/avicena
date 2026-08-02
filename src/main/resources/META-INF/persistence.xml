@@ -7,10 +7,11 @@
     <class>br.udesc.ceavi.progii.avicena.model.Endereco</class>
     <class>br.udesc.ceavi.progii.avicena.model.Enfermeiro</class>
     <class>br.udesc.ceavi.progii.avicena.model.Medico</class>
-    <class>br.udesc.ceavi.progii.avicena.model.Paciente</class>
     <class>br.udesc.ceavi.progii.avicena.model.Pessoa</class>
     <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal</class>
     <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario</class>
+    <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/AvicenaBD"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>

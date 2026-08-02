@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import br.udesc.ceavi.progii.avicena.model.Consulta;
-import br.udesc.ceavi.progii.avicena.model.EstadoCivil;
-import br.udesc.ceavi.progii.avicena.model.Paciente;
+import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import org.junit.jupiter.api.Test;
 
 class FrameConsultaListarTest {
@@ -16,7 +16,7 @@ class FrameConsultaListarTest {
         consulta.setData("02/08/2026");
         consulta.setHora("10:00");
         consulta.setPaciente(
-                new Paciente("Paciente Teste", "11111111111", 0, "48900000000", null, EstadoCivil.SOLTEIRO));
+                new PatientEntity(null, "Paciente Teste", "11111111111", "48900000000", null, MaritalStatus.SINGLE));
 
         String[] row = assertDoesNotThrow(() -> FrameConsultaListar.toTableRow(consulta));
 
