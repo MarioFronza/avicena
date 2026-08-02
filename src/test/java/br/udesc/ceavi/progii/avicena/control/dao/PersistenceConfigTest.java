@@ -8,15 +8,27 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class PersistenceConfigTest {
 
     private static final String URL_PROPERTY = "AVICENA_DB_URL";
 
+    private String originalUrl;
+
+    @BeforeEach
+    void captureSystemProperties() {
+        originalUrl = System.getProperty(URL_PROPERTY);
+    }
+
     @AfterEach
-    void clearSystemProperties() {
-        System.clearProperty(URL_PROPERTY);
+    void restoreSystemProperties() {
+        if (originalUrl == null) {
+            System.clearProperty(URL_PROPERTY);
+        } else {
+            System.setProperty(URL_PROPERTY, originalUrl);
+        }
     }
 
     @Test
