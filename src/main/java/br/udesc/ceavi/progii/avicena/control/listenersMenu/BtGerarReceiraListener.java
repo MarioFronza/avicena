@@ -23,9 +23,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Listener para evento de clique do botão Gerar Receita
@@ -36,55 +38,81 @@ import java.util.logging.Logger;
 public class BtGerarReceiraListener implements ActionListener{
 
     private DiagnosticoPrimario diagnosticoPrimario;
-    DAO dao = new ConsultaDAO();
-    List<Consulta> consultas = dao.getList();
-    Consulta consulta;
-    
+
+    static List<String> buildReceitaLines(Consulta consulta) {
+        if (consulta.getMedico() == null || consulta.getMedico().getEndereco() == null) {
+            throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
+        }
+        if (consulta.getPaciente() == null || consulta.getPaciente().getEndereco() == null) {
+            throw new IllegalStateException("Paciente ou endereço do paciente não cadastrado");
+        }
+
+        List<String> lines = new ArrayList<>();
+        lines.add("Receira Médica - AVICENA");
+        lines.add("------------------------------------------------------------------");
+        lines.add("Dr. " + consulta.getMedico().getNome());
+        lines.add("Rua. " + consulta.getMedico().getEndereco().getRua() + " , " + consulta.getMedico().getEndereco().getBairro());
+        lines.add("Telefone: (479921-00081)");
+        lines.add("CRM " + consulta.getMedico().getCrm());
+        lines.add("------------------------------------------------------------------");
+        lines.add("Paciente " + consulta.getPaciente().getNome());
+        lines.add("Rua " + consulta.getPaciente().getEndereco().getRua() + " , " + consulta.getPaciente().getEndereco().getBairro());
+        lines.add("Remédios:");
+        lines.add(" ");
+        lines.add("________________________");
+        lines.add(" ");
+        lines.add("________________________");
+        lines.add(" ");
+        lines.add("________________________");
+        lines.add(" ");
+        lines.add("Assinatura do profissional:");
+        lines.add(" ");
+        lines.add("_______________________________________________________");
+        return lines;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        consulta = consultas.get(FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex());
-        
+        DAO dao = new ConsultaDAO();
+        List<Consulta> consultas = dao.getList();
+        int selectedIndex = FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex();
+        if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
+            JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), "Selecione uma consulta válida");
+            return;
+        }
+        Consulta consulta = consultas.get(selectedIndex);
+
+        List<String> lines;
+        try {
+            lines = buildReceitaLines(consulta);
+        } catch (IllegalStateException ex) {
+            JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), ex.getMessage());
+            return;
+        }
+
+        boolean generated = false;
         Document document = new Document();
         try {
             PdfWriter.getInstance(document, new FileOutputStream("Receira-Avicena.pdf"));
             document.open();
-            document.add(new Paragraph("Receira Médica - AVICENA"));
-            document.add(new Paragraph("------------------------------------------------------------------"));
-            document.add(new Paragraph("Dr. "+consulta.getMedico().getNome()));
-            document.add(new Paragraph("Rua. "+consulta.getMedico().getEndereco().getRua()+" , "+consulta.getMedico().getEndereco().getBairro()));
-            document.add(new Paragraph("Telefone: (479921-00081)"));
-            document.add(new Paragraph("CRM "+consulta.getMedico().getCrm()));
-            document.add(new Paragraph("------------------------------------------------------------------"));
-            document.add(new Paragraph("Paciente "+ consulta.getPaciente().getNome()));
-            document.add(new Paragraph("Rua "+consulta.getPaciente().getEndereco().getRua()+" , "+consulta.getPaciente().getEndereco().getBairro()));
-            document.add(new Paragraph("Remédios:"));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("________________________"));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("________________________"));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("________________________"));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("Assinatura do profissional:"));
-            document.add(new Paragraph(" "));
-            document.add(new Paragraph("_______________________________________________________"));
-            
+            for (String line : lines) {
+                document.add(new Paragraph(line));
+            }
+            generated = true;
         } catch (FileNotFoundException | DocumentException ex) {
             Logger.getLogger(BtGerarReceiraListener.class.getName()).log(Level.SEVERE, null, ex);
-        }finally{
+        } finally {
             document.close();
         }
-        
+
+        if (!generated) {
+            return;
+        }
+
         try {
             Desktop.getDesktop().open(new File("Receira-Avicena.pdf"));
         } catch (IOException ex) {
             Logger.getLogger(BtGerarReceiraListener.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
     }
-
-    
-    
-
-    
 }
