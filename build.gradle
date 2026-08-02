@@ -1,5 +1,6 @@
 plugins {
     id 'application'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 repositories {
@@ -36,4 +37,12 @@ test {
     // default, which recent Docker Engine versions reject. Pinning a version both
     // old and new engines support avoids relying on negotiation.
     systemProperty 'api.version', '1.41'
+}
+
+spotless {
+    java {
+        target 'src/**/*.java'
+        palantirJavaFormat()
+        removeUnusedImports()
+    }
 }
