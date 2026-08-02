@@ -50,6 +50,10 @@ public class Endereco implements Serializable {
         this.cidade = cidade;
     }
 
+    public long getCodigo() {
+        return codigo;
+    }
+
     public int getNumero() {
         return numero;
     }

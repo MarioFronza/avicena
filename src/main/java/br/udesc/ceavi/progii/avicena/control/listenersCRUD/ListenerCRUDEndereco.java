@@ -106,13 +106,18 @@ public class ListenerCRUDEndereco {
                                                                 JOptionPane.YES_NO_OPTION, 
                                                                 JOptionPane.QUESTION_MESSAGE);
             if (resposta == JOptionPane.YES_OPTION) {
-                //chama a classe controller  que faz a exclusão do objeto  
+                JPADAO jpadao = new JPADAO();
+                try {
+                    jpadao.deletar(endereco);
+                } catch (Exception ex) {
+                    Logger.getLogger(ListenerCRUDEndereco.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 tela.limparCampos();
             }
         }
-    
+
     }
-    
+
     /**
      * Classe interna que define o Listener para o botão Novo
      * @author Mário, Vini, Adroan, Raphael
@@ -122,9 +127,9 @@ public class ListenerCRUDEndereco {
     private class btNovoActionListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(tela, "Novo Medico");
+            JOptionPane.showMessageDialog(tela, "Novo Endereco");
         }
-    
+
     }
     
     /**
