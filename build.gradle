@@ -24,8 +24,16 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.11.3')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.20.4')
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:junit-jupiter'
 }
 
 test {
     useJUnitPlatform()
+    // Testcontainers' bundled docker-java client negotiates down to API 1.32 by
+    // default, which recent Docker Engine versions reject. Pinning a version both
+    // old and new engines support avoids relying on negotiation.
+    systemProperty 'api.version', '1.41'
 }
