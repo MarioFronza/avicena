@@ -18,12 +18,12 @@ import br.udesc.ceavi.progii.avicena.model.Medico;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameConsultaNova;
+import jakarta.persistence.EntityManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.EntityManager;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 

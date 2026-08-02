@@ -3,9 +3,9 @@ package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.domain.PatientRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 
 public class PatientJpaRepository implements PatientRepository {
 

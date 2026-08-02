@@ -6,9 +6,9 @@
 package br.udesc.ceavi.progii.avicena.model;
 
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
+import jakarta.persistence.*;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.*;
 
 /**
  * Esta Classe contem os atributos e métodos para toda Consulta

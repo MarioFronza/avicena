@@ -8,8 +8,8 @@ import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 
 class ConsultaDAOTest {
