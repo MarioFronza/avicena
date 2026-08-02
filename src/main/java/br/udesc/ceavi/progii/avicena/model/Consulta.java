@@ -54,6 +54,10 @@ public class Consulta {
         this.estadoPaciente = estadoPaciente;
     }
 
+    public long getCodigo() {
+        return codigo;
+    }
+
     public String getData() {
         return data;
     }
