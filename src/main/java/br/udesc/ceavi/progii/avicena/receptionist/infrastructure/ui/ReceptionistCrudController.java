@@ -125,10 +125,13 @@ public class ReceptionistCrudController {
             String name = registrationFrame.getNameField().getText();
             String cpf = registrationFrame.getCpfField().getText();
             String phone = registrationFrame.getPhoneField().getText();
-            int workHours = Integer.parseInt(registrationFrame.getWorkHoursField().getText());
-            int overtimeHours = Integer.parseInt(registrationFrame.getOvertimeHoursField().getText());
+            int workHours =
+                    Integer.parseInt(registrationFrame.getWorkHoursField().getText());
+            int overtimeHours =
+                    Integer.parseInt(registrationFrame.getOvertimeHoursField().getText());
             float salary = Float.parseFloat(registrationFrame.getSalaryField().getText());
-            int laborCardNumber = Integer.parseInt(registrationFrame.getLaborCardNumberField().getText());
+            int laborCardNumber =
+                    Integer.parseInt(registrationFrame.getLaborCardNumberField().getText());
             MaritalStatus maritalStatus =
                     (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
 
