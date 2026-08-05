@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.udesc.ceavi.avicena.control.exceptions;
+package br.udesc.ceavi.progii.avicena.control.exceptions;
 
 /**
  * Classe responsavel pela exceção de um valor nulo
