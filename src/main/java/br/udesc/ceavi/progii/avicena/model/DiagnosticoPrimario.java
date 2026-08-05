@@ -5,6 +5,7 @@
  */
 package br.udesc.ceavi.progii.avicena.model;
 
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import jakarta.persistence.*;
 import java.util.Objects;
 
@@ -39,7 +40,7 @@ public class DiagnosticoPrimario {
 
     @ManyToOne
     @JoinColumn(name = "id_consulta")
-    private Consulta consulta;
+    private AppointmentEntity consulta;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_diagnostico_final")
@@ -110,7 +111,7 @@ public class DiagnosticoPrimario {
         this.Descricao = Descricao;
     }
 
-    public Consulta getConsulta() {
+    public AppointmentEntity getConsulta() {
         return consulta;
     }
 
@@ -118,7 +119,7 @@ public class DiagnosticoPrimario {
         return diagnosticoFinal;
     }
 
-    public void setConsulta(Consulta consulta) {
+    public void setConsulta(AppointmentEntity consulta) {
         this.consulta = consulta;
     }
 

@@ -5,14 +5,14 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersCRUD;
 
-import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
-import br.udesc.ceavi.progii.avicena.control.dao.DAO;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.JPADAO;
-import br.udesc.ceavi.progii.avicena.model.Consulta;
+import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroDiagnostico;
+import jakarta.persistence.EntityManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -157,8 +157,16 @@ public class ListenerCRUDDiagnostico {
         public void actionPerformed(ActionEvent e) {
             FrameCadastroDiagnostico frame = FrameCadastroDiagnostico.getInstance();
             JPADAO jpadao = new JPADAO();
-            DAO dao = new ConsultaDAO();
-            List<Consulta> consultas = dao.getList();
+            EntityManager entityManager =
+                    PersistenceConfig.createEntityManagerFactory().createEntityManager();
+            List<AppointmentEntity> consultas;
+            try {
+                consultas = entityManager
+                        .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
+                        .getResultList();
+            } finally {
+                entityManager.close();
+            }
             diagnosticoPrimario = new DiagnosticoPrimario();
             diagnosticoFinal = new DiagnosticoFinal();
 
