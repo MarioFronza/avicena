@@ -120,11 +120,6 @@ Since this repo's purpose is refactoring practice, these are the load-bearing qu
 worth knowing before touching code (not an exhaustive list, but the ones that shape
 architecture decisions):
 
-- **DAO duality**, now scoped to what's left unmigrated: `JPADAO` (works) vs.
-  `ConsultaDAO`/`EnderecoDAO` (validate-only stubs) vs.
-  `DiagnosticoPrimarioDAO`/`DiagnosticoFinalDAO`/`AgendaDAO` (complete stubs, every
-  method throws `UnsupportedOperationException`). Whether a given old-style entity
-  actually persists depends on whether its `ListenerCRUD*` separately calls `JPADAO`.
 - **Dual address entities** — `model.Endereco` and
   `patient.infrastructure.persistence.AddressEntity` both map the `endereco` table.
   The four migrated `CrudController`s bridge through `ListenerCRUDEndereco` and a
