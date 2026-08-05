@@ -5,10 +5,9 @@
  */
 package br.udesc.ceavi.progii.avicena.view.principal;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuAgendaListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuCadDiagnosticoListener;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuConsultaListarListener;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuConsultaNovaListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuHistoricoListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenuListener;
@@ -34,7 +33,6 @@ public class MenuPrincipal extends JMenuBar {
 
     private JMenu menuPaciente;
     private JMenuItem menuItemCadDiagnostico;
-    private JMenuItem menuItemCadAgenda;
     private JMenuItem menuItemCadHistorico;
 
     private JMenu menuCadastro;
@@ -80,7 +78,6 @@ public class MenuPrincipal extends JMenuBar {
         menuPaciente = new JMenu("Paciente");
         menuItemCadDiagnostico = new JMenuItem("Diagnóstico");
         menuItemCadHistorico = new JMenuItem("Histórico");
-        menuItemCadAgenda = new JMenuItem("Agenda");
 
         menuCadastro = new JMenu("Cadastro");
         menuItemCadPaciente = new JMenuItem("Cadastro Paciente");
@@ -104,16 +101,11 @@ public class MenuPrincipal extends JMenuBar {
                 getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/report_edit.png")));
         menuItemCadHistorico.setIcon(new javax.swing.ImageIcon(
                 getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/status_away.png")));
-        menuItemCadAgenda.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/report_user.png")));
         menuPaciente.setToolTipText("Cadastro de Diagnóstico,...");
         menuItemCadDiagnostico.setToolTipText("Cadastro dos diagnósticos primário e final");
         menuItemCadHistorico.setToolTipText("Em desenvolvimento...");
-        menuItemCadAgenda.setToolTipText("Em desenvolvimento...");
-        menuItemCadAgenda.setEnabled(false);
         menuItemCadHistorico.setEnabled(false);
         menuPaciente.add(menuItemCadDiagnostico);
-        menuPaciente.add(menuItemCadAgenda);
         menuPaciente.add(menuItemCadHistorico);
 
         super.add(menuPaciente);
@@ -171,17 +163,15 @@ public class MenuPrincipal extends JMenuBar {
         ActionListener listenerCadAtendente = new RegisterReceptionistMenuListener(frame);
         ActionListener listenerSobreListener = new MenuSobreListener(frame);
         ActionListener listenerCadDiagnostico = new MenuCadDiagnosticoListener(frame);
-        ActionListener listenerAgenda = new MenuAgendaListener(frame);
         ActionListener listenerHistorico = new MenuHistoricoListener(frame);
 
         // Listeners para os itens do Menu Consula
-        ActionListener listenerConsultaNova = new MenuConsultaNovaListener(frame);
-        ActionListener listenerConsultaListar = new MenuConsultaListarListener(frame);
+        ActionListener listenerConsultaNova = new RegisterAppointmentMenuListener(frame);
+        ActionListener listenerConsultaListar = new ListAppointmentsMenuListener(frame);
 
         // Adiciona o Listener para o item
         menuItemCadHistorico.addActionListener(listenerHistorico);
         menuItemCadDiagnostico.addActionListener(listenerCadDiagnostico);
-        menuItemCadAgenda.addActionListener(listenerAgenda);
         menuItemCadMedico.addActionListener(listenerCadMedico);
         menuItemCadEnfermeiro.addActionListener(listenerCadEnfermeiro);
         menuItemCadPaciente.addActionListener(listenerCadPaciente);

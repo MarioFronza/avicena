@@ -5,15 +5,15 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
-import br.udesc.ceavi.progii.avicena.control.dao.DAO;
-import br.udesc.ceavi.progii.avicena.model.Consulta;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
+import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroDiagnostico;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import jakarta.persistence.EntityManager;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,26 +37,26 @@ public class BtGerarReceiraListener implements ActionListener {
 
     private DiagnosticoPrimario diagnosticoPrimario;
 
-    static List<String> buildReceitaLines(Consulta consulta) {
-        if (consulta.getMedico() == null || consulta.getMedico().getAddress() == null) {
+    static List<String> buildReceitaLines(AppointmentEntity consulta) {
+        if (consulta.getDoctor() == null || consulta.getDoctor().getAddress() == null) {
             throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
         }
-        if (consulta.getPaciente() == null || consulta.getPaciente().getAddress() == null) {
+        if (consulta.getPatient() == null || consulta.getPatient().getAddress() == null) {
             throw new IllegalStateException("Paciente ou endereço do paciente não cadastrado");
         }
 
         List<String> lines = new ArrayList<>();
         lines.add("Receira Médica - AVICENA");
         lines.add("------------------------------------------------------------------");
-        lines.add("Dr. " + consulta.getMedico().getName());
-        lines.add("Rua. " + consulta.getMedico().getAddress().getStreet() + " , "
-                + consulta.getMedico().getAddress().getNeighborhood());
+        lines.add("Dr. " + consulta.getDoctor().getName());
+        lines.add("Rua. " + consulta.getDoctor().getAddress().getStreet() + " , "
+                + consulta.getDoctor().getAddress().getNeighborhood());
         lines.add("Telefone: (479921-00081)");
-        lines.add("CRM " + consulta.getMedico().getCrm());
+        lines.add("CRM " + consulta.getDoctor().getCrm());
         lines.add("------------------------------------------------------------------");
-        lines.add("Paciente " + consulta.getPaciente().getName());
-        lines.add("Rua " + consulta.getPaciente().getAddress().getStreet() + " , "
-                + consulta.getPaciente().getAddress().getNeighborhood());
+        lines.add("Paciente " + consulta.getPatient().getName());
+        lines.add("Rua " + consulta.getPatient().getAddress().getStreet() + " , "
+                + consulta.getPatient().getAddress().getNeighborhood());
         lines.add("Remédios:");
         lines.add(" ");
         lines.add("________________________");
@@ -73,15 +73,23 @@ public class BtGerarReceiraListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DAO dao = new ConsultaDAO();
-        List<Consulta> consultas = dao.getList();
+        EntityManager entityManager =
+                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        List<AppointmentEntity> consultas;
+        try {
+            consultas = entityManager
+                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
+                    .getResultList();
+        } finally {
+            entityManager.close();
+        }
         int selectedIndex =
                 FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex();
         if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
             JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), "Selecione uma consulta válida");
             return;
         }
-        Consulta consulta = consultas.get(selectedIndex);
+        AppointmentEntity consulta = consultas.get(selectedIndex);
 
         List<String> lines;
         try {

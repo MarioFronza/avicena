@@ -5,14 +5,14 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
-import br.udesc.ceavi.progii.avicena.control.dao.DAO;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
+import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.control.listenersCRUD.ListenerCRUDDiagnostico;
-import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal;
 import br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroDiagnostico;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import jakarta.persistence.EntityManager;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
@@ -36,15 +36,23 @@ public class MenuCadDiagnosticoListener extends MenuActionListener {
         ListenerCRUDDiagnostico listenerCRUDDiagnosticoFinal =
                 ListenerCRUDDiagnostico.getInstance(diagnosticoPrimario, diagnosticoFinal, frame);
 
-        DAO dao = new ConsultaDAO();
-        List<Consulta> consultas = dao.getList();
+        EntityManager entityManager =
+                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        List<AppointmentEntity> consultas;
+        try {
+            consultas = entityManager
+                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
+                    .getResultList();
+        } finally {
+            entityManager.close();
+        }
         FrameCadastroDiagnostico.getInstance().getCbConsulta().removeAllItems();
 
         for (int i = 0; i < consultas.size(); i++) {
             FrameCadastroDiagnostico.getInstance()
                     .getCbConsulta()
-                    .addItem(consultas.get(i).getHora() + " - "
-                            + consultas.get(i).getPaciente().getName());
+                    .addItem(consultas.get(i).getTime() + " - "
+                            + consultas.get(i).getPatient().getName());
         }
 
         if (frame.isVisible()) {
