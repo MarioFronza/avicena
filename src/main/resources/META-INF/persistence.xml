@@ -11,6 +11,8 @@
     <class>br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity</class>
     <class>br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistEntity</class>
     <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.FinalDiagnosisEntity</class>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/AvicenaBD"/>
       <property name="jakarta.persistence.jdbc.user" value="postgres"/>
