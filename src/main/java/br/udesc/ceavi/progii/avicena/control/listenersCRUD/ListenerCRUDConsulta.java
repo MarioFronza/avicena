@@ -7,13 +7,12 @@ package br.udesc.ceavi.progii.avicena.control.listenersCRUD;
 
 import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
-import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.JPADAO;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
-import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameConsultaNova;
@@ -141,7 +140,7 @@ public class ListenerCRUDConsulta {
      * @version 1.0
      * @since 06/05/2018
      */
-    List<Enfermeiro> enfermeiros;
+    List<NurseEntity> enfermeiros;
 
     List<DoctorEntity> medicos;
 
@@ -151,16 +150,12 @@ public class ListenerCRUDConsulta {
 
             DAO dao = new ConsultaDAO();
             JPADAO jpadao = new JPADAO();
-            DAO daoEnfermeiro = new EnfermeiroDAO();
-            enfermeiros = daoEnfermeiro.getList();
             consulta = new Consulta();
             FrameConsultaNova tela = FrameConsultaNova.getInstance();
             consulta.setHora(tela.getTfHora().getText());
             consulta.setData(tela.getTfData().getText());
             consulta.setSintomas(tela.getTfSintomas().getText());
             consulta.setEstadoPaciente(EstadoPaciente.NAOURGENTE);
-            consulta.setEnfermeiro(enfermeiros.get(tela.getCbEnfermeiro().getSelectedIndex()));
-            System.out.println(tela.getCbEnfermeiro().getSelectedIndex());
             EntityManager entityManager =
                     PersistenceConfig.createEntityManagerFactory().createEntityManager();
             List<PatientEntity> pacientes;
@@ -171,9 +166,14 @@ public class ListenerCRUDConsulta {
                 medicos = entityManager
                         .createQuery("SELECT d FROM DoctorEntity d", DoctorEntity.class)
                         .getResultList();
+                enfermeiros = entityManager
+                        .createQuery("SELECT n FROM NurseEntity n", NurseEntity.class)
+                        .getResultList();
             } finally {
                 entityManager.close();
             }
+            consulta.setEnfermeiro(enfermeiros.get(tela.getCbEnfermeiro().getSelectedIndex()));
+            System.out.println(tela.getCbEnfermeiro().getSelectedIndex());
             consulta.setMedico(medicos.get(tela.getCbMedico().getSelectedIndex()));
             System.out.println(tela.getCbMedico().getSelectedIndex());
             for (int i = 0; i < pacientes.size(); i++) {
