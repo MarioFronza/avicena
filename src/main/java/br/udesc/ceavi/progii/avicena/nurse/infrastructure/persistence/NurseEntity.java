@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class NurseEntity {
     @Column(name = "telefone", nullable = false)
     private String phone;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "codigo_endereco")
     private AddressEntity address;
 

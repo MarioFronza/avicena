@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.view.principal;
 
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroEndereco;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -96,10 +95,6 @@ public class FrameSistema extends JFrame {
     }
     // Adcionar frames internos
     public void adicionarFrameInterno(JInternalFrame frame) {
-        desktop.add(frame);
-    }
-    // Adiconar frame de endereço
-    public void adicionarFrameInterno2(FrameCadastroEndereco frame) {
         desktop.add(frame);
     }
 }

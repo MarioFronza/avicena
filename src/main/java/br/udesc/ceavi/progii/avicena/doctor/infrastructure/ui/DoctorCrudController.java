@@ -1,14 +1,13 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.control.listenersCRUD.ListenerCRUDEndereco;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
-import br.udesc.ceavi.progii.avicena.model.Endereco;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -66,21 +65,8 @@ public class DoctorCrudController {
     }
 
     private Address currentAddress() {
-        ListenerCRUDEndereco addressController = ListenerCRUDEndereco.getInstance();
-        if (addressController == null) {
-            return null;
-        }
-        Endereco endereco = addressController.getEndereco();
-        if (endereco == null) {
-            return null;
-        }
-        return new Address(
-                endereco.getNumero(),
-                endereco.getComplemento(),
-                endereco.getCep(),
-                endereco.getRua(),
-                endereco.getBairro(),
-                endereco.getCidade());
+        AddressEntryController addressController = AddressEntryController.getInstance();
+        return addressController == null ? null : addressController.getAddress();
     }
 
     private class CancelActionListener implements ActionListener {
