@@ -5,7 +5,6 @@
     <class>br.udesc.ceavi.progii.avicena.model.Atendente</class>
     <class>br.udesc.ceavi.progii.avicena.model.Consulta</class>
     <class>br.udesc.ceavi.progii.avicena.model.Endereco</class>
-    <class>br.udesc.ceavi.progii.avicena.model.Enfermeiro</class>
     <class>br.udesc.ceavi.progii.avicena.model.Pessoa</class>
     <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal</class>
     <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario</class>

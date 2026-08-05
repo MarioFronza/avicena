@@ -14,8 +14,8 @@ class NurseJpaRepositoryTest {
 
     @Test
     void savePersistsANurseThatIsRetrievableAfterward() {
-        Nurse nurse = new Nurse(
-                "Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+        Nurse nurse =
+                new Nurse("Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
         NurseJpaRepository repository = new NurseJpaRepository();
 
         Nurse saved = repository.save(nurse);
@@ -32,8 +32,8 @@ class NurseJpaRepositoryTest {
 
     @Test
     void deleteRemovesAPreviouslyPersistedNurse() {
-        Nurse nurse = new Nurse(
-                "Maria Teste", "98765432100", "48988880000", null, MaritalStatus.SINGLE, "Enfermeira", 800);
+        Nurse nurse =
+                new Nurse("Maria Teste", "98765432100", "48988880000", null, MaritalStatus.SINGLE, "Enfermeira", 800);
         NurseJpaRepository repository = new NurseJpaRepository();
         Nurse saved = repository.save(nurse);
 

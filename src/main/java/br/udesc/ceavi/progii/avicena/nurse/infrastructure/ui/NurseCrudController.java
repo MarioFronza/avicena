@@ -126,7 +126,8 @@ public class NurseCrudController {
             String cpf = registrationFrame.getCpfField().getText();
             String phone = registrationFrame.getPhoneField().getText();
             String formation = registrationFrame.getFormationField().getText();
-            int hoursCompleted = Integer.parseInt(registrationFrame.getHoursCompletedField().getText());
+            int hoursCompleted =
+                    Integer.parseInt(registrationFrame.getHoursCompletedField().getText());
             MaritalStatus maritalStatus =
                     (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
 

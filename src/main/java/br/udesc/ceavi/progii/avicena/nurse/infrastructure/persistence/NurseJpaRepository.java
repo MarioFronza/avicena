@@ -33,10 +33,7 @@ public class NurseJpaRepository implements NurseRepository {
     public List<Nurse> findAll() {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            return entityManager
-                    .createQuery("SELECT n FROM NurseEntity n", NurseEntity.class)
-                    .getResultList()
-                    .stream()
+            return entityManager.createQuery("SELECT n FROM NurseEntity n", NurseEntity.class).getResultList().stream()
                     .map(NurseMapper::toDomain)
                     .toList();
         } finally {

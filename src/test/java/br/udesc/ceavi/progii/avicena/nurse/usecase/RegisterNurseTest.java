@@ -13,8 +13,8 @@ class RegisterNurseTest {
     void savesTheNurseThroughTheRepository() {
         InMemoryNurseRepository repository = new InMemoryNurseRepository();
         RegisterNurse useCase = new RegisterNurse(repository);
-        Nurse nurse = new Nurse(
-                "Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+        Nurse nurse =
+                new Nurse("Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
 
         Nurse registered = useCase.register(nurse);
 

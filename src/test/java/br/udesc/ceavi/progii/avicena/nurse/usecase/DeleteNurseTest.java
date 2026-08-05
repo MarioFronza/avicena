@@ -11,8 +11,8 @@ class DeleteNurseTest {
     @Test
     void deletesTheNurseThroughTheRepository() {
         InMemoryNurseRepository repository = new InMemoryNurseRepository();
-        Nurse nurse = new Nurse(
-                "Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+        Nurse nurse =
+                new Nurse("Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
         repository.save(nurse);
         DeleteNurse useCase = new DeleteNurse(repository);
 
