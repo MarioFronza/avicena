@@ -7,7 +7,7 @@ package br.udesc.ceavi.progii.avicena.view.principal;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuCadDiagnosticoListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagnosisMenuListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuHistoricoListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenuListener;
@@ -162,7 +162,7 @@ public class MenuPrincipal extends JMenuBar {
         ActionListener listenerCadEnfermeiro = new RegisterNurseMenuListener(frame);
         ActionListener listenerCadAtendente = new RegisterReceptionistMenuListener(frame);
         ActionListener listenerSobreListener = new MenuSobreListener(frame);
-        ActionListener listenerCadDiagnostico = new MenuCadDiagnosticoListener(frame);
+        ActionListener listenerCadDiagnostico = new RegisterDiagnosisMenuListener(frame);
         ActionListener listenerHistorico = new MenuHistoricoListener(frame);
 
         // Listeners para os itens do Menu Consula

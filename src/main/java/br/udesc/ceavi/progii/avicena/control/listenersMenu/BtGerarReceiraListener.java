@@ -6,9 +6,8 @@
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCadastroDiagnostico;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
@@ -34,8 +33,6 @@ import javax.swing.JOptionPane;
  * @version 1.0
  */
 public class BtGerarReceiraListener implements ActionListener {
-
-    private DiagnosticoPrimario diagnosticoPrimario;
 
     static List<String> buildReceitaLines(AppointmentEntity consulta) {
         if (consulta.getDoctor() == null || consulta.getDoctor().getAddress() == null) {
@@ -83,10 +80,11 @@ public class BtGerarReceiraListener implements ActionListener {
         } finally {
             entityManager.close();
         }
-        int selectedIndex =
-                FrameCadastroDiagnostico.getInstance().getCbConsulta().getSelectedIndex();
+        int selectedIndex = DiagnosisRegistrationFrame.getInstance()
+                .getAppointmentComboBox()
+                .getSelectedIndex();
         if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
-            JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), "Selecione uma consulta válida");
+            JOptionPane.showMessageDialog(DiagnosisRegistrationFrame.getInstance(), "Selecione uma consulta válida");
             return;
         }
         AppointmentEntity consulta = consultas.get(selectedIndex);
@@ -95,7 +93,7 @@ public class BtGerarReceiraListener implements ActionListener {
         try {
             lines = buildReceitaLines(consulta);
         } catch (IllegalStateException ex) {
-            JOptionPane.showMessageDialog(FrameCadastroDiagnostico.getInstance(), ex.getMessage());
+            JOptionPane.showMessageDialog(DiagnosisRegistrationFrame.getInstance(), ex.getMessage());
             return;
         }
 
