@@ -1,6 +1,6 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.BtEnderecoListener;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
@@ -277,7 +277,7 @@ public class ReceptionistRegistrationFrame extends FrameCRUD implements ActionLi
     public void actionPerformed(ActionEvent e) {}
 
     private void addListeners() {
-        ActionListener addressListener = new BtEnderecoListener(mainFrame);
+        ActionListener addressListener = new AddAddressListener(mainFrame);
         ActionListener searchListener = new ReceptionistSearchController();
         searchButton.addActionListener(searchListener);
         addressButton.addActionListener(addressListener);
