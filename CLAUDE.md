@@ -7,8 +7,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Avicena is a Java Swing desktop app for clinic management (patients, doctors, nurses,
 receptionists, appointments, diagnoses, prescriptions). It's an academic project
 (UDESC, Programação II course) built as a NetBeans "Java Application" (Ant-based),
-persisted via JPA/EclipseLink to PostgreSQL. Requirements and domain model
-(`AvicenaRequisitos.txt`, ISO-8859-1 encoded) are in Portuguese.
+persisted via JPA/EclipseLink to PostgreSQL. Original requirements are in
+`REQUIREMENTS.md`.
 
 This repo is being used for **refactoring practice/training**, not active feature
 delivery — see "Known issues / refactor targets" below for where the interesting work is.
