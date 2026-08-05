@@ -5,9 +5,9 @@
  */
 package br.udesc.ceavi.progii.avicena.view.principal;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuCadDiagnosticoListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
+import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuCadDiagnosticoListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuHistoricoListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenuListener;
