@@ -1,7 +1,6 @@
 package br.udesc.ceavi.progii.avicena.view.frames;
 
 import br.udesc.ceavi.progii.avicena.model.EstadoPaciente;
-import br.udesc.ceavi.progii.avicena.model.Medico;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -30,7 +29,6 @@ public class FrameConsultaNova extends FrameCRUD {
     private static final String titulo = "Cadastro de Consulta";
     private static final Dimension dimension = new Dimension(630, 230);
     private List listaMedicos = new ArrayList();
-    private Medico medico;
     private JLabel lbData;
     private JLabel lbHora;
     private JLabel lbSintomas;
