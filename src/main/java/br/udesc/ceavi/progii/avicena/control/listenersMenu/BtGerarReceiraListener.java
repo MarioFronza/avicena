@@ -38,7 +38,7 @@ public class BtGerarReceiraListener implements ActionListener {
     private DiagnosticoPrimario diagnosticoPrimario;
 
     static List<String> buildReceitaLines(Consulta consulta) {
-        if (consulta.getMedico() == null || consulta.getMedico().getEndereco() == null) {
+        if (consulta.getMedico() == null || consulta.getMedico().getAddress() == null) {
             throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
         }
         if (consulta.getPaciente() == null || consulta.getPaciente().getAddress() == null) {
@@ -48,9 +48,9 @@ public class BtGerarReceiraListener implements ActionListener {
         List<String> lines = new ArrayList<>();
         lines.add("Receira Médica - AVICENA");
         lines.add("------------------------------------------------------------------");
-        lines.add("Dr. " + consulta.getMedico().getNome());
-        lines.add("Rua. " + consulta.getMedico().getEndereco().getRua() + " , "
-                + consulta.getMedico().getEndereco().getBairro());
+        lines.add("Dr. " + consulta.getMedico().getName());
+        lines.add("Rua. " + consulta.getMedico().getAddress().getStreet() + " , "
+                + consulta.getMedico().getAddress().getNeighborhood());
         lines.add("Telefone: (479921-00081)");
         lines.add("CRM " + consulta.getMedico().getCrm());
         lines.add("------------------------------------------------------------------");

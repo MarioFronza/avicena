@@ -13,8 +13,7 @@ class DoctorTest {
     void rejectsBlankName() {
         assertThrows(
                 InvalidDoctorDataException.class,
-                () -> new Doctor(
-                        "", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology"));
+                () -> new Doctor("", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology"));
     }
 
     @Test

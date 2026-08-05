@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.view.frames;
 
 import br.udesc.ceavi.progii.avicena.control.dao.ConsultaDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
+import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Pessoa;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
@@ -76,6 +77,10 @@ public class FrameConsultaListar extends FrameSemCRUD {
 
     private static String nomeOuPlaceholder(PatientEntity patient) {
         return patient == null ? "-" : patient.getName();
+    }
+
+    private static String nomeOuPlaceholder(DoctorEntity doctor) {
+        return doctor == null ? "-" : doctor.getName();
     }
 
     public static FrameConsultaListar getInstance() {
