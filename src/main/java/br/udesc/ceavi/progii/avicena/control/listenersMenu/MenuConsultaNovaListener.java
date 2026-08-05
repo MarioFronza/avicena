@@ -1,12 +1,10 @@
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-import br.udesc.ceavi.progii.avicena.control.dao.DAO;
-import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.control.listenersCRUD.ListenerCRUDConsulta;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
-import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameConsultaNova;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import jakarta.persistence.EntityManager;
@@ -27,7 +25,7 @@ public class MenuConsultaNovaListener extends MenuActionListener {
 
     private static MenuConsultaNovaListener instancia;
     private List<DoctorEntity> medicos;
-    private List<Enfermeiro> enfermeiros;
+    private List<NurseEntity> enfermeiros;
 
     public static MenuConsultaNovaListener getInstace() {
         return instancia;
@@ -47,6 +45,9 @@ public class MenuConsultaNovaListener extends MenuActionListener {
             medicos = entityManager
                     .createQuery("SELECT d FROM DoctorEntity d", DoctorEntity.class)
                     .getResultList();
+            enfermeiros = entityManager
+                    .createQuery("SELECT n FROM NurseEntity n", NurseEntity.class)
+                    .getResultList();
         } finally {
             entityManager.close();
         }
@@ -57,14 +58,12 @@ public class MenuConsultaNovaListener extends MenuActionListener {
                     .addItem(medicos.get(i).getName() + " - " + medicos.get(i).getSpecialty());
         }
 
-        DAO dao2 = new EnfermeiroDAO();
-        enfermeiros = dao2.getList();
         FrameConsultaNova.getInstance().getCbEnfermeiro();
         for (int i = 0; i < enfermeiros.size(); i++) {
             FrameConsultaNova.getInstance()
                     .getCbEnfermeiro()
-                    .addItem(enfermeiros.get(i).getNome() + " - "
-                            + enfermeiros.get(i).getFormacao());
+                    .addItem(enfermeiros.get(i).getName() + " - "
+                            + enfermeiros.get(i).getFormation());
         }
 
         if (frame.isVisible()) {
@@ -79,7 +78,7 @@ public class MenuConsultaNovaListener extends MenuActionListener {
         return medicos;
     }
 
-    public List<Enfermeiro> getListEnfermeiros() {
+    public List<NurseEntity> getListEnfermeiros() {
         return enfermeiros;
     }
 }

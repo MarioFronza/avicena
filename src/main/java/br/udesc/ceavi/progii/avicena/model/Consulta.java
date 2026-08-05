@@ -6,6 +6,7 @@
 package br.udesc.ceavi.progii.avicena.model;
 
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import jakarta.persistence.*;
 import java.util.Date;
@@ -40,7 +41,7 @@ public class Consulta {
 
     @ManyToOne
     @JoinColumn(name = "codigo_enfermeiro")
-    private Enfermeiro enfermeiro;
+    private NurseEntity enfermeiro;
 
     @ManyToOne
     @JoinColumn(name = "codigo_medico")
@@ -59,7 +60,7 @@ public class Consulta {
             String sintomas,
             int id,
             PatientEntity paciente,
-            Enfermeiro enfermeiro,
+            NurseEntity enfermeiro,
             DoctorEntity medico,
             DiagnosticoPrimario diagnosticoPrimario,
             DiagnosticoFinal diagnosticoFinal,
@@ -109,11 +110,11 @@ public class Consulta {
         this.paciente = paciente;
     }
 
-    public Enfermeiro getEnfermeiro() {
+    public NurseEntity getEnfermeiro() {
         return enfermeiro;
     }
 
-    public void setEnfermeiro(Enfermeiro enfermeiro) {
+    public void setEnfermeiro(NurseEntity enfermeiro) {
         this.enfermeiro = enfermeiro;
     }
 
