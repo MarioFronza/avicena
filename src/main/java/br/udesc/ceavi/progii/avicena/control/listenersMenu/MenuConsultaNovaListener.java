@@ -2,13 +2,14 @@ package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
 import br.udesc.ceavi.progii.avicena.control.dao.DAO;
 import br.udesc.ceavi.progii.avicena.control.dao.EnfermeiroDAO;
-import br.udesc.ceavi.progii.avicena.control.dao.MedicoDAO;
+import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.control.listenersCRUD.ListenerCRUDConsulta;
+import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.model.Enfermeiro;
-import br.udesc.ceavi.progii.avicena.model.Medico;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameConsultaNova;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import jakarta.persistence.EntityManager;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class MenuConsultaNovaListener extends MenuActionListener {
     }
 
     private static MenuConsultaNovaListener instancia;
-    private List<Medico> medicos;
+    private List<DoctorEntity> medicos;
     private List<Enfermeiro> enfermeiros;
 
     public static MenuConsultaNovaListener getInstace() {
@@ -40,13 +41,20 @@ public class MenuConsultaNovaListener extends MenuActionListener {
 
         ListenerCRUDConsulta listenerConsulta = ListenerCRUDConsulta.getInstance(consulta, frame);
 
-        DAO dao = new MedicoDAO();
-        medicos = dao.getList();
+        EntityManager entityManager =
+                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        try {
+            medicos = entityManager
+                    .createQuery("SELECT d FROM DoctorEntity d", DoctorEntity.class)
+                    .getResultList();
+        } finally {
+            entityManager.close();
+        }
         FrameConsultaNova.getInstance().getCbMedico().removeAllItems();
         for (int i = 0; i < medicos.size(); i++) {
             FrameConsultaNova.getInstance()
                     .getCbMedico()
-                    .addItem(medicos.get(i).getNome() + " - " + medicos.get(i).getEspecializacao());
+                    .addItem(medicos.get(i).getName() + " - " + medicos.get(i).getSpecialty());
         }
 
         DAO dao2 = new EnfermeiroDAO();
@@ -67,7 +75,7 @@ public class MenuConsultaNovaListener extends MenuActionListener {
         }
     }
 
-    public List<Medico> getListMedicos() {
+    public List<DoctorEntity> getListMedicos() {
         return medicos;
     }
 
