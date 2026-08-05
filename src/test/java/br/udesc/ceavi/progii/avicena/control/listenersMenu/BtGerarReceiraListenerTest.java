@@ -3,8 +3,9 @@ package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
-import br.udesc.ceavi.progii.avicena.model.Consulta;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
@@ -15,42 +16,41 @@ class BtGerarReceiraListenerTest {
 
     @Test
     void rejectsAConsultaWhoseMedicoHasNoEndereco() {
-        Consulta consulta = new Consulta();
         DoctorEntity medico = new DoctorEntity(
                 null, "Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE, "CRM-1", "Clinica Geral");
-        consulta.setMedico(medico);
-        consulta.setPaciente(paciente());
+        AppointmentEntity consulta = consulta(medico, paciente());
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
     }
 
     @Test
     void rejectsAConsultaWhoseMedicoIsMissing() {
-        Consulta consulta = new Consulta();
-        consulta.setPaciente(paciente());
+        AppointmentEntity consulta = consulta(null, paciente());
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
     }
 
     @Test
     void rejectsAConsultaWhosePacienteHasNoEndereco() {
-        Consulta consulta = new Consulta();
-        consulta.setMedico(medico());
-        consulta.setPaciente(
-                new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE));
+        PatientEntity paciente =
+                new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
+        AppointmentEntity consulta = consulta(medico(), paciente);
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
     }
 
     @Test
     void buildsReceitaLinesForAFullyPopulatedConsulta() {
-        Consulta consulta = new Consulta();
-        consulta.setMedico(medico());
-        consulta.setPaciente(paciente());
+        AppointmentEntity consulta = consulta(medico(), paciente());
 
         List<String> lines = BtGerarReceiraListener.buildReceitaLines(consulta);
 
         assertFalse(lines.isEmpty());
+    }
+
+    private AppointmentEntity consulta(DoctorEntity medico, PatientEntity paciente) {
+        return new AppointmentEntity(
+                null, "05/08/2026", "14:00", "Febre", paciente, medico, null, UrgencyStatus.NOT_URGENT);
     }
 
     private DoctorEntity medico() {
