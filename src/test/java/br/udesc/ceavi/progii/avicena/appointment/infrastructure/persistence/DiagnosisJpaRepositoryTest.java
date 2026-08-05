@@ -19,8 +19,8 @@ class DiagnosisJpaRepositoryTest {
     @Test
     void savePersistsADiagnosisThatCascadesTheLinkedFinalDiagnosis() {
         Appointment appointment = anAppointment();
-        Diagnosis diagnosis =
-                new Diagnosis(appointment.getId(), 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
+        Diagnosis diagnosis = new Diagnosis(
+                appointment.getId(), 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
 
         Diagnosis saved = repository.save(diagnosis);
@@ -32,8 +32,8 @@ class DiagnosisJpaRepositoryTest {
     @Test
     void deleteRemovesAPreviouslyPersistedDiagnosis() {
         Appointment appointment = anAppointment();
-        Diagnosis diagnosis =
-                new Diagnosis(appointment.getId(), 110f, 36, 165, 60, "Padrão", "Tosse", "Xarope", "Exame padrão", "Padrão");
+        Diagnosis diagnosis = new Diagnosis(
+                appointment.getId(), 110f, 36, 165, 60, "Padrão", "Tosse", "Xarope", "Exame padrão", "Padrão");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Diagnosis saved = repository.save(diagnosis);
 

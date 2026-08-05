@@ -8,7 +8,11 @@ final class DiagnosisMapper {
 
     static DiagnosisEntity toEntity(Diagnosis diagnosis, AppointmentEntity appointment) {
         FinalDiagnosisEntity finalDiagnosis = new FinalDiagnosisEntity(
-                null, diagnosis.getDisease(), diagnosis.getMedications(), diagnosis.getFinalDescription(), diagnosis.getExamNotes());
+                null,
+                diagnosis.getDisease(),
+                diagnosis.getMedications(),
+                diagnosis.getFinalDescription(),
+                diagnosis.getExamNotes());
         return new DiagnosisEntity(
                 diagnosis.getId(),
                 diagnosis.getBloodPressure(),

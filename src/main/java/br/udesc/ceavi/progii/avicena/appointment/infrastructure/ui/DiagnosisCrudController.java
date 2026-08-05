@@ -93,8 +93,10 @@ public class DiagnosisCrudController {
         public void actionPerformed(ActionEvent e) {
             DiagnosisRegistrationFrame registrationFrame = DiagnosisRegistrationFrame.getInstance();
             Long appointmentId = registrationFrame.getSelectedAppointmentId();
-            float bloodPressure = Float.parseFloat(registrationFrame.getBloodPressureField().getText());
-            int temperature = Integer.parseInt(registrationFrame.getTemperatureField().getText());
+            float bloodPressure =
+                    Float.parseFloat(registrationFrame.getBloodPressureField().getText());
+            int temperature =
+                    Integer.parseInt(registrationFrame.getTemperatureField().getText());
             int height = Integer.parseInt(registrationFrame.getHeightField().getText());
             int weight = Integer.parseInt(registrationFrame.getWeightField().getText());
             String disease = registrationFrame.getDiseaseField().getText();

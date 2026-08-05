@@ -11,8 +11,7 @@ class DiagnosisTest {
     void rejectsNullAppointmentId() {
         assertThrows(
                 InvalidDiagnosisDataException.class,
-                () -> new Diagnosis(
-                        null, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão"));
+                () -> new Diagnosis(null, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão"));
     }
 
     @Test

@@ -3,8 +3,6 @@
   <persistence-unit name="AvicenaBD" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>br.udesc.ceavi.progii.avicena.model.Endereco</class>
-    <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoFinal</class>
-    <class>br.udesc.ceavi.progii.avicena.model.DiagnosticoPrimario</class>
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity</class>
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity</class>
     <class>br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity</class>

@@ -91,7 +91,8 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
         appointments = findAllAppointments();
         appointmentComboBox.removeAllItems();
         for (AppointmentEntity appointment : appointments) {
-            appointmentComboBox.addItem(appointment.getTime() + " - " + appointment.getPatient().getName());
+            appointmentComboBox.addItem(
+                    appointment.getTime() + " - " + appointment.getPatient().getName());
         }
     }
 
@@ -109,7 +110,9 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
 
     public Long getSelectedAppointmentId() {
         int index = appointmentComboBox.getSelectedIndex();
-        return index < 0 || appointments == null ? null : appointments.get(index).getId();
+        return index < 0 || appointments == null
+                ? null
+                : appointments.get(index).getId();
     }
 
     private void initializeComponents() {
