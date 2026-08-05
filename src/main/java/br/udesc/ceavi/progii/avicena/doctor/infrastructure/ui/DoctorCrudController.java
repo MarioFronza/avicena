@@ -1,6 +1,5 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
@@ -8,6 +7,7 @@ import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

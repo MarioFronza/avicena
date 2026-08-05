@@ -1,8 +1,8 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistJpaRepository;

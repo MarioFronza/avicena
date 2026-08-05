@@ -1,7 +1,7 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;

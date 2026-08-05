@@ -1,6 +1,5 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui;
 
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.nurse.domain.InvalidNurseDataException;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRepository;
@@ -8,6 +7,7 @@ import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
