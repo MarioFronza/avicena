@@ -45,9 +45,9 @@ Entry point: `br.udesc.ceavi.progii.avicena.main.AvicenaMain`, opens `FrameSiste
 
 ## Architecture
 
-Package root: `br.udesc.ceavi.progii.avicena` (most code), with three exception
-classes oddly living under a sibling root `br.udesc.ceavi.avicena.control.exceptions`
-instead — a naming inconsistency from early development, not a deliberate split.
+Package root: `br.udesc.ceavi.progii.avicena` for all code, including
+`control/exceptions/` (`ValorNuloException`, `ValorIncorretoException`) thrown by
+`AgendaDAO`, `EnderecoDAO`, and `ConsultaDAO`.
 
 - **`model/`** — JPA entities. `Pessoa` is an abstract `@Entity` base
   (`InheritanceType.TABLE_PER_CLASS`) extended by `Paciente`, `Medico`, `Atendente`,
@@ -124,10 +124,7 @@ class-by-class while both languages coexist:
 1. **DAO duality.** Pick `JPADAO` or the per-entity DAOs, not both. Migrating a class
    that's only half-wired to persistence (per-entity DAO stubs that validate but never
    `em.persist()`) produces a Kotlin class with the same silent gap.
-2. **Package split.** Consolidate `br.udesc.ceavi.avicena.control.exceptions` into
-   `br.udesc.ceavi.progii.avicena` before it's a Kotlin package importing from a
-   differently-rooted Java package for no reason.
-3. **Dead code.** Delete `control/listenersCRUD/exceptions/*` and
+2. **Dead code.** Delete `control/listenersCRUD/exceptions/*` and
    `Paciente.setEstadoCivil()` rather than translating dead code to Kotlin.
 
 Module boundaries (splitting `model`/`control`/`view` into separate Gradle modules) are
