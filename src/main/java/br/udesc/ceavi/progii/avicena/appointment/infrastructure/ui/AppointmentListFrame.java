@@ -44,8 +44,8 @@ public class AppointmentListFrame extends FrameSemCRUD {
 
     private void initializeComponents() {
         table = new JTable();
-        table.setModel(new DefaultTableModel(
-                new Object[][] {}, new String[] {"Date", "Time", "Patient", "Doctor", "Nurse"}));
+        table.setModel(
+                new DefaultTableModel(new Object[][] {}, new String[] {"Date", "Time", "Patient", "Doctor", "Nurse"}));
         tableModel = (DefaultTableModel) table.getModel();
         backgroundPanel = new JPanel();
         backgroundPanel.setLayout(new GridLayout(1, 1));

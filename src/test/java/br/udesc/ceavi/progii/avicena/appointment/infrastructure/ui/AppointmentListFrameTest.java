@@ -13,8 +13,8 @@ class AppointmentListFrameTest {
 
     @Test
     void buildsARowEvenWhenMedicoAndEnfermeiroAreMissing() {
-        PatientEntity paciente = new PatientEntity(
-                null, "Paciente Teste", "11111111111", "48900000000", null, MaritalStatus.SINGLE);
+        PatientEntity paciente =
+                new PatientEntity(null, "Paciente Teste", "11111111111", "48900000000", null, MaritalStatus.SINGLE);
         AppointmentEntity consulta = new AppointmentEntity(
                 null, "02/08/2026", "10:00", "Febre", paciente, null, null, UrgencyStatus.NOT_URGENT);
 

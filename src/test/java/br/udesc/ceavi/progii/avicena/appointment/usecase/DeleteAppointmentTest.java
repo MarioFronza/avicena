@@ -11,8 +11,7 @@ class DeleteAppointmentTest {
     @Test
     void deletesTheAppointmentThroughTheRepository() {
         InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
-        Appointment appointment =
-                new Appointment("05/08/2026", "14:00", "Febre", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
+        Appointment appointment = new Appointment("05/08/2026", "14:00", "Febre", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
         repository.save(appointment);
         DeleteAppointment useCase = new DeleteAppointment(repository);
 

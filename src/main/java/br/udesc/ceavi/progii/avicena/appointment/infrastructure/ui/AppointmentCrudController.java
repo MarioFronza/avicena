@@ -69,8 +69,9 @@ public class AppointmentCrudController {
 
     private Long findPatientIdByCpf(String cpf) {
         List<Patient> patients = new ListPatients(new PatientJpaRepository()).list();
-        Optional<Patient> found =
-                patients.stream().filter(patient -> cpf.equals(patient.getCpf())).findFirst();
+        Optional<Patient> found = patients.stream()
+                .filter(patient -> cpf.equals(patient.getCpf()))
+                .findFirst();
         return found.map(Patient::getId).orElse(null);
     }
 
@@ -116,13 +117,14 @@ public class AppointmentCrudController {
             String date = registrationFrame.getDateField().getText();
             String time = registrationFrame.getTimeField().getText();
             String symptoms = registrationFrame.getSymptomsField().getText();
-            Long patientId = findPatientIdByCpf(registrationFrame.getPatientCpfField().getText());
+            Long patientId =
+                    findPatientIdByCpf(registrationFrame.getPatientCpfField().getText());
             Long doctorId = registrationFrame.getSelectedDoctorId();
             Long nurseId = registrationFrame.getSelectedNurseId();
 
             try {
-                appointment = registerAppointment.register(new Appointment(
-                        date, time, symptoms, patientId, doctorId, nurseId, UrgencyStatus.NOT_URGENT));
+                appointment = registerAppointment.register(
+                        new Appointment(date, time, symptoms, patientId, doctorId, nurseId, UrgencyStatus.NOT_URGENT));
                 JOptionPane.showMessageDialog(frame, "Appointment saved");
             } catch (InvalidAppointmentDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());

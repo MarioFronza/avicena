@@ -11,14 +11,12 @@ class AppointmentTest {
     void rejectsNullPatientId() {
         assertThrows(
                 InvalidAppointmentDataException.class,
-                () -> new Appointment(
-                        "05/08/2026", "14:00", "Febre", null, 1L, 1L, UrgencyStatus.NOT_URGENT));
+                () -> new Appointment("05/08/2026", "14:00", "Febre", null, 1L, 1L, UrgencyStatus.NOT_URGENT));
     }
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Appointment appointment =
-                new Appointment("05/08/2026", "14:00", "Febre", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
+        Appointment appointment = new Appointment("05/08/2026", "14:00", "Febre", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
 
         assertEquals("05/08/2026", appointment.getDate());
         assertEquals("14:00", appointment.getTime());

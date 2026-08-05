@@ -25,7 +25,12 @@ class AppointmentJpaRepositoryTest {
                 .save(new Patient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE));
         Doctor doctor = new DoctorJpaRepository()
                 .save(new Doctor(
-                        "Doutor Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE, "CRM-1",
+                        "Doutor Teste",
+                        "22222222222",
+                        "480000001",
+                        null,
+                        MaritalStatus.SINGLE,
+                        "CRM-1",
                         "Clinica Geral"));
         Nurse nurse = new NurseJpaRepository()
                 .save(new Nurse(
