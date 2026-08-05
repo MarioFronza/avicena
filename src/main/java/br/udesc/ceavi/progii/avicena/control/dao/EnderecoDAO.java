@@ -5,7 +5,7 @@
  */
 package br.udesc.ceavi.progii.avicena.control.dao;
 
-import br.udesc.ceavi.avicena.control.exceptions.ValorNuloException;
+import br.udesc.ceavi.progii.avicena.control.exceptions.ValorNuloException;
 import br.udesc.ceavi.progii.avicena.model.Endereco;
 import java.util.List;
 

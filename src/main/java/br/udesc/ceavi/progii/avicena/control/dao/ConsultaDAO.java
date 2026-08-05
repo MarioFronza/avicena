@@ -5,7 +5,7 @@
  */
 package br.udesc.ceavi.progii.avicena.control.dao;
 
-import br.udesc.ceavi.avicena.control.exceptions.ValorIncorretoException;
+import br.udesc.ceavi.progii.avicena.control.exceptions.ValorIncorretoException;
 import br.udesc.ceavi.progii.avicena.model.Consulta;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
