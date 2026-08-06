@@ -45,19 +45,23 @@ Entry point: `br.udesc.ceavi.progii.avicena.main.AvicenaMain`, opens `FrameSiste
 
 ## Architecture
 
-Package root: `br.udesc.ceavi.progii.avicena`. Four entities have been migrated,
-one-by-one, to a Clean Architecture layering; everything else is still the original
-NetBeans-generated structure. Both styles coexist and bridge at the UI layer — see
-below.
+Package root: `br.udesc.ceavi.progii.avicena`. Six vertical slices have been migrated
+to a Clean Architecture layering; the original NetBeans-generated `model/` package is
+gone entirely, and only a small Swing shell plus a few standalone old-style listeners
+remain unmigrated. There is no more "old vs. new" bridging — everything reads and
+writes through the Clean Architecture repositories now.
 
-### Migrated entities: `patient/`, `doctor/`, `nurse/`, `receptionist/`
+### Migrated verticals: `patient/`, `doctor/`, `nurse/`, `receptionist/`, `appointment/`
 
-Each of these top-level packages is a self-contained vertical slice, none of them
+**Patient, Doctor, Nurse, Receptionist** — four uniform vertical slices, none of them
 import from each other's `domain`:
 
 - **`domain/`** — a plain domain class (`Patient`, `Doctor`, `Nurse`, `Receptionist`),
   its `*Repository` interface, and an `Invalid*DataException`. `Address` and
-  `MaritalStatus` live in `patient.domain` and are reused by the other three.
+  `MaritalStatus` live in `patient.domain` and are imported by the other three —
+  the one deliberate cross-package dependency in the whole migrated codebase. If a
+  future migration needs its own address-like value object, follow this precedent
+  (reuse from `patient.domain`) rather than duplicating it.
 - **`usecase/`** — thin wrappers around the repository: `Register*`, `List*`,
   `Delete*`. No business logic beyond what the domain constructor already validates.
 - **`infrastructure/persistence/`** — `*Entity` (the real `@Entity` JPA class,
@@ -67,90 +71,100 @@ import from each other's `domain`:
 - **`infrastructure/ui/`** — `*RegistrationFrame` (Swing form), `*CrudController`
   (wires Novo/Gravar/Excluir/Cancelar to the use cases), `*SearchController` (CPF
   search, list-all-then-filter, no dedicated query), `Register*MenuListener` (opens the
-  frame from the main menu).
+  frame from the main menu). `patient.infrastructure.ui` additionally owns
+  `AddressEntryFrame`/`AddressEntryController`/`AddAddressListener` — the "Add
+  Address" popup shared by all four registration screens. The controller does no
+  database work itself; it just captures form input into an in-memory `Address`, and
+  each entity's `@ManyToOne address` field is `cascade = CascadeType.PERSIST`, so
+  saving the parent persists the address with it.
 
-**The `Endereco`/`Address` bridge:** none of the four migrated entities have their own
-address input screen. Each `*CrudController.currentAddress()` reads the currently
-selected address from `ListenerCRUDEndereco.getInstance().getEndereco()` — the
-*old-style* address controller — and converts the old `Endereco` entity's fields into
-the domain `Address` value object by hand. This means `model.Endereco` (old) and
-`patient.infrastructure.persistence.AddressEntity` (new) both map the same `endereco`
-table as two separate JPA entity classes; anyone touching address handling needs to
-know both exist.
+**Appointment** (with `Diagnosis` nested inside it, not a sibling package) — the first
+migrated entity with real cross-aggregate relationships, and it deviates from the
+four-entity template on purpose:
 
-### Not yet migrated: `model/`, `control/`, `view/`
+- `appointment.domain.Appointment` holds `patientId`/`doctorId`/`nurseId` as `Long`
+  fields rather than embedding `Patient`/`Doctor`/`Nurse` domain objects — it
+  references those aggregates by ID, not by object, so `Appointment` doesn't need
+  their repositories. `appointment.infrastructure.persistence.AppointmentEntity`
+  still holds real `@ManyToOne` JPA relationships to `PatientEntity`/`DoctorEntity`/
+  `NurseEntity` (JPA relationships stay JPA-managed even when the domain layer only
+  keeps IDs).
+- `appointment.domain.Diagnosis` lives inside `appointment` rather than as its own
+  top-level package, because diagnoses have no independent use case — nothing lists
+  or searches diagnoses on their own, they're only ever created against an existing
+  appointment. Its `DiagnosisRepository` only exposes `save`/`delete`, no `findAll`,
+  matching that reality.
+- `DiagnosisEntity` (`diagnostico_primario` table) has a
+  `@ManyToOne(cascade = CascadeType.ALL) FinalDiagnosisEntity` (`diagnostico_final`
+  table) — the one cascade relationship in the codebase that also cascades removal,
+  mirroring the original two-table schema.
+- `infrastructure/ui/` has `AppointmentRegistrationFrame`/`AppointmentCrudController`,
+  `AppointmentListFrame` (extends `FrameSemCRUD`, not `FrameCRUD` — it's a read-only
+  table, not a CRUD form), and `DiagnosisRegistrationFrame`/`DiagnosisCrudController`.
+  `DiagnosisRegistrationFrame` replicates the original two-panel `CardLayout` UI
+  (Primary Diagnosis / Final Diagnosis in one window) and embeds the "Generate
+  Receipt" button that triggers `BtGerarReceiraListener`.
 
-- **`model/`** — `Consulta` (an appointment; `@ManyToOne` references into
-  `PatientEntity`, `NurseEntity`, `DoctorEntity` from the migrated packages — this is
-  the other bridge point), `Endereco`, `DiagnosticoPrimario`/`DiagnosticoFinal`,
-  `EstadoPaciente` (enum).
-- **`control/dao/`** — `JPADAO<X> implements DAO` is generic and works
-  (`em.persist`/`merge`/`remove`, one `EntityManager` per call, closed in `finally`).
-  It's the only thing that actually persists `Consulta` — `ListenerCRUDConsulta` calls
-  `ConsultaDAO.inserir()` for validation and `JPADAO.inserir()` separately for the real
-  save. The other per-entity DAOs are stubs: `ConsultaDAO`/`EnderecoDAO`'s `inserir()`
-  validates and returns `true` but never persists;
-  `DiagnosticoPrimarioDAO`/`DiagnosticoFinalDAO`/`AgendaDAO` throw
-  `UnsupportedOperationException` for every method. `control/exceptions/`
-  (`ValorNuloException`, `ValorIncorretoException`) are thrown by `EnderecoDAO` and
-  `ConsultaDAO`'s validation.
-- **`control/listenersCRUD/`** — One class per not-yet-migrated entity
-  (`ListenerCRUDConsulta`, `ListenerCRUDEndereco`, `ListenerCRUDDiagnostico`, ...),
-  lazy singleton (`getInstance(...)`) wired to a `FrameCRUD`'s
-  Novo/Gravar/Excluir/Cancelar buttons. `ListenerCRUDEndereco` additionally serves as
-  the bridge the four migrated `CrudController`s depend on (see above) — it is live
-  infrastructure, not legacy code to delete.
-- **`control/listenersMenu/`** — `MenuActionListener` is the abstract base for
-  menu-bar actions; concrete `Menu*Listener` classes open the corresponding
-  `view/frames/*` internal frame. The four migrated entities have their own
-  `Register*MenuListener` instead, under their own `infrastructure/ui/`.
-- **`view/frames/`** — Swing `JInternalFrame`s. `FrameCRUD` is the abstract template
-  for entity CRUD screens (embeds a shared `CRUDActionPanel` for the
-  Novo/Gravar/Excluir/Cancelar buttons); `FrameSemCRUD` is the template for read-only
-  screens (agenda, histórico, listagens, consultation list). `view/principal/FrameSistema`
-  is the MDI main window hosting the menu bar and internal frames.
-- **PDF generation** — `BtGerarReceiraListener` (in `listenersMenu/`) uses iText
-  (`com.itextpdf:itextpdf`, a Gradle dependency) to generate a prescription PDF at
-  runtime to a hardcoded relative path (note: the code writes `Receira-Avicena.pdf`,
-  transposed letters, not `Receita-Avicena.pdf`).
+### What's left outside the six migrated packages
+
+- **`control/dao/`** — only `PersistenceConfig` (the `EntityManagerFactory` factory,
+  reads `AVICENA_DB_URL`/`USER`/`PASSWORD` env vars or system properties, falls back
+  to `persistence.xml` defaults). Every old-style DAO (`JPADAO`, the `DAO` interface,
+  and every per-entity DAO) has been deleted.
+- **`control/exceptions/`** — `ValorNuloException`/`ValorIncorretoException`, dead:
+  zero callers anywhere now that the DAOs that threw them (`EnderecoDAO`,
+  `ConsultaDAO`) are both gone. Candidates for deletion, not fixed here.
+- **`control/listenersMenu/`** — `MenuActionListener` (abstract base for menu-bar
+  actions), `MenuSobreListener` ("About" dialog), `MenuHistoricoListener` (opens
+  `FrameHistoricoPaciente`, see Known Issues — its menu item is disabled), and
+  `BtGerarReceiraListener` (generates the prescription PDF via iText, wired from
+  `DiagnosisRegistrationFrame`; writes to a hardcoded relative path — note the code
+  writes `Receira-Avicena.pdf`, transposed letters, not `Receita-Avicena.pdf`). There
+  is no more `control/listenersCRUD/` — every old-style CRUD listener has been deleted
+  along with the entity it used to serve.
+- **`view/frames/`** — `FrameCRUD` (abstract template for entity CRUD screens, shared
+  `CRUDActionPanel` for Novo/Gravar/Excluir/Cancelar) and `FrameSemCRUD` (template for
+  read-only screens) are still the active base classes every registration/list screen
+  extends, migrated or not. `FrameHistoricoPaciente` is the one screen left with no
+  Clean Architecture equivalent — see Known Issues.
+- **`view/principal/`** — `FrameSistema` (MDI main window) and `MenuPrincipal` (menu
+  bar, wires every `Register*MenuListener`/`List*MenuListener` from the six migrated
+  packages alongside the handful of old-style listeners above).
 
 ## Known issues / refactor targets
 
 Since this repo's purpose is refactoring practice, these are the load-bearing quirks
-worth knowing before touching code (not an exhaustive list, but the ones that shape
-architecture decisions):
+worth knowing before touching code:
 
-- **Dual address entities** — `model.Endereco` and
-  `patient.infrastructure.persistence.AddressEntity` both map the `endereco` table.
-  The four migrated `CrudController`s bridge through `ListenerCRUDEndereco` and a
-  hand-written `Endereco`→`Address` conversion (see Architecture above). Consolidating
-  this requires either migrating `Endereco` itself to Clean Architecture or having the
-  migrated entities read `AddressEntity` directly — not yet decided.
-- Static `EntityManager`/`EntityManagerFactory` fields, reassigned per instance and
-  never closed, in `ConsultaDAO` (the other old-style DAOs use `JPADAO` for anything
-  that actually needs to persist).
+- **Dead exception classes** — `ValorNuloException`/`ValorIncorretoException` in
+  `control/exceptions/` have zero callers. Safe to delete.
+- **`FrameHistoricoPaciente` is a stub** — hardcoded table rows, no real query against
+  appointment data. Its menu item (`MenuPrincipal`, "Histórico") is `setEnabled(false)`
+  and always has been. Either delete it or replace it with a real patient-history
+  screen backed by the `appointment` package.
 - Hardcoded default DB credentials in `src/main/resources/META-INF/persistence.xml`
   (overridable via env var/system property, see Build & run, but the default itself is
   still a plaintext password in source).
-- Test coverage is thin outside the four migrated packages: DAOs and a couple of
-  listener/frame bugfixes have integration tests; most of `control/listenersCRUD/` and
-  `view/frames/` have none.
+- Test coverage is thin outside the six migrated packages: `PersistenceConfigTest` and
+  `BtGerarReceiraListenerTest` are the only tests left in `control/`; `view/frames/`
+  has none except `AppointmentListFrameTest`.
 
-### Kotlin-migration sequencing
+### Next steps
 
-If/when part of this codebase moves to Kotlin, fix these first — each one makes the
-migration harder the longer it's deferred, since Kotlin interop means migrating
-class-by-class while both languages coexist:
+With every entity migrated and the old `model`/DAO/listener layers gone, the codebase
+is close to uniformly Clean Architecture. What's left:
 
-1. **DAO duality.** Pick `JPADAO` or the per-entity DAOs for `Consulta`/`Endereco`/
-   `Diagnostico`/`Agenda`, not both. A class that's only half-wired to persistence
-   (validate-only stub, real save elsewhere) produces a Kotlin class with the same
-   silent gap.
-2. **Dual address entities.** Consolidate `Endereco` and `AddressEntity` before
-   migrating either — migrating one while the other still exists just moves the
-   redundancy into Kotlin.
-
-Module boundaries (splitting `model`/`control`/`view` into separate Gradle modules,
-alongside the four already-separate entity packages) are a reasonable next step after
-that, so migration can happen module-by-module — worth a scoped follow-up rather than
-doing it speculatively here.
+1. **Delete the dead exception classes** and decide `FrameHistoricoPaciente`'s fate
+   (delete it, or give it a real `ListAppointments`-backed implementation) — both
+   small, independent cleanups.
+2. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
+   `appointment` into separate Gradle modules is now realistic — the package
+   boundaries already exist and only `patient.domain.Address`/`MaritalStatus` cross
+   between them. This was previously blocked on DAO duality and the address
+   duplication; both are resolved.
+3. **Appointment registration UX** — `AppointmentRegistrationFrame` currently stores
+   patient/doctor/nurse by ID only; the combo boxes show names at selection time but
+   nothing re-displays them by name after the fact (e.g. on `AppointmentListFrame`,
+   which does look them up via the JPA relationship — the registration frame doesn't
+   need to, but it's worth knowing the two screens get names two different ways).
+   Not broken, just worth being aware of before extending either screen.
