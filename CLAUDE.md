@@ -26,15 +26,25 @@ details in `src/main/resources/META-INF/persistence.xml` default to
 `jdbc:postgresql://localhost:5432/AvicenaBD` / `postgres` / a hardcoded password
 matching `docker-compose.yml`; override via `AVICENA_DB_URL` / `AVICENA_DB_USER` /
 `AVICENA_DB_PASSWORD` env vars or matching Java system properties (system properties
-win — see `PersistenceConfig`). `schema-generation.database.action=create` — Hibernate
-creates/updates the schema from `@Entity` classes on `EntityManagerFactory` creation,
-no separate migration step (see #48 for a real Flyway migration effort in progress).
+win — see `PersistenceConfig`). Schema is owned by Flyway migrations
+(`src/main/resources/db/migration/`), run by `PersistenceConfig.createEntityManagerFactory()`
+before the JPA persistence unit boots — Hibernate's `schema-generation.database.action`
+is unset (Flyway's job now, not Hibernate's). `PersistenceConfig` runs Flyway with
+`baselineOnMigrate(true)`/`baselineVersion("1")`, so pointing it at a database that
+already has the current (pre-Flyway) schema — e.g. the long-running dev
+`docker-compose` Postgres — baselines cleanly instead of trying to re-run `V1` against
+tables that already exist. #48 tracks rolling the target schema from #43 out through
+further migrations; today `V1__baseline.sql` only reproduces the existing schema
+verbatim, no redesign yet.
 
 Tests are real integration tests against Postgres, no mocks. A JUnit 5 extension
 (`PostgresContainerExtension`, auto-registered for every test class via the service
 loader) starts its own Testcontainers Postgres and points `AVICENA_DB_URL`/`USER`/
 `PASSWORD` at it before any test runs, so `./gradlew test` works with no docker-compose
 running at all — the docker-compose Postgres is for `./gradlew run`, not for tests.
+Every Testcontainers Postgres starts empty, so Flyway runs `V1__baseline.sql` as a real
+migration there (not a baseline) — the baseline path only kicks in against a database
+that already has tables.
 
 CI (`.github/workflows/ci.yml`, GitHub Actions) runs `./gradlew build` — Spotless
 formatting check (`palantir-java-format`, run `./gradlew spotlessApply` to fix
