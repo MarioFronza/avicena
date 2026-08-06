@@ -110,10 +110,9 @@ four-entity template on purpose:
 - **`control/dao/`** — only `PersistenceConfig` (the `EntityManagerFactory` factory,
   reads `AVICENA_DB_URL`/`USER`/`PASSWORD` env vars or system properties, falls back
   to `persistence.xml` defaults). Every old-style DAO (`JPADAO`, the `DAO` interface,
-  and every per-entity DAO) has been deleted.
-- **`control/exceptions/`** — `ValorNuloException`/`ValorIncorretoException`, dead:
-  zero callers anywhere now that the DAOs that threw them (`EnderecoDAO`,
-  `ConsultaDAO`) are both gone. Candidates for deletion, not fixed here.
+  and every per-entity DAO) has been deleted. `control/exceptions/` is gone entirely
+  now too — it held only `ValorNuloException`/`ValorIncorretoException`, both dead
+  once the DAOs that threw them (`EnderecoDAO`, `ConsultaDAO`) were removed.
 - **`control/listenersMenu/`** — `MenuActionListener` (abstract base for menu-bar
   actions), `MenuSobreListener` ("About" dialog), `MenuHistoricoListener` (opens
   `FrameHistoricoPaciente`, see Known Issues — its menu item is disabled), and
@@ -136,8 +135,6 @@ four-entity template on purpose:
 Since this repo's purpose is refactoring practice, these are the load-bearing quirks
 worth knowing before touching code:
 
-- **Dead exception classes** — `ValorNuloException`/`ValorIncorretoException` in
-  `control/exceptions/` have zero callers. Safe to delete.
 - **`FrameHistoricoPaciente` is a stub** — hardcoded table rows, no real query against
   appointment data. Its menu item (`MenuPrincipal`, "Histórico") is `setEnabled(false)`
   and always has been. Either delete it or replace it with a real patient-history
@@ -154,9 +151,9 @@ worth knowing before touching code:
 With every entity migrated and the old `model`/DAO/listener layers gone, the codebase
 is close to uniformly Clean Architecture. What's left:
 
-1. **Delete the dead exception classes** and decide `FrameHistoricoPaciente`'s fate
-   (delete it, or give it a real `ListAppointments`-backed implementation) — both
-   small, independent cleanups.
+1. **Decide `FrameHistoricoPaciente`'s fate** (delete it, or give it a real
+   `ListAppointments`-backed implementation) — small, independent cleanup. The dead
+   exception classes (`ValorNuloException`/`ValorIncorretoException`) are already gone.
 2. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
    `appointment` into separate Gradle modules is now realistic — the package
    boundaries already exist and only `patient.domain.Address`/`MaritalStatus` cross
