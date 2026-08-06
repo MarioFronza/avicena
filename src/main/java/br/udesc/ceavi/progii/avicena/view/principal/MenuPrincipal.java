@@ -8,7 +8,7 @@ package br.udesc.ceavi.progii.avicena.view.principal;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagnosisMenuListener;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuHistoricoListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ShowPatientHistoryMenuListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenuListener;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.RegisterNurseMenuListener;
@@ -103,8 +103,7 @@ public class MenuPrincipal extends JMenuBar {
                 getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/status_away.png")));
         menuPaciente.setToolTipText("Cadastro de Diagnóstico,...");
         menuItemCadDiagnostico.setToolTipText("Cadastro dos diagnósticos primário e final");
-        menuItemCadHistorico.setToolTipText("Em desenvolvimento...");
-        menuItemCadHistorico.setEnabled(false);
+        menuItemCadHistorico.setToolTipText("Histórico de consultas do paciente");
         menuPaciente.add(menuItemCadDiagnostico);
         menuPaciente.add(menuItemCadHistorico);
 
@@ -163,7 +162,7 @@ public class MenuPrincipal extends JMenuBar {
         ActionListener listenerCadAtendente = new RegisterReceptionistMenuListener(frame);
         ActionListener listenerSobreListener = new MenuSobreListener(frame);
         ActionListener listenerCadDiagnostico = new RegisterDiagnosisMenuListener(frame);
-        ActionListener listenerHistorico = new MenuHistoricoListener(frame);
+        ActionListener listenerHistorico = new ShowPatientHistoryMenuListener(frame);
 
         // Listeners para os itens do Menu Consula
         ActionListener listenerConsultaNova = new RegisterAppointmentMenuListener(frame);

@@ -34,8 +34,8 @@ class PatientHistoryFrameTest {
                 null, "02/08/2026", "10:00", "Febre", matching, null, null, UrgencyStatus.NOT_URGENT);
         AppointmentEntity otherAppointment = new AppointmentEntity(
                 null, "03/08/2026", "11:00", "Tosse", other, null, null, UrgencyStatus.NOT_URGENT);
-        AppointmentEntity noPatientAppointment = new AppointmentEntity(
-                null, "04/08/2026", "12:00", "Dor", null, null, null, UrgencyStatus.NOT_URGENT);
+        AppointmentEntity noPatientAppointment =
+                new AppointmentEntity(null, "04/08/2026", "12:00", "Dor", null, null, null, UrgencyStatus.NOT_URGENT);
 
         List<AppointmentEntity> filtered = PatientHistoryFrame.filterByPatientCpf(
                 List.of(matchingAppointment, otherAppointment, noPatientAppointment), "11111111111");
