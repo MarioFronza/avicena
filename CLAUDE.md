@@ -103,7 +103,11 @@ four-entity template on purpose:
   table, not a CRUD form), and `DiagnosisRegistrationFrame`/`DiagnosisCrudController`.
   `DiagnosisRegistrationFrame` replicates the original two-panel `CardLayout` UI
   (Primary Diagnosis / Final Diagnosis in one window) and embeds the "Generate
-  Receipt" button that triggers `BtGerarReceiraListener`.
+  Receipt" button that triggers `BtGerarReceiraListener`. `PatientHistoryFrame`/
+  `PatientHistorySearchController`/`ShowPatientHistoryMenuListener` are the real,
+  `AppointmentEntity`-backed replacement for the old fake-data
+  `FrameHistoricoPaciente` stub — CPF search, list-all-then-filter, same shape as
+  the four staff/patient `*SearchController`s.
 
 ### What's left outside the six migrated packages
 
@@ -114,9 +118,8 @@ four-entity template on purpose:
   now too — it held only `ValorNuloException`/`ValorIncorretoException`, both dead
   once the DAOs that threw them (`EnderecoDAO`, `ConsultaDAO`) were removed.
 - **`control/listenersMenu/`** — `MenuActionListener` (abstract base for menu-bar
-  actions), `MenuSobreListener` ("About" dialog), `MenuHistoricoListener` (opens
-  `FrameHistoricoPaciente`, see Known Issues — its menu item is disabled), and
-  `BtGerarReceiraListener` (generates the prescription PDF via iText, wired from
+  actions), `MenuSobreListener` ("About" dialog), and `BtGerarReceiraListener`
+  (generates the prescription PDF via iText, wired from
   `DiagnosisRegistrationFrame`; writes to a hardcoded relative path — note the code
   writes `Receira-Avicena.pdf`, transposed letters, not `Receita-Avicena.pdf`). There
   is no more `control/listenersCRUD/` — every old-style CRUD listener has been deleted
@@ -124,8 +127,7 @@ four-entity template on purpose:
 - **`view/frames/`** — `FrameCRUD` (abstract template for entity CRUD screens, shared
   `CRUDActionPanel` for Novo/Gravar/Excluir/Cancelar) and `FrameSemCRUD` (template for
   read-only screens) are still the active base classes every registration/list screen
-  extends, migrated or not. `FrameHistoricoPaciente` is the one screen left with no
-  Clean Architecture equivalent — see Known Issues.
+  extends, migrated or not.
 - **`view/principal/`** — `FrameSistema` (MDI main window) and `MenuPrincipal` (menu
   bar, wires every `Register*MenuListener`/`List*MenuListener` from the six migrated
   packages alongside the handful of old-style listeners above).
@@ -135,10 +137,6 @@ four-entity template on purpose:
 Since this repo's purpose is refactoring practice, these are the load-bearing quirks
 worth knowing before touching code:
 
-- **`FrameHistoricoPaciente` is a stub** — hardcoded table rows, no real query against
-  appointment data. Its menu item (`MenuPrincipal`, "Histórico") is `setEnabled(false)`
-  and always has been. Either delete it or replace it with a real patient-history
-  screen backed by the `appointment` package.
 - Hardcoded default DB credentials in `src/main/resources/META-INF/persistence.xml`
   (overridable via env var/system property, see Build & run, but the default itself is
   still a plaintext password in source).
@@ -151,15 +149,12 @@ worth knowing before touching code:
 With every entity migrated and the old `model`/DAO/listener layers gone, the codebase
 is close to uniformly Clean Architecture. What's left:
 
-1. **Decide `FrameHistoricoPaciente`'s fate** (delete it, or give it a real
-   `ListAppointments`-backed implementation) — small, independent cleanup. The dead
-   exception classes (`ValorNuloException`/`ValorIncorretoException`) are already gone.
-2. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
+1. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
    `appointment` into separate Gradle modules is now realistic — the package
    boundaries already exist and only `patient.domain.Address`/`MaritalStatus` cross
    between them. This was previously blocked on DAO duality and the address
    duplication; both are resolved.
-3. **Appointment registration UX** — `AppointmentRegistrationFrame` currently stores
+2. **Appointment registration UX** — `AppointmentRegistrationFrame` currently stores
    patient/doctor/nurse by ID only; the combo boxes show names at selection time but
    nothing re-displays them by name after the fact (e.g. on `AppointmentListFrame`,
    which does look them up via the JPA relationship — the registration frame doesn't
