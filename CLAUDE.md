@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Avicena is a Java Swing desktop app for clinic management (patients, doctors, nurses,
 receptionists, appointments, diagnoses, prescriptions). It's an academic project
 (UDESC, Programação II course) built as a NetBeans "Java Application" (Ant-based),
-persisted via JPA/EclipseLink to PostgreSQL. Original requirements are in
+persisted via JPA/Hibernate to PostgreSQL. Original requirements are in
 `REQUIREMENTS.md`.
 
 This repo is being used for **refactoring practice/training**, not active feature
@@ -26,9 +26,9 @@ details in `src/main/resources/META-INF/persistence.xml` default to
 `jdbc:postgresql://localhost:5432/AvicenaBD` / `postgres` / a hardcoded password
 matching `docker-compose.yml`; override via `AVICENA_DB_URL` / `AVICENA_DB_USER` /
 `AVICENA_DB_PASSWORD` env vars or matching Java system properties (system properties
-win — see `PersistenceConfig`). `schema-generation.database.action=create` — EclipseLink
+win — see `PersistenceConfig`). `schema-generation.database.action=create` — Hibernate
 creates/updates the schema from `@Entity` classes on `EntityManagerFactory` creation,
-no separate migration step.
+no separate migration step (see #48 for a real Flyway migration effort in progress).
 
 Tests are real integration tests against Postgres, no mocks. A JUnit 5 extension
 (`PostgresContainerExtension`, auto-registered for every test class via the service
