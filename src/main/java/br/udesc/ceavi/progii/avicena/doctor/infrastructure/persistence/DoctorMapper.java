@@ -2,32 +2,35 @@ package br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
+import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 
 final class DoctorMapper {
 
     private DoctorMapper() {}
 
-    static DoctorEntity toEntity(Doctor doctor) {
-        return new DoctorEntity(
-                doctor.getId(),
+    static DoctorEntity toEntity(Doctor doctor, MaritalStatusEntity maritalStatus) {
+        PersonEntity person = new PersonEntity(
+                null,
                 doctor.getName(),
                 doctor.getCpf(),
                 doctor.getPhone(),
                 toEntity(doctor.getAddress()),
-                doctor.getMaritalStatus(),
-                doctor.getCrm(),
-                doctor.getSpecialty());
+                maritalStatus);
+        return new DoctorEntity(doctor.getId(), person, doctor.getCrm(), doctor.getSpecialty());
     }
 
     static Doctor toDomain(DoctorEntity entity) {
+        PersonEntity person = entity.getPerson();
         return new Doctor(
                 entity.getId(),
-                entity.getName(),
-                entity.getCpf(),
-                entity.getPhone(),
-                toDomain(entity.getAddress()),
-                entity.getMaritalStatus(),
+                person.getName(),
+                person.getCpf(),
+                person.getPhone(),
+                toDomain(person.getAddress()),
+                toDomain(person.getMaritalStatus()),
                 entity.getCrm(),
                 entity.getSpecialty());
     }
@@ -57,5 +60,9 @@ final class DoctorMapper {
                 entity.getStreet(),
                 entity.getNeighborhood(),
                 entity.getCity());
+    }
+
+    private static MaritalStatus toDomain(MaritalStatusEntity entity) {
+        return entity == null ? null : MaritalStatus.valueOf(entity.getCode());
     }
 }
