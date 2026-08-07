@@ -19,7 +19,8 @@ public class PatientJpaRepository implements PatientRepository {
     public Patient save(Patient patient) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            PatientEntity entity = PatientMapper.toEntity(patient);
+            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, patient);
+            PatientEntity entity = PatientMapper.toEntity(patient, maritalStatus);
             entityManager.getTransaction().begin();
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
@@ -27,6 +28,16 @@ public class PatientJpaRepository implements PatientRepository {
         } finally {
             entityManager.close();
         }
+    }
+
+    private MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Patient patient) {
+        if (patient.getMaritalStatus() == null) {
+            return null;
+        }
+        return entityManager
+                .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
+                .setParameter("code", patient.getMaritalStatus().name())
+                .getSingleResult();
     }
 
     @Override

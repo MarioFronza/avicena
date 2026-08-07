@@ -1,30 +1,33 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
+import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 
 final class PatientMapper {
 
     private PatientMapper() {}
 
-    static PatientEntity toEntity(Patient patient) {
-        return new PatientEntity(
-                patient.getId(),
+    static PatientEntity toEntity(Patient patient, MaritalStatusEntity maritalStatus) {
+        PersonEntity person = new PersonEntity(
+                null,
                 patient.getName(),
                 patient.getCpf(),
                 patient.getPhone(),
                 toEntity(patient.getAddress()),
-                patient.getMaritalStatus());
+                maritalStatus);
+        return new PatientEntity(patient.getId(), person);
     }
 
     static Patient toDomain(PatientEntity entity) {
+        PersonEntity person = entity.getPerson();
         return new Patient(
                 entity.getId(),
-                entity.getName(),
-                entity.getCpf(),
-                entity.getPhone(),
-                toDomain(entity.getAddress()),
-                entity.getMaritalStatus());
+                person.getName(),
+                person.getCpf(),
+                person.getPhone(),
+                toDomain(person.getAddress()),
+                toDomain(person.getMaritalStatus()));
     }
 
     private static AddressEntity toEntity(Address address) {
@@ -52,5 +55,9 @@ final class PatientMapper {
                 entity.getStreet(),
                 entity.getNeighborhood(),
                 entity.getCity());
+    }
+
+    private static MaritalStatus toDomain(MaritalStatusEntity entity) {
+        return entity == null ? null : MaritalStatus.valueOf(entity.getCode());
     }
 }

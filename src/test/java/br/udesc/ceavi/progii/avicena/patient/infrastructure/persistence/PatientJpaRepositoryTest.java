@@ -46,6 +46,20 @@ class PatientJpaRepositoryTest {
     }
 
     @Test
+    void savePersistsAPatientWithAMaritalStatusThatRoundTripsCorrectly() {
+        Patient patient = new Patient("Casado Teste", "33333333333", "48966660000", null, MaritalStatus.MARRIED);
+        PatientJpaRepository repository = new PatientJpaRepository();
+
+        repository.save(patient);
+
+        Optional<Patient> found = repository.findAll().stream()
+                .filter(p -> p.getCpf().equals("33333333333"))
+                .findFirst();
+        assertTrue(found.isPresent());
+        assertEquals(MaritalStatus.MARRIED, found.get().getMaritalStatus());
+    }
+
+    @Test
     void deleteRemovesAPreviouslyPersistedPatient() {
         Patient patient = new Patient("Joao Teste", "98765432100", "48988880000", null, MaritalStatus.SINGLE);
         PatientJpaRepository repository = new PatientJpaRepository();

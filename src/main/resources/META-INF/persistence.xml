@@ -3,6 +3,8 @@
   <persistence-unit name="AvicenaBD" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity</class>
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity</class>
     <class>br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity</class>
     <class>br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity</class>
