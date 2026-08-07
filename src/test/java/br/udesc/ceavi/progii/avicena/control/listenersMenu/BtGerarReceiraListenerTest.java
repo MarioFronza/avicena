@@ -8,7 +8,9 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.Appo
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -32,8 +34,7 @@ class BtGerarReceiraListenerTest {
 
     @Test
     void rejectsAConsultaWhosePacienteHasNoEndereco() {
-        PatientEntity paciente =
-                new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
+        PatientEntity paciente = newPatient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
         AppointmentEntity consulta = consulta(medico(), paciente);
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
@@ -63,6 +64,18 @@ class BtGerarReceiraListenerTest {
     private PatientEntity paciente() {
         AddressEntity address =
                 new AddressEntity(null, 2, "Casa", "88000001", "Rua Paciente", "Centro", "Florianopolis");
-        return new PatientEntity(null, "Paciente Teste", "11111111111", "480000000", address, MaritalStatus.SINGLE);
+        return newPatient("Paciente Teste", "11111111111", "480000000", address, MaritalStatus.SINGLE);
+    }
+
+    private static PatientEntity newPatient(
+            String name, String cpf, String phone, AddressEntity address, MaritalStatus maritalStatus) {
+        PersonEntity person = new PersonEntity(
+                null,
+                name,
+                cpf,
+                phone,
+                address,
+                new MaritalStatusEntity(1L, maritalStatus.name(), maritalStatus.name()));
+        return new PatientEntity(null, person);
     }
 }

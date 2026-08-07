@@ -77,7 +77,20 @@ import from each other's `domain`:
 - **`infrastructure/persistence/`** — `*Entity` (the real `@Entity` JPA class,
   standalone, does not extend anything shared), `*Mapper` (package-private,
   domain↔entity conversion), `*JpaRepository` (implements the domain repository,
-  opens/closes an `EntityManager` per call via `PersistenceConfig`).
+  opens/closes an `EntityManager` per call via `PersistenceConfig`). **Patient is the
+  one exception**, as of #48's schema rollout: `PatientEntity` (table `patients`) no
+  longer holds `name`/`cpf`/`phone`/`address`/`maritalStatus` columns directly — it
+  holds a `@OneToOne(cascade = {PERSIST, REMOVE}) PersonEntity` (table `people`,
+  the shared shape #43 designed to eventually replace all four verticals' duplicated
+  columns) plus convenience getters (`getName()`, `getCpf()`, etc.) that delegate to
+  `person` for the cross-vertical call sites (`AppointmentListFrame`,
+  `DiagnosisRegistrationFrame`, `PatientHistoryFrame`, `BtGerarReceiraListener`) that
+  read `PatientEntity` fields directly. `MaritalStatusEntity` (table
+  `marital_statuses`) replaces the raw-ordinal `MaritalStatus` column for Patient —
+  it has no `@GeneratedValue`, since the app only ever reads seeded rows by `code`,
+  never inserts new ones. Doctor/Nurse/Receptionist are unchanged (still the old
+  flat shape, on `medico`/`enfermeiro`/`atendente`), pending their own follow-up
+  migrations in #48.
 - **`infrastructure/ui/`** — `*RegistrationFrame` (Swing form), `*CrudController`
   (wires Novo/Gravar/Excluir/Cancelar to the use cases), `*SearchController` (CPF
   search, list-all-then-filter, no dedicated query), `Register*MenuListener` (opens the
