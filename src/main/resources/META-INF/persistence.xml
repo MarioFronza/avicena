@@ -15,7 +15,9 @@
       <property name="jakarta.persistence.jdbc.user" value="postgres"/>
       <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="jakarta.persistence.jdbc.password" value="CasaAmarela"/>
-      <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+      <!-- Schema is owned by Flyway migrations (src/main/resources/db/migration),
+           run by PersistenceConfig before this persistence unit boots. No JPA
+           schema-generation action here. -->
     </properties>
   </persistence-unit>
 </persistence>
