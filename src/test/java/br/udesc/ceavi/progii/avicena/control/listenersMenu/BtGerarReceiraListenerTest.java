@@ -18,8 +18,7 @@ class BtGerarReceiraListenerTest {
 
     @Test
     void rejectsAConsultaWhoseMedicoHasNoEndereco() {
-        DoctorEntity medico = new DoctorEntity(
-                null, "Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE, "CRM-1", "Clinica Geral");
+        DoctorEntity medico = newDoctor("Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE);
         AppointmentEntity consulta = consulta(medico, paciente());
 
         assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
@@ -57,8 +56,19 @@ class BtGerarReceiraListenerTest {
     private DoctorEntity medico() {
         AddressEntity address =
                 new AddressEntity(null, 1, "Sala 1", "88000000", "Rua Medico", "Centro", "Florianopolis");
-        return new DoctorEntity(
-                null, "Dr Teste", "22222222222", "480000001", address, MaritalStatus.SINGLE, "CRM-1", "Clinica Geral");
+        return newDoctor("Dr Teste", "22222222222", "480000001", address, MaritalStatus.SINGLE);
+    }
+
+    private static DoctorEntity newDoctor(
+            String name, String cpf, String phone, AddressEntity address, MaritalStatus maritalStatus) {
+        PersonEntity person = new PersonEntity(
+                null,
+                name,
+                cpf,
+                phone,
+                address,
+                new MaritalStatusEntity(1L, maritalStatus.name(), maritalStatus.name()));
+        return new DoctorEntity(null, person, "CRM-1", "Clinica Geral");
     }
 
     private PatientEntity paciente() {
