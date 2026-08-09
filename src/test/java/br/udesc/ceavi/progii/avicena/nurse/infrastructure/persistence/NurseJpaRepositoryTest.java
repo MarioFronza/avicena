@@ -33,13 +33,13 @@ class NurseJpaRepositoryTest {
     @Test
     void savePersistsANurseWithAMaritalStatusThatRoundTripsCorrectly() {
         Nurse nurse =
-                new Nurse("Casado Teste", "33333333333", "48966660000", null, MaritalStatus.MARRIED, "Tecnico", 900);
+                new Nurse("Casado Teste", "44444444444", "48966660000", null, MaritalStatus.MARRIED, "Tecnico", 900);
         NurseJpaRepository repository = new NurseJpaRepository();
 
         repository.save(nurse);
 
         Optional<Nurse> found = repository.findAll().stream()
-                .filter(n -> n.getCpf().equals("33333333333"))
+                .filter(n -> n.getCpf().equals("44444444444"))
                 .findFirst();
         assertTrue(found.isPresent());
         assertEquals(MaritalStatus.MARRIED, found.get().getMaritalStatus());
