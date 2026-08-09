@@ -139,6 +139,20 @@ four-entity template on purpose:
   `FrameHistoricoPaciente` stub — CPF search, list-all-then-filter, same shape as
   the four staff/patient `*SearchController`s.
 
+### `auth/` — persistence-only, no vertical yet
+
+`auth/infrastructure/persistence/` holds `UserEntity` (table `users`, `@OneToOne`
+to `PersonEntity` with **no cascade** — unlike the four role tables, a user doesn't
+own its person's lifecycle), `RoleEntity` (table `roles`, seeded with
+`ADMIN`/`DOCTOR`/`NURSE`/`RECEPTIONIST`, no `@GeneratedValue` like
+`MaritalStatusEntity`), and `PermissionEntity` (table `permissions`, empty — no
+permission codes defined yet). `role_permissions`/`user_roles` are plain
+`@ManyToMany @JoinTable`s, not standalone entity classes, since both are pure
+joins with composite primary keys and no extra columns. There is deliberately no
+`auth/domain`, `auth/usecase`, or `auth/infrastructure/ui` yet — #48's PRD scoped
+this phase to "real tables and JPA entities" only; login, session handling, and
+permission checks are unbuilt future work.
+
 ### What's left outside the six migrated packages
 
 - **`control/dao/`** — only `PersistenceConfig` (the `EntityManagerFactory` factory,
@@ -186,11 +200,15 @@ worth knowing before touching code:
 With every entity migrated and the old `model`/DAO/listener layers gone, the codebase
 is close to uniformly Clean Architecture. #48's schema rollout has now migrated all
 four person-verticals (Patient, Doctor, Nurse, Receptionist) onto the shared `people`
-table; remaining #48 phases are Appointment/Diagnosis's own migration and the auth
-tables (`users`/`roles`/`permissions`/`role_permissions`/`user_roles`) from #43's
-design. The `endereco`→`addresses` rename and the `specialties` lookup table were
-both deferred specifically until all four person-verticals moved off their old flat
-tables — that condition is now met, so either can be picked up next within #48.
+table, and added the auth tables (`users`/`roles`/`permissions`/`role_permissions`/
+`user_roles`) as schema + JPA entities only — no login/session/permission-check code
+exists yet, that's separate future work. Remaining #48 work: Appointment/Diagnosis's
+own migration (urgency_statuses lookup, new departments table, real date/time types,
+diagnostico_primario/diagnostico_final renamed to diagnoses/final_diagnoses — the
+biggest single piece left, touches live appointment data and several UI screens). The
+`endereco`→`addresses` rename and the `specialties` lookup table were both deferred
+specifically until all four person-verticals moved off their old flat tables — that
+condition is now met, so either can be picked up whenever convenient within #48.
 
 1. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
    `appointment` into separate Gradle modules is now realistic — the package
