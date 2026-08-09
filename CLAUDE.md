@@ -77,22 +77,24 @@ import from each other's `domain`:
 - **`infrastructure/persistence/`** — `*Entity` (the real `@Entity` JPA class,
   standalone, does not extend anything shared), `*Mapper` (package-private,
   domain↔entity conversion), `*JpaRepository` (implements the domain repository,
-  opens/closes an `EntityManager` per call via `PersistenceConfig`). **Patient and
-  Doctor are the exceptions so far**, as #48's schema rollout reaches them one
-  vertical at a time: `PatientEntity` (table `patients`) and `DoctorEntity` (table
-  `doctors`) no longer hold `name`/`cpf`/`phone`/`address`/`maritalStatus` columns
-  directly — each holds a `@OneToOne(cascade = {PERSIST, REMOVE}) PersonEntity`
-  (table `people`, the shared shape #43 designed to eventually replace all four
-  verticals' duplicated columns) plus convenience getters (`getName()`, `getCpf()`,
-  etc.) that delegate to `person` for the cross-vertical call sites
-  (`AppointmentListFrame`, `DiagnosisRegistrationFrame`, `PatientHistoryFrame`,
-  `BtGerarReceiraListener`) that read these fields directly. `MaritalStatusEntity`
-  (table `marital_statuses`) replaces the raw-ordinal `MaritalStatus` column for
-  both — it has no `@GeneratedValue`, since the app only ever reads seeded rows by
-  `code`, never inserts new ones. Doctor keeps `crm`/`specialty` as plain columns on
-  `doctors` (the #43 `specialties` lookup table was only a "Should Have", deferred).
-  Nurse/Receptionist are unchanged (still the old flat shape, on
-  `enfermeiro`/`atendente`), pending their own follow-up migrations in #48.
+  opens/closes an `EntityManager` per call via `PersistenceConfig`). **Patient,
+  Doctor, and Nurse are the exceptions so far**, as #48's schema rollout reaches
+  them one vertical at a time: `PatientEntity` (table `patients`), `DoctorEntity`
+  (table `doctors`), and `NurseEntity` (table `nurses`) no longer hold
+  `name`/`cpf`/`phone`/`address`/`maritalStatus` columns directly — each holds a
+  `@OneToOne(cascade = {PERSIST, REMOVE}) PersonEntity` (table `people`, the shared
+  shape #43 designed to eventually replace all four verticals' duplicated columns)
+  plus convenience getters (`getName()`, `getCpf()`, etc.) that delegate to `person`
+  for the cross-vertical call sites (`AppointmentListFrame`,
+  `DiagnosisRegistrationFrame`, `PatientHistoryFrame`, `BtGerarReceiraListener`)
+  that read these fields directly. `MaritalStatusEntity` (table `marital_statuses`)
+  replaces the raw-ordinal `MaritalStatus` column for all three — it has no
+  `@GeneratedValue`, since the app only ever reads seeded rows by `code`, never
+  inserts new ones. Doctor keeps `crm`/`specialty` and Nurse keeps
+  `formation`/`hoursCompleted` as plain columns on their own tables (the #43
+  `specialties` lookup table was only a "Should Have", deferred). Receptionist is
+  unchanged (still the old flat shape, on `atendente`), pending its own follow-up
+  migration in #48.
 - **`infrastructure/ui/`** — `*RegistrationFrame` (Swing form), `*CrudController`
   (wires Novo/Gravar/Excluir/Cancelar to the use cases), `*SearchController` (CPF
   search, list-all-then-filter, no dedicated query), `Register*MenuListener` (opens the

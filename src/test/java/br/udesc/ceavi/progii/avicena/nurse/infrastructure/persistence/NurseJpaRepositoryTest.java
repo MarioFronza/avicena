@@ -31,6 +31,21 @@ class NurseJpaRepositoryTest {
     }
 
     @Test
+    void savePersistsANurseWithAMaritalStatusThatRoundTripsCorrectly() {
+        Nurse nurse =
+                new Nurse("Casado Teste", "44444444444", "48966660000", null, MaritalStatus.MARRIED, "Tecnico", 900);
+        NurseJpaRepository repository = new NurseJpaRepository();
+
+        repository.save(nurse);
+
+        Optional<Nurse> found = repository.findAll().stream()
+                .filter(n -> n.getCpf().equals("44444444444"))
+                .findFirst();
+        assertTrue(found.isPresent());
+        assertEquals(MaritalStatus.MARRIED, found.get().getMaritalStatus());
+    }
+
+    @Test
     void deleteRemovesAPreviouslyPersistedNurse() {
         Nurse nurse =
                 new Nurse("Maria Teste", "98765432100", "48988880000", null, MaritalStatus.SINGLE, "Enfermeira", 800);
