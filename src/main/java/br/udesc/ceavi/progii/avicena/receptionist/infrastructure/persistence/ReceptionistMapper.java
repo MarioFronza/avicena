@@ -1,21 +1,27 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
+import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 
 final class ReceptionistMapper {
 
     private ReceptionistMapper() {}
 
-    static ReceptionistEntity toEntity(Receptionist receptionist) {
-        return new ReceptionistEntity(
-                receptionist.getId(),
+    static ReceptionistEntity toEntity(Receptionist receptionist, MaritalStatusEntity maritalStatus) {
+        PersonEntity person = new PersonEntity(
+                null,
                 receptionist.getName(),
                 receptionist.getCpf(),
                 receptionist.getPhone(),
                 toEntity(receptionist.getAddress()),
-                receptionist.getMaritalStatus(),
+                maritalStatus);
+        return new ReceptionistEntity(
+                receptionist.getId(),
+                person,
                 receptionist.getWorkHours(),
                 receptionist.getSalary(),
                 receptionist.getOvertimeHours(),
@@ -23,13 +29,14 @@ final class ReceptionistMapper {
     }
 
     static Receptionist toDomain(ReceptionistEntity entity) {
+        PersonEntity person = entity.getPerson();
         return new Receptionist(
                 entity.getId(),
-                entity.getName(),
-                entity.getCpf(),
-                entity.getPhone(),
-                toDomain(entity.getAddress()),
-                entity.getMaritalStatus(),
+                person.getName(),
+                person.getCpf(),
+                person.getPhone(),
+                toDomain(person.getAddress()),
+                toDomain(person.getMaritalStatus()),
                 entity.getWorkHours(),
                 entity.getSalary(),
                 entity.getOvertimeHours(),
@@ -61,5 +68,9 @@ final class ReceptionistMapper {
                 entity.getStreet(),
                 entity.getNeighborhood(),
                 entity.getCity());
+    }
+
+    private static MaritalStatus toDomain(MaritalStatusEntity entity) {
+        return entity == null ? null : MaritalStatus.valueOf(entity.getCode());
     }
 }
