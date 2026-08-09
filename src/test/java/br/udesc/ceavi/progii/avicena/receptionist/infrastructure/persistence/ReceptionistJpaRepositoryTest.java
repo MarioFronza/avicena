@@ -33,6 +33,21 @@ class ReceptionistJpaRepositoryTest {
     }
 
     @Test
+    void savePersistsAReceptionistWithAMaritalStatusThatRoundTripsCorrectly() {
+        Receptionist receptionist = new Receptionist(
+                "Casado Teste", "77777777777", "48966660000", null, MaritalStatus.MARRIED, 40, 3200f, 2, 987654);
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+
+        repository.save(receptionist);
+
+        Optional<Receptionist> found = repository.findAll().stream()
+                .filter(r -> r.getCpf().equals("77777777777"))
+                .findFirst();
+        assertTrue(found.isPresent());
+        assertEquals(MaritalStatus.MARRIED, found.get().getMaritalStatus());
+    }
+
+    @Test
     void deleteRemovesAPreviouslyPersistedReceptionist() {
         Receptionist receptionist = new Receptionist(
                 "Bruna Teste", "98765432100", "48988880000", null, MaritalStatus.SINGLE, 30, 2500f, 0, 654321);

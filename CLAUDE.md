@@ -77,24 +77,27 @@ import from each other's `domain`:
 - **`infrastructure/persistence/`** — `*Entity` (the real `@Entity` JPA class,
   standalone, does not extend anything shared), `*Mapper` (package-private,
   domain↔entity conversion), `*JpaRepository` (implements the domain repository,
-  opens/closes an `EntityManager` per call via `PersistenceConfig`). **Patient,
-  Doctor, and Nurse are the exceptions so far**, as #48's schema rollout reaches
-  them one vertical at a time: `PatientEntity` (table `patients`), `DoctorEntity`
-  (table `doctors`), and `NurseEntity` (table `nurses`) no longer hold
+  opens/closes an `EntityManager` per call via `PersistenceConfig`). All four
+  person-verticals now run on the shared `people` foundation from #48's schema
+  rollout, migrated one at a time: `PatientEntity` (table `patients`),
+  `DoctorEntity` (table `doctors`), `NurseEntity` (table `nurses`), and
+  `ReceptionistEntity` (table `receptionists`) no longer hold
   `name`/`cpf`/`phone`/`address`/`maritalStatus` columns directly — each holds a
   `@OneToOne(cascade = {PERSIST, REMOVE}) PersonEntity` (table `people`, the shared
-  shape #43 designed to eventually replace all four verticals' duplicated columns)
-  plus convenience getters (`getName()`, `getCpf()`, etc.) that delegate to `person`
+  shape #43 designed to replace all four verticals' duplicated columns) plus
+  convenience getters (`getName()`, `getCpf()`, etc.) that delegate to `person`
   for the cross-vertical call sites (`AppointmentListFrame`,
   `DiagnosisRegistrationFrame`, `PatientHistoryFrame`, `BtGerarReceiraListener`)
   that read these fields directly. `MaritalStatusEntity` (table `marital_statuses`)
-  replaces the raw-ordinal `MaritalStatus` column for all three — it has no
+  replaces the raw-ordinal `MaritalStatus` column for all four — it has no
   `@GeneratedValue`, since the app only ever reads seeded rows by `code`, never
-  inserts new ones. Doctor keeps `crm`/`specialty` and Nurse keeps
-  `formation`/`hoursCompleted` as plain columns on their own tables (the #43
-  `specialties` lookup table was only a "Should Have", deferred). Receptionist is
-  unchanged (still the old flat shape, on `atendente`), pending its own follow-up
-  migration in #48.
+  inserts new ones. Doctor keeps `crm`/`specialty`, Nurse keeps
+  `formation`/`hoursCompleted`, and Receptionist keeps
+  `workHours`/`salary`/`overtimeHours`/`laborCardNumber` as plain columns on their
+  own tables (the #43 `specialties` lookup table was only a "Should Have",
+  deferred). Unlike `paciente`/`medico`/`enfermeiro`, `atendente` had no FK from
+  `consulta` — receptionists were never linked to appointments — so its migration
+  (`V5__receptionist_onto_people.sql`) needed no FK repoint, just the table swap.
 - **`infrastructure/ui/`** — `*RegistrationFrame` (Swing form), `*CrudController`
   (wires Novo/Gravar/Excluir/Cancelar to the use cases), `*SearchController` (CPF
   search, list-all-then-filter, no dedicated query), `Register*MenuListener` (opens the
@@ -170,11 +173,24 @@ worth knowing before touching code:
 - Test coverage is thin outside the six migrated packages: `PersistenceConfigTest` and
   `BtGerarReceiraListenerTest` are the only tests left in `control/`; `view/frames/`
   has none except `AppointmentListFrameTest`.
+- All real-Postgres integration tests share one Testcontainers Postgres for the whole
+  suite (`PostgresContainerExtension`, static field, `BeforeAll`, never truncated).
+  "Isolation" between tests is purely conventional — each test picks values (like a
+  cpf) it hopes nothing else in the suite collides with. Already caused one real CI
+  flake (issue #58): two tests independently used the same cpf against the same
+  shared table with different marital statuses, making `findFirst()` nondeterministic
+  by test execution order.
 
 ### Next steps
 
 With every entity migrated and the old `model`/DAO/listener layers gone, the codebase
-is close to uniformly Clean Architecture. What's left:
+is close to uniformly Clean Architecture. #48's schema rollout has now migrated all
+four person-verticals (Patient, Doctor, Nurse, Receptionist) onto the shared `people`
+table; remaining #48 phases are Appointment/Diagnosis's own migration and the auth
+tables (`users`/`roles`/`permissions`/`role_permissions`/`user_roles`) from #43's
+design. The `endereco`→`addresses` rename and the `specialties` lookup table were
+both deferred specifically until all four person-verticals moved off their old flat
+tables — that condition is now met, so either can be picked up next within #48.
 
 1. **Module boundaries.** Splitting `patient`/`doctor`/`nurse`/`receptionist`/
    `appointment` into separate Gradle modules is now realistic — the package
