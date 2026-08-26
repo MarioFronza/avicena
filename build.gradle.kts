@@ -1,6 +1,6 @@
 plugins {
     application
-    id("com.diffplug.spotless") version "8.9.0"
+    id("com.diffplug.spotless") version "8.10.0"
 }
 
 repositories {
@@ -19,9 +19,9 @@ application {
 
 dependencies {
     implementation("org.hibernate.orm:hibernate-core:7.4.5.Final")
-    implementation("org.flywaydb:flyway-core:13.1.0")
-    implementation("org.flywaydb:flyway-database-postgresql:13.1.0")
-    implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.flywaydb:flyway-core:13.3.0")
+    implementation("org.flywaydb:flyway-database-postgresql:13.3.0")
+    implementation("org.postgresql:postgresql:42.7.13")
     implementation("com.itextpdf:itextpdf:5.5.13.6")
 
     testImplementation(platform("org.junit:junit-bom:6.1.2"))
