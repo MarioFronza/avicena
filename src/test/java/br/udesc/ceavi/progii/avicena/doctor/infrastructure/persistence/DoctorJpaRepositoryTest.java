@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +47,29 @@ class DoctorJpaRepositoryTest {
                 .findFirst();
         assertTrue(found.isPresent());
         assertEquals(MaritalStatus.MARRIED, found.get().getMaritalStatus());
+    }
+
+    @Test
+    void reusesTheSameSpecialtyRowWhenTwoDoctorsShareASpecialtyName() throws Exception {
+        Doctor first = new Doctor(
+                "Primeiro Teste", "44444444444", "48911110000", null, MaritalStatus.SINGLE, "11111", "Dermatology");
+        Doctor second = new Doctor(
+                "Segundo Teste", "55555555555", "48922220000", null, MaritalStatus.SINGLE, "22222", "Dermatology");
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+
+        repository.save(first);
+        repository.save(second);
+
+        try (Connection connection = DriverManager.getConnection(
+                        System.getProperty("AVICENA_DB_URL"),
+                        System.getProperty("AVICENA_DB_USER"),
+                        System.getProperty("AVICENA_DB_PASSWORD"));
+                Statement statement = connection.createStatement();
+                ResultSet resultSet =
+                        statement.executeQuery("SELECT COUNT(*) FROM specialties WHERE name = 'Dermatology'")) {
+            resultSet.next();
+            assertEquals(1, resultSet.getInt(1));
+        }
     }
 
     @Test
