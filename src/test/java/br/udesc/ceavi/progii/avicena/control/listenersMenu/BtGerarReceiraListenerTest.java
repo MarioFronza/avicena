@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
+import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.SpecialtyEntity;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
@@ -68,7 +69,7 @@ class BtGerarReceiraListenerTest {
                 phone,
                 address,
                 new MaritalStatusEntity(1L, maritalStatus.name(), maritalStatus.name()));
-        return new DoctorEntity(null, person, "CRM-1", "Clinica Geral");
+        return new DoctorEntity(null, person, "CRM-1", new SpecialtyEntity(1L, "Clinica Geral"));
     }
 
     private PatientEntity paciente() {

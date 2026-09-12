@@ -11,7 +11,7 @@ final class DoctorMapper {
 
     private DoctorMapper() {}
 
-    static DoctorEntity toEntity(Doctor doctor, MaritalStatusEntity maritalStatus) {
+    static DoctorEntity toEntity(Doctor doctor, MaritalStatusEntity maritalStatus, SpecialtyEntity specialty) {
         PersonEntity person = new PersonEntity(
                 null,
                 doctor.getName(),
@@ -19,7 +19,7 @@ final class DoctorMapper {
                 doctor.getPhone(),
                 toEntity(doctor.getAddress()),
                 maritalStatus);
-        return new DoctorEntity(doctor.getId(), person, doctor.getCrm(), doctor.getSpecialty());
+        return new DoctorEntity(doctor.getId(), person, doctor.getCrm(), specialty);
     }
 
     static Doctor toDomain(DoctorEntity entity) {
@@ -32,7 +32,7 @@ final class DoctorMapper {
                 toDomain(person.getAddress()),
                 toDomain(person.getMaritalStatus()),
                 entity.getCrm(),
-                entity.getSpecialty());
+                entity.getSpecialty() == null ? null : entity.getSpecialty().getName());
     }
 
     private static AddressEntity toEntity(Address address) {

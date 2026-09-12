@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -28,12 +29,13 @@ public class DoctorEntity {
     @Column(name = "crm")
     private String crm;
 
-    @Column(name = "specialty")
-    private String specialty;
+    @ManyToOne
+    @JoinColumn(name = "specialty_id")
+    private SpecialtyEntity specialty;
 
     protected DoctorEntity() {}
 
-    public DoctorEntity(Long id, PersonEntity person, String crm, String specialty) {
+    public DoctorEntity(Long id, PersonEntity person, String crm, SpecialtyEntity specialty) {
         this.id = id;
         this.person = person;
         this.crm = crm;
@@ -68,7 +70,7 @@ public class DoctorEntity {
         return crm;
     }
 
-    public String getSpecialty() {
+    public SpecialtyEntity getSpecialty() {
         return specialty;
     }
 }

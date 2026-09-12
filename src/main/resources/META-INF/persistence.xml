@@ -7,6 +7,7 @@
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity</class>
     <class>br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity</class>
     <class>br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.SpecialtyEntity</class>
     <class>br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity</class>
     <class>br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistEntity</class>
     <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity</class>
