@@ -8,6 +8,8 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.Urge
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -18,8 +20,8 @@ class PatientHistoryFrameTest {
     @Test
     void buildsARowWithDateAndSymptoms() {
         PatientEntity patient = newPatient("Paciente Teste", "11111111111", "48900000000");
-        AppointmentEntity appointment =
-                new AppointmentEntity(null, "02/08/2026", "10:00", "Febre", patient, null, null, NOT_URGENT);
+        AppointmentEntity appointment = new AppointmentEntity(
+                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Febre", patient, null, null, NOT_URGENT);
 
         String[] row = PatientHistoryFrame.toTableRow(appointment);
 
@@ -30,12 +32,12 @@ class PatientHistoryFrameTest {
     void filterByPatientCpfKeepsOnlyMatchingPatientAndIgnoresAppointmentsWithoutAPatient() {
         PatientEntity matching = newPatient("Match", "11111111111", "48900000000");
         PatientEntity other = newPatient("Other", "22222222222", "48900000001");
-        AppointmentEntity matchingAppointment =
-                new AppointmentEntity(null, "02/08/2026", "10:00", "Febre", matching, null, null, NOT_URGENT);
-        AppointmentEntity otherAppointment =
-                new AppointmentEntity(null, "03/08/2026", "11:00", "Tosse", other, null, null, NOT_URGENT);
-        AppointmentEntity noPatientAppointment =
-                new AppointmentEntity(null, "04/08/2026", "12:00", "Dor", null, null, null, NOT_URGENT);
+        AppointmentEntity matchingAppointment = new AppointmentEntity(
+                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Febre", matching, null, null, NOT_URGENT);
+        AppointmentEntity otherAppointment = new AppointmentEntity(
+                null, LocalDate.of(2026, 8, 3), LocalTime.of(11, 0), "Tosse", other, null, null, NOT_URGENT);
+        AppointmentEntity noPatientAppointment = new AppointmentEntity(
+                null, LocalDate.of(2026, 8, 4), LocalTime.of(12, 0), "Dor", null, null, null, NOT_URGENT);
 
         List<AppointmentEntity> filtered = PatientHistoryFrame.filterByPatientCpf(
                 List.of(matchingAppointment, otherAppointment, noPatientAppointment), "11111111111");

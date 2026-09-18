@@ -8,6 +8,8 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.Urge
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class AppointmentListFrameTest {
@@ -24,8 +26,8 @@ class AppointmentListFrameTest {
         PatientEntity paciente = new PatientEntity(null, person);
         AppointmentEntity consulta = new AppointmentEntity(
                 null,
-                "02/08/2026",
-                "10:00",
+                LocalDate.of(2026, 8, 2),
+                LocalTime.of(10, 0),
                 "Febre",
                 paciente,
                 null,
