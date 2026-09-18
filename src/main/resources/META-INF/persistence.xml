@@ -18,11 +18,12 @@
     <class>br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence.RoleEntity</class>
     <class>br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence.PermissionEntity</class>
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/AvicenaBD"/>
-      <property name="jakarta.persistence.jdbc.user" value="postgres"/>
       <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="jakarta.persistence.jdbc.password" value="CasaAmarela"/>
-      <!-- Schema is owned by Flyway migrations (src/main/resources/db/migration),
+      <!-- jdbc.url/user/password are supplied entirely at runtime by
+           PersistenceConfig (system property, env var, or .env file - see
+           DotenvLoader). No credentials live in this file.
+
+           Schema is owned by Flyway migrations (src/main/resources/db/migration),
            run by PersistenceConfig before this persistence unit boots. No JPA
            schema-generation action here. -->
     </properties>
