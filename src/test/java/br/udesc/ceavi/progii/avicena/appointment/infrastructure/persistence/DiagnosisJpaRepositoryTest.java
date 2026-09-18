@@ -26,7 +26,7 @@ class DiagnosisJpaRepositoryTest {
         Diagnosis saved = repository.save(diagnosis);
 
         assertNotNull(saved.getId());
-        assertEquals("Gripe", findByCodigo(saved.getId()).getFinalDiagnosis().getDoenca());
+        assertEquals("Gripe", findByCodigo(saved.getId()).getFinalDiagnosis().getDisease());
     }
 
     @Test
