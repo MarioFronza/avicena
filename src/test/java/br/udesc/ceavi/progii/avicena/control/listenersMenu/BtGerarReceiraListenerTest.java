@@ -3,8 +3,8 @@ package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.UrgencyStatusEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.SpecialtyEntity;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
@@ -12,6 +12,8 @@ import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressE
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -51,7 +53,14 @@ class BtGerarReceiraListenerTest {
 
     private AppointmentEntity consulta(DoctorEntity medico, PatientEntity paciente) {
         return new AppointmentEntity(
-                null, "05/08/2026", "14:00", "Febre", paciente, medico, null, UrgencyStatus.NOT_URGENT);
+                null,
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 0),
+                "Febre",
+                paciente,
+                medico,
+                null,
+                new UrgencyStatusEntity(4L, "NOT_URGENT", "Not urgent"));
     }
 
     private DoctorEntity medico() {

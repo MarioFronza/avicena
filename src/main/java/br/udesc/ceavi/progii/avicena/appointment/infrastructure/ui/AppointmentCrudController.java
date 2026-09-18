@@ -121,10 +121,12 @@ public class AppointmentCrudController {
                     findPatientIdByCpf(registrationFrame.getPatientCpfField().getText());
             Long doctorId = registrationFrame.getSelectedDoctorId();
             Long nurseId = registrationFrame.getSelectedNurseId();
+            UrgencyStatus urgencyStatus =
+                    (UrgencyStatus) registrationFrame.getUrgencyComboBox().getSelectedItem();
 
             try {
                 appointment = registerAppointment.register(
-                        new Appointment(date, time, symptoms, patientId, doctorId, nurseId, UrgencyStatus.NOT_URGENT));
+                        new Appointment(date, time, symptoms, patientId, doctorId, nurseId, urgencyStatus));
                 JOptionPane.showMessageDialog(frame, "Appointment saved");
             } catch (InvalidAppointmentDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());

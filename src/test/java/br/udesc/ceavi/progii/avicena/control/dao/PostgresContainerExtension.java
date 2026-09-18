@@ -14,7 +14,8 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 
 public class PostgresContainerExtension implements BeforeAllCallback, BeforeEachCallback {
 
-    private static final Set<String> SEEDED_TABLES = Set.of("marital_statuses", "roles", "flyway_schema_history");
+    private static final Set<String> SEEDED_TABLES =
+            Set.of("marital_statuses", "urgency_statuses", "departments", "roles", "flyway_schema_history");
 
     private static final PostgreSQLContainer CONTAINER = new PostgreSQLContainer("postgres:16-alpine")
             .withDatabaseName("AvicenaBD")

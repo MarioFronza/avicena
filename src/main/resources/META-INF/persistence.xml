@@ -13,6 +13,7 @@
     <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity</class>
     <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisEntity</class>
     <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.FinalDiagnosisEntity</class>
+    <class>br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.UrgencyStatusEntity</class>
     <class>br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence.UserEntity</class>
     <class>br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence.RoleEntity</class>
     <class>br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence.PermissionEntity</class>

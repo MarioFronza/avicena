@@ -29,7 +29,8 @@ public class AppointmentJpaRepository implements AppointmentRepository {
             NurseEntity nurse = appointment.getNurseId() == null
                     ? null
                     : entityManager.getReference(NurseEntity.class, appointment.getNurseId());
-            AppointmentEntity entity = AppointmentMapper.toEntity(appointment, patient, doctor, nurse);
+            UrgencyStatusEntity urgencyStatus = findUrgencyStatus(entityManager, appointment);
+            AppointmentEntity entity = AppointmentMapper.toEntity(appointment, patient, doctor, nurse, urgencyStatus);
             entityManager.getTransaction().begin();
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
@@ -37,6 +38,16 @@ public class AppointmentJpaRepository implements AppointmentRepository {
         } finally {
             entityManager.close();
         }
+    }
+
+    private UrgencyStatusEntity findUrgencyStatus(EntityManager entityManager, Appointment appointment) {
+        if (appointment.getUrgencyStatus() == null) {
+            return null;
+        }
+        return entityManager
+                .createQuery("SELECT u FROM UrgencyStatusEntity u WHERE u.code = :code", UrgencyStatusEntity.class)
+                .setParameter("code", appointment.getUrgencyStatus().name())
+                .getSingleResult();
     }
 
     @Override
