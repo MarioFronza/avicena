@@ -29,14 +29,14 @@ final class DiagnosisMapper {
         return new Diagnosis(
                 entity.getId(),
                 entity.getAppointment() == null ? null : entity.getAppointment().getId(),
-                entity.getPressao(),
-                entity.getTemperatura(),
-                entity.getAltura(),
-                entity.getPeso(),
-                entity.getHistoricoRemedio(),
-                finalDiagnosis == null ? null : finalDiagnosis.getDoenca(),
-                finalDiagnosis == null ? null : finalDiagnosis.getRemedios(),
-                finalDiagnosis == null ? null : finalDiagnosis.getExame(),
-                finalDiagnosis == null ? null : finalDiagnosis.getDescricao());
+                entity.getBloodPressure(),
+                entity.getTemperature(),
+                entity.getHeight(),
+                entity.getWeight(),
+                entity.getMedicationHistory(),
+                finalDiagnosis == null ? null : finalDiagnosis.getDisease(),
+                finalDiagnosis == null ? null : finalDiagnosis.getMedications(),
+                finalDiagnosis == null ? null : finalDiagnosis.getExamNotes(),
+                finalDiagnosis == null ? null : finalDiagnosis.getDescription());
     }
 }

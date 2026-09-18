@@ -11,54 +11,54 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "diagnostico_primario")
+@Table(name = "diagnoses")
 public class DiagnosisEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "codigo")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "pressao")
-    private float pressao;
+    @Column(name = "blood_pressure")
+    private float bloodPressure;
 
-    @Column(name = "temperatura")
-    private int temperatura;
+    @Column(name = "temperature")
+    private int temperature;
 
-    @Column(name = "altura")
-    private int altura;
+    @Column(name = "height")
+    private int height;
 
-    @Column(name = "peso")
-    private int peso;
+    @Column(name = "weight")
+    private int weight;
 
-    @Column(name = "historico_remedio")
-    private String historicoRemedio;
+    @Column(name = "medication_history")
+    private String medicationHistory;
 
     @ManyToOne
-    @JoinColumn(name = "id_consulta")
+    @JoinColumn(name = "appointment_id")
     private AppointmentEntity appointment;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id_diagnostico_final")
+    @JoinColumn(name = "final_diagnosis_id")
     private FinalDiagnosisEntity finalDiagnosis;
 
     protected DiagnosisEntity() {}
 
     public DiagnosisEntity(
             Long id,
-            float pressao,
-            int temperatura,
-            int altura,
-            int peso,
-            String historicoRemedio,
+            float bloodPressure,
+            int temperature,
+            int height,
+            int weight,
+            String medicationHistory,
             AppointmentEntity appointment,
             FinalDiagnosisEntity finalDiagnosis) {
         this.id = id;
-        this.pressao = pressao;
-        this.temperatura = temperatura;
-        this.altura = altura;
-        this.peso = peso;
-        this.historicoRemedio = historicoRemedio;
+        this.bloodPressure = bloodPressure;
+        this.temperature = temperature;
+        this.height = height;
+        this.weight = weight;
+        this.medicationHistory = medicationHistory;
         this.appointment = appointment;
         this.finalDiagnosis = finalDiagnosis;
     }
@@ -67,24 +67,24 @@ public class DiagnosisEntity {
         return id;
     }
 
-    public float getPressao() {
-        return pressao;
+    public float getBloodPressure() {
+        return bloodPressure;
     }
 
-    public int getTemperatura() {
-        return temperatura;
+    public int getTemperature() {
+        return temperature;
     }
 
-    public int getAltura() {
-        return altura;
+    public int getHeight() {
+        return height;
     }
 
-    public int getPeso() {
-        return peso;
+    public int getWeight() {
+        return weight;
     }
 
-    public String getHistoricoRemedio() {
-        return historicoRemedio;
+    public String getMedicationHistory() {
+        return medicationHistory;
     }
 
     public AppointmentEntity getAppointment() {

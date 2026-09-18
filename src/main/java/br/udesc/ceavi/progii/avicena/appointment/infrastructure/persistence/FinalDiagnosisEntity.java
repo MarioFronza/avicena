@@ -8,53 +8,53 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "diagnostico_final")
+@Table(name = "final_diagnoses")
 public class FinalDiagnosisEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "codigo")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "doenca")
-    private String doenca;
+    @Column(name = "disease")
+    private String disease;
 
-    @Column(name = "remedios")
-    private String remedios;
+    @Column(name = "medications")
+    private String medications;
 
-    @Column(name = "descricao")
-    private String descricao;
+    @Column(name = "description")
+    private String description;
 
-    @Column(name = "exame")
-    private String exame;
+    @Column(name = "exam_notes")
+    private String examNotes;
 
     protected FinalDiagnosisEntity() {}
 
-    public FinalDiagnosisEntity(Long id, String doenca, String remedios, String descricao, String exame) {
+    public FinalDiagnosisEntity(Long id, String disease, String medications, String description, String examNotes) {
         this.id = id;
-        this.doenca = doenca;
-        this.remedios = remedios;
-        this.descricao = descricao;
-        this.exame = exame;
+        this.disease = disease;
+        this.medications = medications;
+        this.description = description;
+        this.examNotes = examNotes;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getDoenca() {
-        return doenca;
+    public String getDisease() {
+        return disease;
     }
 
-    public String getRemedios() {
-        return remedios;
+    public String getMedications() {
+        return medications;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getDescription() {
+        return description;
     }
 
-    public String getExame() {
-        return exame;
+    public String getExamNotes() {
+        return examNotes;
     }
 }
