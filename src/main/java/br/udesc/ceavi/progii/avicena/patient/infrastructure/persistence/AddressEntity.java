@@ -8,30 +8,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "endereco")
+@Table(name = "addresses")
 public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "codigo_endereco")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "numero")
+    @Column(name = "number")
     private int number;
 
-    @Column(name = "complento")
+    @Column(name = "complement")
     private String complement;
 
-    @Column(name = "cep")
+    @Column(name = "zip_code")
     private String zipCode;
 
-    @Column(name = "rua")
+    @Column(name = "street")
     private String street;
 
-    @Column(name = "bairro")
+    @Column(name = "neighborhood")
     private String neighborhood;
 
-    @Column(name = "cidade")
+    @Column(name = "city")
     private String city;
 
     protected AddressEntity() {}
