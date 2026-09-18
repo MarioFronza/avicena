@@ -1,6 +1,5 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
-import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
@@ -43,8 +42,9 @@ public class AppointmentEntity {
     @JoinColumn(name = "codigo_enfermeiro")
     private NurseEntity nurse;
 
-    @Column(name = "estado_paciente")
-    private UrgencyStatus urgencyStatus;
+    @ManyToOne
+    @JoinColumn(name = "urgency_status_id")
+    private UrgencyStatusEntity urgencyStatus;
 
     protected AppointmentEntity() {}
 
@@ -56,7 +56,7 @@ public class AppointmentEntity {
             PatientEntity patient,
             DoctorEntity doctor,
             NurseEntity nurse,
-            UrgencyStatus urgencyStatus) {
+            UrgencyStatusEntity urgencyStatus) {
         this.id = id;
         this.date = date;
         this.time = time;
@@ -95,7 +95,7 @@ public class AppointmentEntity {
         return nurse;
     }
 
-    public UrgencyStatus getUrgencyStatus() {
+    public UrgencyStatusEntity getUrgencyStatus() {
         return urgencyStatus;
     }
 }

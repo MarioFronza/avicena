@@ -3,8 +3,8 @@ package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.UrgencyStatusEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.SpecialtyEntity;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
@@ -51,7 +51,14 @@ class BtGerarReceiraListenerTest {
 
     private AppointmentEntity consulta(DoctorEntity medico, PatientEntity paciente) {
         return new AppointmentEntity(
-                null, "05/08/2026", "14:00", "Febre", paciente, medico, null, UrgencyStatus.NOT_URGENT);
+                null,
+                "05/08/2026",
+                "14:00",
+                "Febre",
+                paciente,
+                medico,
+                null,
+                new UrgencyStatusEntity(4L, "NOT_URGENT", "Not urgent"));
     }
 
     private DoctorEntity medico() {
