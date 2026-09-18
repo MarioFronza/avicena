@@ -20,9 +20,10 @@ public class DoctorJpaRepository implements DoctorRepository {
     public Doctor save(Doctor doctor) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, doctor);
-            DoctorEntity entity = DoctorMapper.toEntity(doctor, maritalStatus);
             entityManager.getTransaction().begin();
+            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, doctor);
+            SpecialtyEntity specialty = findOrCreateSpecialty(entityManager, doctor);
+            DoctorEntity entity = DoctorMapper.toEntity(doctor, maritalStatus, specialty);
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
             return DoctorMapper.toDomain(entity);
@@ -39,6 +40,22 @@ public class DoctorJpaRepository implements DoctorRepository {
                 .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
                 .setParameter("code", doctor.getMaritalStatus().name())
                 .getSingleResult();
+    }
+
+    private SpecialtyEntity findOrCreateSpecialty(EntityManager entityManager, Doctor doctor) {
+        if (doctor.getSpecialty() == null) {
+            return null;
+        }
+        List<SpecialtyEntity> existing = entityManager
+                .createQuery("SELECT s FROM SpecialtyEntity s WHERE s.name = :name", SpecialtyEntity.class)
+                .setParameter("name", doctor.getSpecialty())
+                .getResultList();
+        if (!existing.isEmpty()) {
+            return existing.get(0);
+        }
+        SpecialtyEntity specialty = new SpecialtyEntity(null, doctor.getSpecialty());
+        entityManager.persist(specialty);
+        return specialty;
     }
 
     @Override
