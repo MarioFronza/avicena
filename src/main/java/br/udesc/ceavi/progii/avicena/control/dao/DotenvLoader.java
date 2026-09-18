@@ -12,6 +12,7 @@ final class DotenvLoader {
         Map<String, String> entries = new HashMap<>();
         for (String line : Files.readAllLines(path)) {
             if (line.isEmpty()) continue;
+            if (line.startsWith("#")) continue;
             String[] parts = line.split("=");
             entries.put(parts[0], parts[1]);
         }
