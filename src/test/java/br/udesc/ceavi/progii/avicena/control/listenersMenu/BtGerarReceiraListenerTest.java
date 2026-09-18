@@ -12,6 +12,8 @@ import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressE
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
@@ -52,8 +54,8 @@ class BtGerarReceiraListenerTest {
     private AppointmentEntity consulta(DoctorEntity medico, PatientEntity paciente) {
         return new AppointmentEntity(
                 null,
-                "05/08/2026",
-                "14:00",
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 0),
                 "Febre",
                 paciente,
                 medico,

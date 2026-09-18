@@ -11,35 +11,41 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
-@Table(name = "consulta")
+@Table(name = "appointments")
 public class AppointmentEntity {
+
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "codigo")
+    @Column(name = "id")
     private Long id;
 
-    @Column(name = "data")
-    private String date;
+    @Column(name = "appointment_date")
+    private LocalDate date;
 
-    @Column(name = "hora")
-    private String time;
+    @Column(name = "appointment_time")
+    private LocalTime time;
 
-    @Column(name = "sintomas")
+    @Column(name = "symptoms")
     private String symptoms;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_paciente")
+    @JoinColumn(name = "patient_id")
     private PatientEntity patient;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_medico")
+    @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_enfermeiro")
+    @JoinColumn(name = "nurse_id")
     private NurseEntity nurse;
 
     @ManyToOne
@@ -50,8 +56,8 @@ public class AppointmentEntity {
 
     public AppointmentEntity(
             Long id,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             String symptoms,
             PatientEntity patient,
             DoctorEntity doctor,
@@ -72,11 +78,11 @@ public class AppointmentEntity {
     }
 
     public String getDate() {
-        return date;
+        return date == null ? null : date.format(DATE_FORMATTER);
     }
 
     public String getTime() {
-        return time;
+        return time == null ? null : time.format(TIME_FORMATTER);
     }
 
     public String getSymptoms() {

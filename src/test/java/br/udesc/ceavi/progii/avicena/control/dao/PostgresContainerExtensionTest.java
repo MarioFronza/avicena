@@ -51,4 +51,17 @@ class PostgresContainerExtensionTest {
             assertEquals(5, resultSet.getInt(1));
         }
     }
+
+    @Test
+    void preservesSeededDepartmentRowsAcrossTruncation() throws Exception {
+        try (Connection connection = DriverManager.getConnection(
+                        System.getProperty("AVICENA_DB_URL"),
+                        System.getProperty("AVICENA_DB_USER"),
+                        System.getProperty("AVICENA_DB_PASSWORD"));
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM departments")) {
+            resultSet.next();
+            assertEquals(1, resultSet.getInt(1));
+        }
+    }
 }
