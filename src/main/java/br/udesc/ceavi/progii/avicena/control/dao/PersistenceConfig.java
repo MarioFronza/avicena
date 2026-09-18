@@ -3,6 +3,8 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import org.flywaydb.core.Flyway;
@@ -11,16 +13,14 @@ import org.flywaydb.core.api.FlywayException;
 public final class PersistenceConfig {
 
     private static final String PERSISTENCE_UNIT = "AvicenaBD";
-    private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/AvicenaBD";
-    private static final String DEFAULT_USER = "postgres";
-    private static final String DEFAULT_PASSWORD = "CasaAmarela";
 
     private PersistenceConfig() {}
 
     public static EntityManagerFactory createEntityManagerFactory() {
-        String url = resolve("AVICENA_DB_URL", DEFAULT_URL);
-        String user = resolve("AVICENA_DB_USER", DEFAULT_USER);
-        String password = resolve("AVICENA_DB_PASSWORD", DEFAULT_PASSWORD);
+        Map<String, String> dotenv = loadDotenv();
+        String url = resolve("AVICENA_DB_URL", dotenv);
+        String user = resolve("AVICENA_DB_USER", dotenv);
+        String password = resolve("AVICENA_DB_PASSWORD", dotenv);
 
         migrate(url, user, password);
 
@@ -29,6 +29,14 @@ public final class PersistenceConfig {
         overrides.put("jakarta.persistence.jdbc.user", user);
         overrides.put("jakarta.persistence.jdbc.password", password);
         return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, overrides);
+    }
+
+    private static Map<String, String> loadDotenv() {
+        try {
+            return DotenvLoader.load(Paths.get(".env"));
+        } catch (IOException e) {
+            return Map.of();
+        }
     }
 
     private static void migrate(String url, String user, String password) {
@@ -44,11 +52,17 @@ public final class PersistenceConfig {
         }
     }
 
-    private static String resolve(String envVar, String defaultValue) {
+    private static String resolve(String envVar, Map<String, String> dotenv) {
         String value = System.getProperty(envVar);
         if (value == null) {
             value = System.getenv(envVar);
         }
-        return value != null ? value : defaultValue;
+        if (value == null) {
+            value = dotenv.get(envVar);
+        }
+        if (value == null) {
+            throw new IllegalStateException("Missing required configuration: " + envVar);
+        }
+        return value;
     }
 }
