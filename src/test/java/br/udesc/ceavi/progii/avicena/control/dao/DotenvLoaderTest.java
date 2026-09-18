@@ -23,4 +23,12 @@ class DotenvLoaderTest {
 
         assertEquals(Map.of("DB_PASS", "secret"), DotenvLoader.load(path));
     }
+
+    @Test
+    void skipsBlankLines() throws Exception {
+        Path path = Files.createTempFile("dotenv", ".env");
+        Files.writeString(path, "\nDB_PASS=secret\n");
+
+        assertEquals(Map.of("DB_PASS", "secret"), DotenvLoader.load(path));
+    }
 }
