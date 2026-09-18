@@ -15,4 +15,12 @@ class DotenvLoaderTest {
 
         assertEquals(Map.of(), DotenvLoader.load(path));
     }
+
+    @Test
+    void parsesASingleKeyValueLineIntoAMap() throws Exception {
+        Path path = Files.createTempFile("dotenv", ".env");
+        Files.writeString(path, "DB_PASS=secret\n");
+
+        assertEquals(Map.of("DB_PASS", "secret"), DotenvLoader.load(path));
+    }
 }
