@@ -10,6 +10,12 @@ atendentes, consultas, diagnósticos, receitas).
 
 ## Running locally
 
+Copy the example env file and fill in real values:
+
+```bash
+cp .env.example .env
+```
+
 Start the database:
 
 ```bash
@@ -27,9 +33,10 @@ container restarts (named volume).
 
 ## Configuration
 
-Default connection settings (matching `docker-compose.yml`) live in
-`src/main/resources/META-INF/persistence.xml`. Override them with environment
-variables if you're pointing at a different database:
+No credentials are committed anywhere in this repo. Connection settings are
+resolved at runtime, in order: a Java system property, an environment
+variable, then the `.env` file at the project root (see `.env.example`).
+Nothing resolving throws immediately instead of falling back to a default.
 
 - `AVICENA_DB_URL`
 - `AVICENA_DB_USER`
@@ -37,7 +44,8 @@ variables if you're pointing at a different database:
 
 ## Development
 
-Run the test suite (needs the database running — see above):
+Run the test suite (self-contained — starts its own Testcontainers Postgres,
+no `docker compose` needed):
 
 ```bash
 ./gradlew test
@@ -46,7 +54,7 @@ Run the test suite (needs the database running — see above):
 Run a single test class:
 
 ```bash
-./gradlew test --tests "br.udesc.ceavi.progii.avicena.control.dao.PacienteDAOTest"
+./gradlew test --tests "br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfigTest"
 ```
 
 Build without running:

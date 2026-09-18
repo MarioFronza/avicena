@@ -55,4 +55,11 @@ class PersistenceConfigTest {
             em.createQuery("SELECT COUNT(p) FROM PatientEntity p").getSingleResult();
         });
     }
+
+    @Test
+    void throwsWhenUrlCannotBeResolved() {
+        System.clearProperty(URL_PROPERTY);
+
+        assertThrows(IllegalStateException.class, () -> PersistenceConfig.createEntityManagerFactory());
+    }
 }
