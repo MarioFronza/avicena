@@ -1,8 +1,10 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
+import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import org.junit.jupiter.api.Test;
@@ -23,5 +25,13 @@ class DoctorCrudControllerTest {
         assertEquals(MaritalStatus.SINGLE, doctor.getMaritalStatus());
         assertEquals("12345", doctor.getCrm());
         assertEquals("Cardiology", doctor.getSpecialty());
+    }
+
+    @Test
+    void toDoctorThrowsForBlankName() {
+        assertThrows(
+                InvalidDoctorDataException.class,
+                () -> DoctorCrudController.toDoctor(
+                        "", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology"));
     }
 }
