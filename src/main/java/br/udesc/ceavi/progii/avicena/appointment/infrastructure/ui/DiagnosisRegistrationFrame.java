@@ -2,7 +2,6 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.BtGerarReceiraListener;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import jakarta.persistence.EntityManager;
 import java.awt.CardLayout;

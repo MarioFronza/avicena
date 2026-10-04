@@ -1,4 +1,4 @@
-package br.udesc.ceavi.progii.avicena.control.listenersMenu;
+package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
