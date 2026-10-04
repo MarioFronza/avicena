@@ -5,6 +5,7 @@ import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListene
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -43,7 +44,6 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
 
     private JPanel formPanel;
     private LayoutManager layout;
-    private GridBagConstraints constraints;
 
     private final FrameSistema mainFrame = MenuPrincipal.getInstance().getFrame();
 
@@ -100,133 +100,45 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
     }
 
     private void addComponents() {
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        formPanel.add(nameLabel, constraints);
+        addField(nameLabel, 0, 0, 1, 10, 10, null);
+        addField(nameField, 1, 0, 3, 200, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridwidth = 3;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 200;
-        formPanel.add(nameField, constraints);
+        addField(cpfLabel, 0, 1, 1, 10, 10, null);
+        addField(cpfField, 1, 1, 1, 105, 0, new Insets(0, 0, 0, 10));
+        addField(searchButton, 2, 1, 1, 10, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        formPanel.add(cpfLabel, constraints);
+        addField(phoneLabel, 0, 2, 1, 10, 10, null);
+        addField(phoneField, 1, 2, 2, 100, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 105;
-        constraints.insets = new Insets(0, 0, 0, 10);
-        formPanel.add(cpfField, constraints);
+        addField(crmLabel, 0, 3, 1, 10, 10, null);
+        addField(crmField, 1, 3, 2, 50, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 2;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        formPanel.add(searchButton, constraints);
+        addField(specialtyLabel, 0, 4, 1, 10, 10, null);
+        addField(specialtyField, 1, 4, 2, 50, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        formPanel.add(phoneLabel, constraints);
+        addField(maritalStatusLabel, 0, 5, 1, 10, 20, null);
+        addField(maritalStatusComboBox, 1, 5, 2, 0, 0, null);
 
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 2;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 100;
-        formPanel.add(phoneField, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        formPanel.add(crmLabel, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 50;
-        formPanel.add(crmField, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 4;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 10;
-        formPanel.add(specialtyLabel, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 4;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 50;
-        formPanel.add(specialtyField, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 5;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        constraints.ipady = 20;
-        formPanel.add(maritalStatusLabel, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 5;
-        constraints.gridwidth = 2;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(maritalStatusComboBox, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 0;
-        constraints.gridy = 6;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.ipadx = 10;
-        formPanel.add(addressLabel, constraints);
-
-        constraints = new GridBagConstraints();
-        constraints.gridx = 1;
-        constraints.gridy = 6;
-        constraints.gridwidth = 1;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
+        addField(addressLabel, 0, 6, 1, 10, 0, null);
         addressButton.addActionListener(this);
-        formPanel.add(addressButton, constraints);
+        addField(addressButton, 1, 6, 1, 0, 0, null);
 
         super.addFormulario(formPanel);
+    }
+
+    private void addField(
+            Component component, int gridx, int gridy, int gridwidth, int ipadx, int ipady, Insets insets) {
+        GridBagConstraints fieldConstraints = new GridBagConstraints();
+        fieldConstraints.gridx = gridx;
+        fieldConstraints.gridy = gridy;
+        fieldConstraints.gridwidth = gridwidth;
+        fieldConstraints.fill = GridBagConstraints.HORIZONTAL;
+        fieldConstraints.ipadx = ipadx;
+        fieldConstraints.ipady = ipady;
+        if (insets != null) {
+            fieldConstraints.insets = insets;
+        }
+        formPanel.add(component, fieldConstraints);
     }
 
     @Override
