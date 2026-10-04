@@ -69,6 +69,17 @@ public class DoctorCrudController {
         return addressController == null ? null : addressController.getAddress();
     }
 
+    static Doctor toDoctor(
+            String name,
+            String cpf,
+            String phone,
+            Address address,
+            MaritalStatus maritalStatus,
+            String crm,
+            String specialty) {
+        return new Doctor(name, cpf, phone, address, maritalStatus, crm, specialty);
+    }
+
     private class CancelActionListener implements ActionListener {
 
         @Override
@@ -118,7 +129,7 @@ public class DoctorCrudController {
 
             try {
                 doctor = registerDoctor.register(
-                        new Doctor(name, cpf, phone, currentAddress(), maritalStatus, crm, specialty));
+                        toDoctor(name, cpf, phone, currentAddress(), maritalStatus, crm, specialty));
                 JOptionPane.showMessageDialog(frame, "Doctor saved");
             } catch (InvalidDoctorDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
