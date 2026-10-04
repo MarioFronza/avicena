@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.udesc.ceavi.progii.avicena.control.listenersMenu;
+package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
