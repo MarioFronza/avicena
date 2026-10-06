@@ -11,7 +11,7 @@ public class DiagnosisJpaRepository implements DiagnosisRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public DiagnosisJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
+        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
     }
 
     @Override

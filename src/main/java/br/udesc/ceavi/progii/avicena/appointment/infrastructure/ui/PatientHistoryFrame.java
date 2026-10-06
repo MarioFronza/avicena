@@ -74,8 +74,7 @@ public class PatientHistoryFrame extends FrameSemCRUD {
     }
 
     static List<AppointmentEntity> findAll() {
-        EntityManager entityManager =
-                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         try {
             return entityManager
                     .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)

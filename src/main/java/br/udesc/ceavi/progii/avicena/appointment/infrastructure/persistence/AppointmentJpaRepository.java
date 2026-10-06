@@ -15,7 +15,7 @@ public class AppointmentJpaRepository implements AppointmentRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public AppointmentJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
+        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
     }
 
     @Override

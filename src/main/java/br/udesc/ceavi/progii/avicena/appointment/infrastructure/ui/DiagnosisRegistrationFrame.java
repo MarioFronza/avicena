@@ -96,8 +96,7 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
     }
 
     private List<AppointmentEntity> findAllAppointments() {
-        EntityManager entityManager =
-                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         try {
             return entityManager
                     .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
