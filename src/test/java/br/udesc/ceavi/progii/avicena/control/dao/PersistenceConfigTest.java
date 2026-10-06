@@ -8,6 +8,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.Query;
+import java.nio.file.Path;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -61,7 +62,9 @@ class PersistenceConfigTest {
     void throwsWhenUrlCannotBeResolved() {
         System.clearProperty(URL_PROPERTY);
 
-        assertThrows(IllegalStateException.class, () -> PersistenceConfig.createEntityManagerFactory());
+        assertThrows(
+                IllegalStateException.class,
+                () -> PersistenceConfig.createEntityManagerFactory(Path.of("does-not-exist.env")));
     }
 
     @Test

@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.PersistenceException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,11 @@ public final class PersistenceConfig {
     }
 
     public static EntityManagerFactory createEntityManagerFactory() {
-        Map<String, String> dotenv = loadDotenv();
+        return createEntityManagerFactory(Paths.get(".env"));
+    }
+
+    static EntityManagerFactory createEntityManagerFactory(Path dotenvPath) {
+        Map<String, String> dotenv = loadDotenv(dotenvPath);
         String url = resolve("AVICENA_DB_URL", dotenv);
         String user = resolve("AVICENA_DB_USER", dotenv);
         String password = resolve("AVICENA_DB_PASSWORD", dotenv);
@@ -40,9 +45,9 @@ public final class PersistenceConfig {
         return Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, overrides);
     }
 
-    private static Map<String, String> loadDotenv() {
+    private static Map<String, String> loadDotenv(Path dotenvPath) {
         try {
-            return DotenvLoader.load(Paths.get(".env"));
+            return DotenvLoader.load(dotenvPath);
         } catch (IOException e) {
             return Map.of();
         }
