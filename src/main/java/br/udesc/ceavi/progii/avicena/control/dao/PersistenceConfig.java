@@ -19,6 +19,11 @@ public final class PersistenceConfig {
 
     private PersistenceConfig() {}
 
+    public static void initialize() {
+        EntityManagerFactory factory = entityManagerFactory();
+        Runtime.getRuntime().addShutdownHook(new Thread(factory::close));
+    }
+
     public static synchronized EntityManagerFactory entityManagerFactory() {
         if (shared == null) {
             shared = createEntityManagerFactory();
