@@ -13,7 +13,7 @@ public class DoctorJpaRepository implements DoctorRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public DoctorJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
+        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
     }
 
     @Override

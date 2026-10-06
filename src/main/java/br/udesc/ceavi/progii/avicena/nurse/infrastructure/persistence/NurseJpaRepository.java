@@ -13,7 +13,7 @@ public class NurseJpaRepository implements NurseRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public NurseJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
+        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
     }
 
     @Override

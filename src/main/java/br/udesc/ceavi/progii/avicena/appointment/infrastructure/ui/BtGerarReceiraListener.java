@@ -69,8 +69,7 @@ public class BtGerarReceiraListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        EntityManager entityManager =
-                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         List<AppointmentEntity> consultas;
         try {
             consultas = entityManager

@@ -13,7 +13,7 @@ public class ReceptionistJpaRepository implements ReceptionistRepository {
     private final EntityManagerFactory entityManagerFactory;
 
     public ReceptionistJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
+        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
     }
 
     @Override
