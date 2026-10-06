@@ -14,7 +14,16 @@ public final class PersistenceConfig {
 
     private static final String PERSISTENCE_UNIT = "AvicenaBD";
 
+    private static EntityManagerFactory shared;
+
     private PersistenceConfig() {}
+
+    public static synchronized EntityManagerFactory entityManagerFactory() {
+        if (shared == null) {
+            shared = createEntityManagerFactory();
+        }
+        return shared;
+    }
 
     public static EntityManagerFactory createEntityManagerFactory() {
         Map<String, String> dotenv = loadDotenv();

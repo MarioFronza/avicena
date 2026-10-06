@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.control.dao;
 
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -61,5 +62,10 @@ class PersistenceConfigTest {
         System.clearProperty(URL_PROPERTY);
 
         assertThrows(IllegalStateException.class, () -> PersistenceConfig.createEntityManagerFactory());
+    }
+
+    @Test
+    void entityManagerFactoryReturnsTheSameInstanceOnEveryCall() {
+        assertSame(PersistenceConfig.entityManagerFactory(), PersistenceConfig.entityManagerFactory());
     }
 }
