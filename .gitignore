@@ -9,3 +9,4 @@
 bin/
 .mise.local.toml
 .env
+*.db
