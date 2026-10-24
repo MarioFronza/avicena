@@ -19,6 +19,7 @@ public class NurseCrudController {
     private static NurseCrudController instance;
 
     private Nurse nurse;
+    private Address address;
     private final FrameCRUD frame;
     private final NurseRegistrationFrame registrationFrame;
     private final RegisterNurse registerNurse;
@@ -42,6 +43,10 @@ public class NurseCrudController {
         this.deleteNurse = deleteNurse;
     }
 
+    public void useAddress(Address address) {
+        this.address = address;
+    }
+
     public void delete() {
         deleteNurse.delete(nurse);
     }
@@ -55,7 +60,7 @@ public class NurseCrudController {
                 Integer.parseInt(registrationFrame.getHoursCompletedField().getText());
         MaritalStatus maritalStatus =
                 (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
-        nurse = registerNurse.register(new Nurse(name, cpf, phone, null, maritalStatus, formation, hoursCompleted));
+        nurse = registerNurse.register(new Nurse(name, cpf, phone, address, maritalStatus, formation, hoursCompleted));
     }
 
     public void setNurse(Nurse nurse) {

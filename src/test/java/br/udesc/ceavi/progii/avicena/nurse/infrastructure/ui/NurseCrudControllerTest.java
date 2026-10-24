@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
+import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import java.awt.Dimension;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,22 @@ class NurseCrudControllerTest {
         ctrl.register();
 
         assertEquals(40, repo.findAll().get(0).getHoursCompleted());
+    }
+
+    @Test
+    void registerUsesTheAddressReceivedFromThePopup() {
+        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        frame.getNameField().setText("Nurse Test");
+        frame.getCpfField().setText("12345678900");
+        frame.getPhoneField().setText("48999990000");
+        frame.getFormationField().setText("Nursing");
+        frame.getHoursCompletedField().setText("40");
+        frame.getMaritalStatusComboBox().setSelectedItem(MaritalStatus.SINGLE);
+        ctrl.useAddress(address);
+
+        ctrl.register();
+
+        assertEquals(address, repo.findAll().get(0).getAddress());
     }
 
     @Test
