@@ -10,12 +10,17 @@ public class AddAddressListener extends MenuActionListener {
         super(tela);
     }
 
+    public AddAddressListener(FrameSistema tela, AddressEntryFrame addressFrame) {
+        super(tela);
+        this.frame = addressFrame;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        frame = AddressEntryFrame.getInstance();
-
-        AddressEntryController.getInstance(frame);
-
+        if (frame == null) {
+            frame = AddressEntryFrame.getInstance();
+            AddressEntryController.getInstance(frame);
+        }
         tela.adicionarFrameInterno(frame);
         frame.setVisible(true);
     }

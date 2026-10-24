@@ -1,18 +1,13 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -20,11 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener {
-
-    private static DoctorRegistrationFrame instance;
-    private static final String TITLE = "Doctor Registration";
-    private static final Dimension DIMENSION = new Dimension(360, 300);
+public class DoctorRegistrationFrame extends FrameCRUD {
 
     private JLabel nameLabel;
     private JLabel cpfLabel;
@@ -45,21 +36,15 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
     private JPanel formPanel;
     private LayoutManager layout;
 
-    private final FrameSistema mainFrame = MenuPrincipal.getInstance().getFrame();
+    public DoctorRegistrationFrame() {
+        this("Doctor Registration", new Dimension(360, 300));
+    }
 
     public DoctorRegistrationFrame(String title, Dimension dimension) {
         super(title, dimension);
 
         initializeComponents();
         addComponents();
-        addListeners();
-    }
-
-    public static DoctorRegistrationFrame getInstance() {
-        if (instance == null) {
-            instance = new DoctorRegistrationFrame(TITLE, DIMENSION);
-        }
-        return instance;
     }
 
     @Override
@@ -120,7 +105,6 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
         addField(maritalStatusComboBox, 1, 5, 2, 0, 0, null);
 
         addField(addressLabel, 0, 6, 1, 10, 0, null);
-        addressButton.addActionListener(this);
         addField(addressButton, 1, 6, 1, 0, 0, null);
 
         super.addFormulario(formPanel);
@@ -139,16 +123,6 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
             fieldConstraints.insets = insets;
         }
         formPanel.add(component, fieldConstraints);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {}
-
-    private void addListeners() {
-        ActionListener addressListener = new AddAddressListener(mainFrame);
-        ActionListener searchListener = new DoctorSearchController();
-        searchButton.addActionListener(searchListener);
-        addressButton.addActionListener(addressListener);
     }
 
     public JTextField getNameField() {
@@ -177,5 +151,9 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
 
     public JButton getSearchButton() {
         return searchButton;
+    }
+
+    public JButton getAddressButton() {
+        return addressButton;
     }
 }
