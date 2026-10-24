@@ -15,7 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import javax.swing.JMenuBar;
 
 /**
  * Esta é a tela principal da aplicação
@@ -30,7 +29,7 @@ public class FrameSistema extends JFrame {
     private Container contentPanel;
     private Image fundo;
 
-    private JMenuBar menuPrincipal;
+    private MenuPrincipal menuPrincipal;
 
     public FrameSistema() {
         super();
@@ -93,6 +92,11 @@ public class FrameSistema extends JFrame {
         menuPrincipal = new MenuPrincipal(this);
         super.setJMenuBar(menuPrincipal);
     }
+
+    public MenuPrincipal getMenuPrincipal() {
+        return menuPrincipal;
+    }
+
     // Adcionar frames internos
     public void adicionarFrameInterno(JInternalFrame frame) {
         desktop.add(frame);

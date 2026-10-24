@@ -4,6 +4,7 @@ import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.function.Consumer;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -12,17 +13,19 @@ public class AddressEntryController {
     private static AddressEntryController instance;
 
     private Address address;
-    private final FrameCRUD frame;
+    private final AddressEntryFrame entryFrame;
+    private final Consumer<Address> callback;
 
-    public AddressEntryController(FrameCRUD frame) {
-        this.frame = frame;
+    public AddressEntryController(AddressEntryFrame entryFrame, Consumer<Address> callback) {
+        this.entryFrame = entryFrame;
+        this.callback = callback;
 
         addCrudListeners();
     }
 
     public static AddressEntryController getInstance(FrameCRUD frame) {
         if (instance == null) {
-            instance = new AddressEntryController(frame);
+            instance = new AddressEntryController((AddressEntryFrame) frame, address -> {});
         }
         return instance;
     }
@@ -38,13 +41,13 @@ public class AddressEntryController {
     private void addCrudListeners() {
         JButton button;
 
-        button = frame.getPanelBotoesCRUD().getBtCancelar();
+        button = entryFrame.getPanelBotoesCRUD().getBtCancelar();
         button.addActionListener(new CancelActionListener());
-        button = frame.getPanelBotoesCRUD().getBtNovo();
+        button = entryFrame.getPanelBotoesCRUD().getBtNovo();
         button.addActionListener(new NewActionListener());
-        button = frame.getPanelBotoesCRUD().getBtExcluir();
+        button = entryFrame.getPanelBotoesCRUD().getBtExcluir();
         button.addActionListener(new DeleteActionListener());
-        button = frame.getPanelBotoesCRUD().getBtGravar();
+        button = entryFrame.getPanelBotoesCRUD().getBtGravar();
         button.addActionListener(new SaveActionListener());
     }
 
@@ -53,13 +56,13 @@ public class AddressEntryController {
         @Override
         public void actionPerformed(ActionEvent e) {
             int response = JOptionPane.showConfirmDialog(
-                    frame,
+                    entryFrame,
                     "Do you really want to close this window?",
                     "Confirm Close",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
-                frame.dispose();
+                entryFrame.dispose();
             }
         }
     }
@@ -68,7 +71,7 @@ public class AddressEntryController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane.showMessageDialog(frame, "New Address");
+            JOptionPane.showMessageDialog(entryFrame, "New Address");
         }
     }
 
@@ -77,7 +80,7 @@ public class AddressEntryController {
         @Override
         public void actionPerformed(ActionEvent e) {
             address = null;
-            frame.limparCampos();
+            entryFrame.limparCampos();
         }
     }
 
@@ -85,7 +88,6 @@ public class AddressEntryController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            AddressEntryFrame entryFrame = AddressEntryFrame.getInstance();
             address = new Address(
                     Integer.parseInt(entryFrame.getNumberField().getText()),
                     entryFrame.getComplementField().getText(),
@@ -93,9 +95,10 @@ public class AddressEntryController {
                     entryFrame.getStreetField().getText(),
                     entryFrame.getNeighborhoodField().getText(),
                     entryFrame.getCityField().getText());
+            callback.accept(address);
             JOptionPane.showMessageDialog(entryFrame, "Address saved");
-            frame.dispose();
-            frame.limparCampos();
+            entryFrame.dispose();
+            entryFrame.limparCampos();
         }
     }
 }

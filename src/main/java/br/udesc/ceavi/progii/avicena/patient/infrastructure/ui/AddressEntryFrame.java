@@ -35,6 +35,10 @@ public class AddressEntryFrame extends FrameCRUD {
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
+    public AddressEntryFrame() {
+        this(TITLE, DIMENSION);
+    }
+
     public AddressEntryFrame(String title, Dimension dimension) {
         super(title, dimension);
 
@@ -44,7 +48,7 @@ public class AddressEntryFrame extends FrameCRUD {
 
     public static AddressEntryFrame getInstance() {
         if (instance == null) {
-            instance = new AddressEntryFrame(TITLE, DIMENSION);
+            instance = new AddressEntryFrame();
         }
         return instance;
     }
