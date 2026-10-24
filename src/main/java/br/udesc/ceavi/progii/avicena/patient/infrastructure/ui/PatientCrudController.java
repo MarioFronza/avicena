@@ -18,6 +18,7 @@ public class PatientCrudController {
     private static PatientCrudController instance;
 
     private Patient patient;
+    private Address address;
     private final FrameCRUD frame;
     private final PatientRegistrationFrame registrationFrame;
     private final RegisterPatient registerPatient;
@@ -41,6 +42,10 @@ public class PatientCrudController {
         this.deletePatient = deletePatient;
     }
 
+    public void useAddress(Address address) {
+        this.address = address;
+    }
+
     public void delete() {
         deletePatient.delete(patient);
     }
@@ -51,7 +56,7 @@ public class PatientCrudController {
         String phone = registrationFrame.getPhoneField().getText();
         MaritalStatus maritalStatus =
                 (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
-        patient = registerPatient.register(new Patient(name, cpf, phone, null, maritalStatus));
+        patient = registerPatient.register(new Patient(name, cpf, phone, address, maritalStatus));
     }
 
     public void setPatient(Patient patient) {

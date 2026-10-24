@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
@@ -22,6 +23,20 @@ class PatientCrudControllerTest {
         repo = new InMemoryPatientRepository();
         frame = new PatientRegistrationFrame("Patient Registration", new Dimension(360, 240));
         ctrl = new PatientCrudController(frame, new RegisterPatient(repo), new DeletePatient(repo));
+    }
+
+    @Test
+    void registerUsesTheAddressReceivedFromThePopup() {
+        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        frame.getNameField().setText("Patient Test");
+        frame.getCpfField().setText("12345678900");
+        frame.getPhoneField().setText("48999990000");
+        frame.getMaritalStatusComboBox().setSelectedItem(MaritalStatus.SINGLE);
+        ctrl.useAddress(address);
+
+        ctrl.register();
+
+        assertEquals(address, repo.findAll().get(0).getAddress());
     }
 
     @Test
