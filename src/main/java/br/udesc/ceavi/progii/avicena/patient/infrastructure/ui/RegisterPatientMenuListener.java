@@ -6,19 +6,18 @@ import java.awt.event.ActionEvent;
 
 public class RegisterPatientMenuListener extends MenuActionListener {
 
-    public RegisterPatientMenuListener(FrameSistema tela) {
+    private final PatientRegistrationFrame patientFrame;
+
+    public RegisterPatientMenuListener(FrameSistema tela, PatientRegistrationFrame patientFrame) {
         super(tela);
+        this.patientFrame = patientFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        frame = PatientRegistrationFrame.getInstance();
-
-        PatientCrudController.getInstance(frame);
-
-        if (!frame.isVisible()) {
-            tela.adicionarFrameInterno(frame);
-            frame.setVisible(true);
+        if (!patientFrame.isVisible()) {
+            tela.adicionarFrameInterno(patientFrame);
+            patientFrame.setVisible(true);
         }
     }
 }

@@ -14,9 +14,17 @@ import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenu
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryFrame;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.PatientCrudController;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.PatientRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.PatientSearchController;
+import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.RegisterPatientMenuListener;
+import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
+import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
+import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import javax.swing.JOptionPane;
 
@@ -47,16 +55,32 @@ public class AvicenaMain {
         DoctorCrudController doctorController = new DoctorCrudController(
                 doctorFrame, new RegisterDoctor(doctorRepository), new DeleteDoctor(doctorRepository));
 
-        AddressEntryFrame addressFrame = new AddressEntryFrame();
-        new AddressEntryController(addressFrame, doctorController::useAddress);
+        AddressEntryFrame doctorAddressFrame = new AddressEntryFrame();
+        new AddressEntryController(doctorAddressFrame, doctorController::useAddress);
 
         doctorFrame
                 .getSearchButton()
                 .addActionListener(
                         new DoctorSearchController(doctorFrame, new ListDoctors(doctorRepository), doctorController));
-        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, addressFrame));
+        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
 
         frameSistema.getMenuPrincipal().onRegisterDoctor(new RegisterDoctorMenuListener(frameSistema, doctorFrame));
+
+        PatientJpaRepository patientRepository = new PatientJpaRepository();
+        PatientRegistrationFrame patientFrame = new PatientRegistrationFrame();
+        PatientCrudController patientController = new PatientCrudController(
+                patientFrame, new RegisterPatient(patientRepository), new DeletePatient(patientRepository));
+
+        AddressEntryFrame patientAddressFrame = new AddressEntryFrame();
+        new AddressEntryController(patientAddressFrame, patientController::useAddress);
+
+        patientFrame
+                .getSearchButton()
+                .addActionListener(new PatientSearchController(
+                        patientFrame, new ListPatients(patientRepository), patientController));
+        patientFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, patientAddressFrame));
+
+        frameSistema.getMenuPrincipal().onRegisterPatient(new RegisterPatientMenuListener(frameSistema, patientFrame));
 
         frameSistema.setVisible(true);
     }

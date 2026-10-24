@@ -4,10 +4,8 @@ import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.InvalidPatientDataException;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -15,31 +13,18 @@ import javax.swing.JOptionPane;
 
 public class PatientCrudController {
 
-    private static PatientCrudController instance;
-
     private Patient patient;
     private Address address;
-    private final FrameCRUD frame;
-    private final PatientRegistrationFrame registrationFrame;
+    private final PatientRegistrationFrame frame;
     private final RegisterPatient registerPatient;
     private final DeletePatient deletePatient;
 
-    public PatientCrudController(FrameCRUD frame) {
-        this.frame = frame;
-        this.registrationFrame = null;
-        PatientJpaRepository repository = new PatientJpaRepository();
-        this.registerPatient = new RegisterPatient(repository);
-        this.deletePatient = new DeletePatient(repository);
-
-        addCrudListeners();
-    }
-
     public PatientCrudController(
-            PatientRegistrationFrame registrationFrame, RegisterPatient registerPatient, DeletePatient deletePatient) {
-        this.frame = registrationFrame;
-        this.registrationFrame = registrationFrame;
+            PatientRegistrationFrame frame, RegisterPatient registerPatient, DeletePatient deletePatient) {
+        this.frame = frame;
         this.registerPatient = registerPatient;
         this.deletePatient = deletePatient;
+        addCrudListeners();
     }
 
     public void useAddress(Address address) {
@@ -51,11 +36,11 @@ public class PatientCrudController {
     }
 
     public void register() {
-        String name = registrationFrame.getNameField().getText();
-        String cpf = registrationFrame.getCpfField().getText();
-        String phone = registrationFrame.getPhoneField().getText();
+        String name = frame.getNameField().getText();
+        String cpf = frame.getCpfField().getText();
+        String phone = frame.getPhoneField().getText();
         MaritalStatus maritalStatus =
-                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+                (MaritalStatus) frame.getMaritalStatusComboBox().getSelectedItem();
         patient = registerPatient.register(new Patient(name, cpf, phone, address, maritalStatus));
     }
 
@@ -65,17 +50,6 @@ public class PatientCrudController {
 
     public Patient getPatient() {
         return patient;
-    }
-
-    public static PatientCrudController getInstance(FrameCRUD frame) {
-        if (instance == null) {
-            instance = new PatientCrudController(frame);
-        }
-        return instance;
-    }
-
-    public static PatientCrudController getInstance() {
-        return instance;
     }
 
     private void addCrudListeners() {
@@ -89,11 +63,6 @@ public class PatientCrudController {
         button.addActionListener(new DeleteActionListener());
         button = frame.getPanelBotoesCRUD().getBtGravar();
         button.addActionListener(new RegisterActionListener());
-    }
-
-    private Address currentAddress() {
-        AddressEntryController addressController = AddressEntryController.getInstance();
-        return addressController == null ? null : addressController.getAddress();
     }
 
     private class CancelActionListener implements ActionListener {
@@ -124,7 +93,7 @@ public class PatientCrudController {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
-                deletePatient.delete(patient);
+                delete();
                 frame.limparCampos();
             }
         }
@@ -134,15 +103,8 @@ public class PatientCrudController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            PatientRegistrationFrame registrationFrame = PatientRegistrationFrame.getInstance();
-            String name = registrationFrame.getNameField().getText();
-            String cpf = registrationFrame.getCpfField().getText();
-            String phone = registrationFrame.getPhoneField().getText();
-            MaritalStatus maritalStatus =
-                    (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
-
             try {
-                patient = registerPatient.register(new Patient(name, cpf, phone, currentAddress(), maritalStatus));
+                register();
                 JOptionPane.showMessageDialog(frame, "Patient saved");
             } catch (InvalidPatientDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
