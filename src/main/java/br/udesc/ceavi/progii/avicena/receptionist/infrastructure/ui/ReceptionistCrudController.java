@@ -2,13 +2,10 @@ package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
-import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistJpaRepository;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -16,33 +13,20 @@ import javax.swing.JOptionPane;
 
 public class ReceptionistCrudController {
 
-    private static ReceptionistCrudController instance;
-
     private Receptionist receptionist;
     private Address address;
-    private final FrameCRUD frame;
-    private final ReceptionistRegistrationFrame registrationFrame;
+    private final ReceptionistRegistrationFrame frame;
     private final RegisterReceptionist registerReceptionist;
     private final DeleteReceptionist deleteReceptionist;
 
-    public ReceptionistCrudController(FrameCRUD frame) {
-        this.frame = frame;
-        this.registrationFrame = null;
-        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
-        this.registerReceptionist = new RegisterReceptionist(repository);
-        this.deleteReceptionist = new DeleteReceptionist(repository);
-
-        addCrudListeners();
-    }
-
     public ReceptionistCrudController(
-            ReceptionistRegistrationFrame registrationFrame,
+            ReceptionistRegistrationFrame frame,
             RegisterReceptionist registerReceptionist,
             DeleteReceptionist deleteReceptionist) {
-        this.frame = registrationFrame;
-        this.registrationFrame = registrationFrame;
+        this.frame = frame;
         this.registerReceptionist = registerReceptionist;
         this.deleteReceptionist = deleteReceptionist;
+        addCrudListeners();
     }
 
     public void useAddress(Address address) {
@@ -54,17 +38,15 @@ public class ReceptionistCrudController {
     }
 
     public void register() {
-        String name = registrationFrame.getNameField().getText();
-        String cpf = registrationFrame.getCpfField().getText();
-        String phone = registrationFrame.getPhoneField().getText();
-        int workHours = Integer.parseInt(registrationFrame.getWorkHoursField().getText());
-        int overtimeHours =
-                Integer.parseInt(registrationFrame.getOvertimeHoursField().getText());
-        float salary = Float.parseFloat(registrationFrame.getSalaryField().getText());
-        int laborCardNumber =
-                Integer.parseInt(registrationFrame.getLaborCardNumberField().getText());
+        String name = frame.getNameField().getText();
+        String cpf = frame.getCpfField().getText();
+        String phone = frame.getPhoneField().getText();
+        int workHours = Integer.parseInt(frame.getWorkHoursField().getText());
+        int overtimeHours = Integer.parseInt(frame.getOvertimeHoursField().getText());
+        float salary = Float.parseFloat(frame.getSalaryField().getText());
+        int laborCardNumber = Integer.parseInt(frame.getLaborCardNumberField().getText());
         MaritalStatus maritalStatus =
-                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+                (MaritalStatus) frame.getMaritalStatusComboBox().getSelectedItem();
         receptionist = registerReceptionist.register(new Receptionist(
                 name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber));
     }
@@ -75,17 +57,6 @@ public class ReceptionistCrudController {
 
     public Receptionist getReceptionist() {
         return receptionist;
-    }
-
-    public static ReceptionistCrudController getInstance(FrameCRUD frame) {
-        if (instance == null) {
-            instance = new ReceptionistCrudController(frame);
-        }
-        return instance;
-    }
-
-    public static ReceptionistCrudController getInstance() {
-        return instance;
     }
 
     private void addCrudListeners() {
@@ -99,11 +70,6 @@ public class ReceptionistCrudController {
         button.addActionListener(new DeleteActionListener());
         button = frame.getPanelBotoesCRUD().getBtGravar();
         button.addActionListener(new RegisterActionListener());
-    }
-
-    private Address currentAddress() {
-        AddressEntryController addressController = AddressEntryController.getInstance();
-        return addressController == null ? null : addressController.getAddress();
     }
 
     private class CancelActionListener implements ActionListener {
@@ -134,7 +100,7 @@ public class ReceptionistCrudController {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
-                deleteReceptionist.delete(receptionist);
+                delete();
                 frame.limparCampos();
             }
         }
@@ -144,31 +110,8 @@ public class ReceptionistCrudController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            ReceptionistRegistrationFrame registrationFrame = ReceptionistRegistrationFrame.getInstance();
-            String name = registrationFrame.getNameField().getText();
-            String cpf = registrationFrame.getCpfField().getText();
-            String phone = registrationFrame.getPhoneField().getText();
-            int workHours =
-                    Integer.parseInt(registrationFrame.getWorkHoursField().getText());
-            int overtimeHours =
-                    Integer.parseInt(registrationFrame.getOvertimeHoursField().getText());
-            float salary = Float.parseFloat(registrationFrame.getSalaryField().getText());
-            int laborCardNumber =
-                    Integer.parseInt(registrationFrame.getLaborCardNumberField().getText());
-            MaritalStatus maritalStatus =
-                    (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
-
             try {
-                receptionist = registerReceptionist.register(new Receptionist(
-                        name,
-                        cpf,
-                        phone,
-                        currentAddress(),
-                        maritalStatus,
-                        workHours,
-                        salary,
-                        overtimeHours,
-                        laborCardNumber));
+                register();
                 JOptionPane.showMessageDialog(frame, "Receptionist saved");
             } catch (InvalidReceptionistDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());
