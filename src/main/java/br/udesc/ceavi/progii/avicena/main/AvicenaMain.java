@@ -14,6 +14,14 @@ import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenu
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRepository;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.NurseCrudController;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.NurseRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.NurseSearchController;
+import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.RegisterNurseMenuListener;
+import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
+import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
+import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
@@ -81,6 +89,22 @@ public class AvicenaMain {
         patientFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, patientAddressFrame));
 
         frameSistema.getMenuPrincipal().onRegisterPatient(new RegisterPatientMenuListener(frameSistema, patientFrame));
+
+        NurseJpaRepository nurseRepository = new NurseJpaRepository();
+        NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame();
+        NurseCrudController nurseController = new NurseCrudController(
+                nurseFrame, new RegisterNurse(nurseRepository), new DeleteNurse(nurseRepository));
+
+        AddressEntryFrame nurseAddressFrame = new AddressEntryFrame();
+        new AddressEntryController(nurseAddressFrame, nurseController::useAddress);
+
+        nurseFrame
+                .getSearchButton()
+                .addActionListener(
+                        new NurseSearchController(nurseFrame, new ListNurses(nurseRepository), nurseController));
+        nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
+
+        frameSistema.getMenuPrincipal().onRegisterNurse(new RegisterNurseMenuListener(frameSistema, nurseFrame));
 
         frameSistema.setVisible(true);
     }
