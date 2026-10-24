@@ -1,7 +1,6 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,12 +10,21 @@ import javax.swing.JOptionPane;
 
 public class PatientSearchController implements ActionListener {
 
+    private final PatientRegistrationFrame frame;
+    private final ListPatients listPatients;
+    private final PatientCrudController controller;
+
+    public PatientSearchController(
+            PatientRegistrationFrame frame, ListPatients listPatients, PatientCrudController controller) {
+        this.frame = frame;
+        this.listPatients = listPatients;
+        this.controller = controller;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        PatientRegistrationFrame frame = PatientRegistrationFrame.getInstance();
         String cpf = frame.getCpfField().getText();
 
-        ListPatients listPatients = new ListPatients(new PatientJpaRepository());
         List<Patient> patients = listPatients.list();
 
         Optional<Patient> found = patients.stream()
@@ -30,7 +38,7 @@ public class PatientSearchController implements ActionListener {
 
         Patient patient = found.get();
         JOptionPane.showMessageDialog(frame, "Patient found");
-        PatientCrudController.getInstance().setPatient(patient);
+        controller.setPatient(patient);
         frame.getNameField().setText(patient.getName());
         frame.getPhoneField().setText(patient.getPhone());
         frame.getMaritalStatusComboBox().setSelectedItem(patient.getMaritalStatus());

@@ -11,7 +11,6 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagn
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ShowPatientHistoryMenuListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.RegisterNurseMenuListener;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.RegisterPatientMenuListener;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.RegisterReceptionistMenuListener;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
@@ -157,9 +156,12 @@ public class MenuPrincipal extends JMenuBar {
         menuItemCadMedico.addActionListener(listener);
     }
 
+    public void onRegisterPatient(ActionListener listener) {
+        menuItemCadPaciente.addActionListener(listener);
+    }
+
     private void adicionaListenersMenu() {
         // Istancia o Listener para o item de menu Cadastro de Endereço
-        ActionListener listenerCadPaciente = new RegisterPatientMenuListener(frame);
         ActionListener listenerCadEnfermeiro = new RegisterNurseMenuListener(frame);
         ActionListener listenerCadAtendente = new RegisterReceptionistMenuListener(frame);
         ActionListener listenerSobreListener = new MenuSobreListener(frame);
@@ -174,7 +176,6 @@ public class MenuPrincipal extends JMenuBar {
         menuItemCadHistorico.addActionListener(listenerHistorico);
         menuItemCadDiagnostico.addActionListener(listenerCadDiagnostico);
         menuItemCadEnfermeiro.addActionListener(listenerCadEnfermeiro);
-        menuItemCadPaciente.addActionListener(listenerCadPaciente);
         menuItemCadAtendente.addActionListener(listenerCadAtendente);
 
         menuItemNovaConsulta.addActionListener(listenerConsultaNova);
