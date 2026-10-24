@@ -20,16 +20,38 @@ public class NurseCrudController {
 
     private Nurse nurse;
     private final FrameCRUD frame;
+    private final NurseRegistrationFrame registrationFrame;
     private final RegisterNurse registerNurse;
     private final DeleteNurse deleteNurse;
 
     public NurseCrudController(FrameCRUD frame) {
         this.frame = frame;
+        this.registrationFrame = null;
         NurseJpaRepository repository = new NurseJpaRepository();
         this.registerNurse = new RegisterNurse(repository);
         this.deleteNurse = new DeleteNurse(repository);
 
         addCrudListeners();
+    }
+
+    public NurseCrudController(
+            NurseRegistrationFrame registrationFrame, RegisterNurse registerNurse, DeleteNurse deleteNurse) {
+        this.frame = registrationFrame;
+        this.registrationFrame = registrationFrame;
+        this.registerNurse = registerNurse;
+        this.deleteNurse = deleteNurse;
+    }
+
+    public void register() {
+        String name = registrationFrame.getNameField().getText();
+        String cpf = registrationFrame.getCpfField().getText();
+        String phone = registrationFrame.getPhoneField().getText();
+        String formation = registrationFrame.getFormationField().getText();
+        int hoursCompleted =
+                Integer.parseInt(registrationFrame.getHoursCompletedField().getText());
+        MaritalStatus maritalStatus =
+                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+        nurse = registerNurse.register(new Nurse(name, cpf, phone, null, maritalStatus, formation, hoursCompleted));
     }
 
     public void setNurse(Nurse nurse) {
