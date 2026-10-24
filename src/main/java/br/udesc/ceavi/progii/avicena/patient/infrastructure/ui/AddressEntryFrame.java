@@ -12,8 +12,6 @@ import javax.swing.JTextField;
 
 public class AddressEntryFrame extends FrameCRUD {
 
-    private static AddressEntryFrame instance;
-
     private static final String TITLE = "Address Entry";
     private static final Dimension DIMENSION = new Dimension(400, 280);
 
@@ -44,13 +42,6 @@ public class AddressEntryFrame extends FrameCRUD {
 
         initializeComponents();
         addComponents();
-    }
-
-    public static AddressEntryFrame getInstance() {
-        if (instance == null) {
-            instance = new AddressEntryFrame();
-        }
-        return instance;
     }
 
     @Override
