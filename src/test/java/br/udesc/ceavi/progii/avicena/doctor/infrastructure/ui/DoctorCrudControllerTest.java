@@ -42,6 +42,22 @@ class DoctorCrudControllerTest {
     }
 
     @Test
+    void registerUsesTheAddressReceivedFromThePopup() {
+        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        frame.getNameField().setText("Dr Test");
+        frame.getCpfField().setText("12345678900");
+        frame.getPhoneField().setText("48999990000");
+        frame.getCrmField().setText("12345");
+        frame.getSpecialtyField().setText("Cardiology");
+        frame.getMaritalStatusComboBox().setSelectedItem(MaritalStatus.SINGLE);
+        ctrl.useAddress(address);
+
+        ctrl.register();
+
+        assertEquals(address, repo.findAll().get(0).getAddress());
+    }
+
+    @Test
     void deleteRemovesTheCurrentDoctor() {
         Doctor doctor = DoctorCrudController.toDoctor(
                 "Dr Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
