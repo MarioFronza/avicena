@@ -41,6 +41,10 @@ public class PatientCrudController {
         this.deletePatient = deletePatient;
     }
 
+    public void delete() {
+        deletePatient.delete(patient);
+    }
+
     public void register() {
         String name = registrationFrame.getNameField().getText();
         String cpf = registrationFrame.getCpfField().getText();
