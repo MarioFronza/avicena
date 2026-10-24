@@ -6,19 +6,18 @@ import java.awt.event.ActionEvent;
 
 public class RegisterReceptionistMenuListener extends MenuActionListener {
 
-    public RegisterReceptionistMenuListener(FrameSistema tela) {
+    private final ReceptionistRegistrationFrame receptionistFrame;
+
+    public RegisterReceptionistMenuListener(FrameSistema tela, ReceptionistRegistrationFrame receptionistFrame) {
         super(tela);
+        this.receptionistFrame = receptionistFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        frame = ReceptionistRegistrationFrame.getInstance();
-
-        ReceptionistCrudController.getInstance(frame);
-
-        if (!frame.isVisible()) {
-            tela.adicionarFrameInterno(frame);
-            frame.setVisible(true);
+        if (!receptionistFrame.isVisible()) {
+            tela.adicionarFrameInterno(receptionistFrame);
+            receptionistFrame.setVisible(true);
         }
     }
 }

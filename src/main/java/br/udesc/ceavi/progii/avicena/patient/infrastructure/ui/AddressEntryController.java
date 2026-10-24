@@ -1,7 +1,6 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Consumer;
@@ -10,9 +9,6 @@ import javax.swing.JOptionPane;
 
 public class AddressEntryController {
 
-    private static AddressEntryController instance;
-
-    private Address address;
     private final AddressEntryFrame entryFrame;
     private final Consumer<Address> callback;
 
@@ -21,21 +17,6 @@ public class AddressEntryController {
         this.callback = callback;
 
         addCrudListeners();
-    }
-
-    public static AddressEntryController getInstance(FrameCRUD frame) {
-        if (instance == null) {
-            instance = new AddressEntryController((AddressEntryFrame) frame, address -> {});
-        }
-        return instance;
-    }
-
-    public static AddressEntryController getInstance() {
-        return instance;
-    }
-
-    public Address getAddress() {
-        return address;
     }
 
     private void addCrudListeners() {
@@ -79,7 +60,6 @@ public class AddressEntryController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            address = null;
             entryFrame.limparCampos();
         }
     }
@@ -88,7 +68,7 @@ public class AddressEntryController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            address = new Address(
+            Address address = new Address(
                     Integer.parseInt(entryFrame.getNumberField().getText()),
                     entryFrame.getComplementField().getText(),
                     entryFrame.getZipCodeField().getText(),

@@ -1,7 +1,6 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
-import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistJpaRepository;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,12 +10,23 @@ import javax.swing.JOptionPane;
 
 public class ReceptionistSearchController implements ActionListener {
 
+    private final ReceptionistRegistrationFrame frame;
+    private final ListReceptionists listReceptionists;
+    private final ReceptionistCrudController controller;
+
+    public ReceptionistSearchController(
+            ReceptionistRegistrationFrame frame,
+            ListReceptionists listReceptionists,
+            ReceptionistCrudController controller) {
+        this.frame = frame;
+        this.listReceptionists = listReceptionists;
+        this.controller = controller;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        ReceptionistRegistrationFrame frame = ReceptionistRegistrationFrame.getInstance();
         String cpf = frame.getCpfField().getText();
 
-        ListReceptionists listReceptionists = new ListReceptionists(new ReceptionistJpaRepository());
         List<Receptionist> receptionists = listReceptionists.list();
 
         Optional<Receptionist> found = receptionists.stream()
@@ -30,7 +40,7 @@ public class ReceptionistSearchController implements ActionListener {
 
         Receptionist receptionist = found.get();
         JOptionPane.showMessageDialog(frame, "Receptionist found");
-        ReceptionistCrudController.getInstance().setReceptionist(receptionist);
+        controller.setReceptionist(receptionist);
         frame.getNameField().setText(receptionist.getName());
         frame.getPhoneField().setText(receptionist.getPhone());
         frame.getWorkHoursField().setText(String.valueOf(receptionist.getWorkHours()));

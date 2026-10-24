@@ -33,6 +33,14 @@ import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.RegisterPatientMe
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
 import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
+import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistJpaRepository;
+import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.ReceptionistCrudController;
+import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.ReceptionistRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.ReceptionistSearchController;
+import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.RegisterReceptionistMenuListener;
+import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
+import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
+import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import javax.swing.JOptionPane;
 
@@ -105,6 +113,28 @@ public class AvicenaMain {
         nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
 
         frameSistema.getMenuPrincipal().onRegisterNurse(new RegisterNurseMenuListener(frameSistema, nurseFrame));
+
+        ReceptionistJpaRepository receptionistRepository = new ReceptionistJpaRepository();
+        ReceptionistRegistrationFrame receptionistFrame = new ReceptionistRegistrationFrame();
+        ReceptionistCrudController receptionistController = new ReceptionistCrudController(
+                receptionistFrame,
+                new RegisterReceptionist(receptionistRepository),
+                new DeleteReceptionist(receptionistRepository));
+
+        AddressEntryFrame receptionistAddressFrame = new AddressEntryFrame();
+        new AddressEntryController(receptionistAddressFrame, receptionistController::useAddress);
+
+        receptionistFrame
+                .getSearchButton()
+                .addActionListener(new ReceptionistSearchController(
+                        receptionistFrame, new ListReceptionists(receptionistRepository), receptionistController));
+        receptionistFrame
+                .getAddressButton()
+                .addActionListener(new AddAddressListener(frameSistema, receptionistAddressFrame));
+
+        frameSistema
+                .getMenuPrincipal()
+                .onRegisterReceptionist(new RegisterReceptionistMenuListener(frameSistema, receptionistFrame));
 
         frameSistema.setVisible(true);
     }
