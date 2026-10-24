@@ -7,8 +7,6 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -16,9 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NurseRegistrationFrame extends FrameCRUD implements ActionListener {
+public class NurseRegistrationFrame extends FrameCRUD {
 
-    private static NurseRegistrationFrame instance;
     private static final String TITLE = "Nurse Registration";
     private static final Dimension DIMENSION = new Dimension(360, 300);
 
@@ -42,19 +39,15 @@ public class NurseRegistrationFrame extends FrameCRUD implements ActionListener 
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
+    public NurseRegistrationFrame() {
+        this(TITLE, DIMENSION);
+    }
+
     public NurseRegistrationFrame(String title, Dimension dimension) {
         super(title, dimension);
 
         initializeComponents();
         addComponents();
-        addListeners();
-    }
-
-    public static NurseRegistrationFrame getInstance() {
-        if (instance == null) {
-            instance = new NurseRegistrationFrame(TITLE, DIMENSION);
-        }
-        return instance;
     }
 
     @Override
@@ -218,16 +211,10 @@ public class NurseRegistrationFrame extends FrameCRUD implements ActionListener 
         constraints.gridy = 6;
         constraints.gridwidth = 1;
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        addressButton.addActionListener(this);
         formPanel.add(addressButton, constraints);
 
         super.addFormulario(formPanel);
     }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {}
-
-    private void addListeners() {}
 
     public JTextField getNameField() {
         return nameField;
@@ -255,5 +242,9 @@ public class NurseRegistrationFrame extends FrameCRUD implements ActionListener 
 
     public JButton getSearchButton() {
         return searchButton;
+    }
+
+    public JButton getAddressButton() {
+        return addressButton;
     }
 }
