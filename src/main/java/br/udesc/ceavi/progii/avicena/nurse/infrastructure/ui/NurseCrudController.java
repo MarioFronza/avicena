@@ -42,6 +42,10 @@ public class NurseCrudController {
         this.deleteNurse = deleteNurse;
     }
 
+    public void delete() {
+        deleteNurse.delete(nurse);
+    }
+
     public void register() {
         String name = registrationFrame.getNameField().getText();
         String cpf = registrationFrame.getCpfField().getText();

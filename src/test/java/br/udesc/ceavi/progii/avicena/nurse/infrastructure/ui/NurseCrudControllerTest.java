@@ -1,7 +1,9 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
@@ -34,5 +36,16 @@ class NurseCrudControllerTest {
         ctrl.register();
 
         assertEquals(40, repo.findAll().get(0).getHoursCompleted());
+    }
+
+    @Test
+    void deleteRemovesTheCurrentNurse() {
+        Nurse nurse = new Nurse("Nurse Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Nursing", 40);
+        repo.save(nurse);
+        ctrl.setNurse(nurse);
+
+        ctrl.delete();
+
+        assertTrue(repo.findAll().isEmpty());
     }
 }
