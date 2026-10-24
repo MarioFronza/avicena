@@ -1,8 +1,10 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import java.awt.Dimension;
@@ -36,5 +38,17 @@ class ReceptionistCrudControllerTest {
         ctrl.register();
 
         assertEquals(1500.5f, repo.findAll().get(0).getSalary());
+    }
+
+    @Test
+    void deleteRemovesTheCurrentReceptionist() {
+        Receptionist receptionist = new Receptionist(
+                "Receptionist Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 8, 1500.5f, 2, 123);
+        repo.save(receptionist);
+        ctrl.setReceptionist(receptionist);
+
+        ctrl.delete();
+
+        assertTrue(repo.findAll().isEmpty());
     }
 }

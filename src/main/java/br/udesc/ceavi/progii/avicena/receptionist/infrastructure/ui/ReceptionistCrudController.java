@@ -44,6 +44,10 @@ public class ReceptionistCrudController {
         this.deleteReceptionist = deleteReceptionist;
     }
 
+    public void delete() {
+        deleteReceptionist.delete(receptionist);
+    }
+
     public void register() {
         String name = registrationFrame.getNameField().getText();
         String cpf = registrationFrame.getCpfField().getText();
