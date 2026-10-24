@@ -1,10 +1,7 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -48,8 +45,6 @@ public class ReceptionistRegistrationFrame extends FrameCRUD implements ActionLi
     private JPanel formPanel;
     private LayoutManager layout;
     private GridBagConstraints constraints;
-
-    private final FrameSistema mainFrame = MenuPrincipal.getInstance().getFrame();
 
     public ReceptionistRegistrationFrame(String title, Dimension dimension) {
         super(title, dimension);
@@ -276,12 +271,7 @@ public class ReceptionistRegistrationFrame extends FrameCRUD implements ActionLi
     @Override
     public void actionPerformed(ActionEvent e) {}
 
-    private void addListeners() {
-        ActionListener addressListener = new AddAddressListener(mainFrame);
-        ActionListener searchListener = new ReceptionistSearchController();
-        searchButton.addActionListener(searchListener);
-        addressButton.addActionListener(addressListener);
-    }
+    private void addListeners() {}
 
     public JTextField getNameField() {
         return nameField;

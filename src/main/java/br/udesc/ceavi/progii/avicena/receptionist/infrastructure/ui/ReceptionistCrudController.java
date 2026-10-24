@@ -20,16 +20,44 @@ public class ReceptionistCrudController {
 
     private Receptionist receptionist;
     private final FrameCRUD frame;
+    private final ReceptionistRegistrationFrame registrationFrame;
     private final RegisterReceptionist registerReceptionist;
     private final DeleteReceptionist deleteReceptionist;
 
     public ReceptionistCrudController(FrameCRUD frame) {
         this.frame = frame;
+        this.registrationFrame = null;
         ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
         this.registerReceptionist = new RegisterReceptionist(repository);
         this.deleteReceptionist = new DeleteReceptionist(repository);
 
         addCrudListeners();
+    }
+
+    public ReceptionistCrudController(
+            ReceptionistRegistrationFrame registrationFrame,
+            RegisterReceptionist registerReceptionist,
+            DeleteReceptionist deleteReceptionist) {
+        this.frame = registrationFrame;
+        this.registrationFrame = registrationFrame;
+        this.registerReceptionist = registerReceptionist;
+        this.deleteReceptionist = deleteReceptionist;
+    }
+
+    public void register() {
+        String name = registrationFrame.getNameField().getText();
+        String cpf = registrationFrame.getCpfField().getText();
+        String phone = registrationFrame.getPhoneField().getText();
+        int workHours = Integer.parseInt(registrationFrame.getWorkHoursField().getText());
+        int overtimeHours =
+                Integer.parseInt(registrationFrame.getOvertimeHoursField().getText());
+        float salary = Float.parseFloat(registrationFrame.getSalaryField().getText());
+        int laborCardNumber =
+                Integer.parseInt(registrationFrame.getLaborCardNumberField().getText());
+        MaritalStatus maritalStatus =
+                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+        receptionist = registerReceptionist.register(new Receptionist(
+                name, cpf, phone, null, maritalStatus, workHours, salary, overtimeHours, laborCardNumber));
     }
 
     public void setReceptionist(Receptionist receptionist) {
