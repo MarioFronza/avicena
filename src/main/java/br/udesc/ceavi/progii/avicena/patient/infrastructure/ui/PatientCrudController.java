@@ -19,16 +19,35 @@ public class PatientCrudController {
 
     private Patient patient;
     private final FrameCRUD frame;
+    private final PatientRegistrationFrame registrationFrame;
     private final RegisterPatient registerPatient;
     private final DeletePatient deletePatient;
 
     public PatientCrudController(FrameCRUD frame) {
         this.frame = frame;
+        this.registrationFrame = null;
         PatientJpaRepository repository = new PatientJpaRepository();
         this.registerPatient = new RegisterPatient(repository);
         this.deletePatient = new DeletePatient(repository);
 
         addCrudListeners();
+    }
+
+    public PatientCrudController(
+            PatientRegistrationFrame registrationFrame, RegisterPatient registerPatient, DeletePatient deletePatient) {
+        this.frame = registrationFrame;
+        this.registrationFrame = registrationFrame;
+        this.registerPatient = registerPatient;
+        this.deletePatient = deletePatient;
+    }
+
+    public void register() {
+        String name = registrationFrame.getNameField().getText();
+        String cpf = registrationFrame.getCpfField().getText();
+        String phone = registrationFrame.getPhoneField().getText();
+        MaritalStatus maritalStatus =
+                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+        patient = registerPatient.register(new Patient(name, cpf, phone, null, maritalStatus));
     }
 
     public void setPatient(Patient patient) {
