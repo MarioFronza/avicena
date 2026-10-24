@@ -19,6 +19,7 @@ public class ReceptionistCrudController {
     private static ReceptionistCrudController instance;
 
     private Receptionist receptionist;
+    private Address address;
     private final FrameCRUD frame;
     private final ReceptionistRegistrationFrame registrationFrame;
     private final RegisterReceptionist registerReceptionist;
@@ -44,6 +45,10 @@ public class ReceptionistCrudController {
         this.deleteReceptionist = deleteReceptionist;
     }
 
+    public void useAddress(Address address) {
+        this.address = address;
+    }
+
     public void delete() {
         deleteReceptionist.delete(receptionist);
     }
@@ -61,7 +66,7 @@ public class ReceptionistCrudController {
         MaritalStatus maritalStatus =
                 (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
         receptionist = registerReceptionist.register(new Receptionist(
-                name, cpf, phone, null, maritalStatus, workHours, salary, overtimeHours, laborCardNumber));
+                name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber));
     }
 
     public void setReceptionist(Receptionist receptionist) {

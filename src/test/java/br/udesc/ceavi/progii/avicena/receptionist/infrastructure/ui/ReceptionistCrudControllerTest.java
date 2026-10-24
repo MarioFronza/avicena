@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
@@ -38,6 +39,24 @@ class ReceptionistCrudControllerTest {
         ctrl.register();
 
         assertEquals(1500.5f, repo.findAll().get(0).getSalary());
+    }
+
+    @Test
+    void registerUsesTheAddressReceivedFromThePopup() {
+        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        frame.getNameField().setText("Receptionist Test");
+        frame.getCpfField().setText("12345678900");
+        frame.getPhoneField().setText("48999990000");
+        frame.getWorkHoursField().setText("8");
+        frame.getOvertimeHoursField().setText("2");
+        frame.getSalaryField().setText("1500.5");
+        frame.getLaborCardNumberField().setText("123");
+        frame.getMaritalStatusComboBox().setSelectedItem(MaritalStatus.SINGLE);
+        ctrl.useAddress(address);
+
+        ctrl.register();
+
+        assertEquals(address, repo.findAll().get(0).getAddress());
     }
 
     @Test
