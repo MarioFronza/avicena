@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
@@ -38,6 +39,18 @@ class DoctorCrudControllerTest {
         ctrl.register();
 
         assertEquals("12345678900", repo.findAll().get(0).getCpf());
+    }
+
+    @Test
+    void deleteRemovesTheCurrentDoctor() {
+        Doctor doctor = DoctorCrudController.toDoctor(
+                "Dr Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
+        repo.save(doctor);
+        ctrl.setDoctor(doctor);
+
+        ctrl.delete();
+
+        assertTrue(repo.findAll().isEmpty());
     }
 
     @Test
