@@ -20,16 +20,37 @@ public class DoctorCrudController {
 
     private Doctor doctor;
     private final FrameCRUD frame;
+    private final DoctorRegistrationFrame registrationFrame;
     private final RegisterDoctor registerDoctor;
     private final DeleteDoctor deleteDoctor;
 
     public DoctorCrudController(FrameCRUD frame) {
         this.frame = frame;
+        this.registrationFrame = null;
         DoctorJpaRepository repository = new DoctorJpaRepository();
         this.registerDoctor = new RegisterDoctor(repository);
         this.deleteDoctor = new DeleteDoctor(repository);
 
         addCrudListeners();
+    }
+
+    public DoctorCrudController(
+            DoctorRegistrationFrame registrationFrame, RegisterDoctor registerDoctor, DeleteDoctor deleteDoctor) {
+        this.frame = registrationFrame;
+        this.registrationFrame = registrationFrame;
+        this.registerDoctor = registerDoctor;
+        this.deleteDoctor = deleteDoctor;
+    }
+
+    public void register() {
+        String name = registrationFrame.getNameField().getText();
+        String cpf = registrationFrame.getCpfField().getText();
+        String phone = registrationFrame.getPhoneField().getText();
+        String crm = registrationFrame.getCrmField().getText();
+        String specialty = registrationFrame.getSpecialtyField().getText();
+        MaritalStatus maritalStatus =
+                (MaritalStatus) registrationFrame.getMaritalStatusComboBox().getSelectedItem();
+        doctor = registerDoctor.register(toDoctor(name, cpf, phone, currentAddress(), maritalStatus, crm, specialty));
     }
 
     public void setDoctor(Doctor doctor) {

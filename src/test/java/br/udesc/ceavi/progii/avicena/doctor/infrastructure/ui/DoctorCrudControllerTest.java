@@ -5,11 +5,40 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
+import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
+import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import java.awt.Dimension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DoctorCrudControllerTest {
+
+    private InMemoryDoctorRepository repo;
+    private DoctorRegistrationFrame frame;
+    private DoctorCrudController ctrl;
+
+    @BeforeEach
+    void setUp() {
+        repo = new InMemoryDoctorRepository();
+        frame = new DoctorRegistrationFrame("Doctor Registration", new Dimension(360, 300));
+        ctrl = new DoctorCrudController(frame, new RegisterDoctor(repo), new DeleteDoctor(repo));
+    }
+
+    @Test
+    void registerSavesDoctorFromFormFields() {
+        frame.getNameField().setText("Dr Test");
+        frame.getCpfField().setText("12345678900");
+        frame.getPhoneField().setText("48999990000");
+        frame.getCrmField().setText("12345");
+        frame.getSpecialtyField().setText("Cardiology");
+        frame.getMaritalStatusComboBox().setSelectedItem(MaritalStatus.SINGLE);
+
+        ctrl.register();
+
+        assertEquals("12345678900", repo.findAll().get(0).getCpf());
+    }
 
     @Test
     void toDoctorBuildsADoctorFromValidFormValues() {

@@ -1,10 +1,7 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -44,8 +41,6 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
 
     private JPanel formPanel;
     private LayoutManager layout;
-
-    private final FrameSistema mainFrame = MenuPrincipal.getInstance().getFrame();
 
     public DoctorRegistrationFrame(String title, Dimension dimension) {
         super(title, dimension);
@@ -144,12 +139,7 @@ public class DoctorRegistrationFrame extends FrameCRUD implements ActionListener
     @Override
     public void actionPerformed(ActionEvent e) {}
 
-    private void addListeners() {
-        ActionListener addressListener = new AddAddressListener(mainFrame);
-        ActionListener searchListener = new DoctorSearchController();
-        searchButton.addActionListener(searchListener);
-        addressButton.addActionListener(addressListener);
-    }
+    private void addListeners() {}
 
     public JTextField getNameField() {
         return nameField;
