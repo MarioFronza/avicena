@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.udesc.ceavi.progii.avicena.main;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
@@ -12,8 +7,8 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.Appo
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisJpaRepository;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.AppointmentListFrame;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.AppointmentRegistrationFrame;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.BtGerarReceiraListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.DiagnosisRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.GeneratePrescriptionListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.ListAppointmentsMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.PatientHistoryFrame;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.RegisterAppointmentMenuListener;
@@ -24,7 +19,7 @@ import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
+import br.udesc.ceavi.progii.avicena.control.menu.AboutMenuListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.controller.DoctorController;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.swing.DoctorRegistrationFrame;
@@ -55,11 +50,11 @@ import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.swing.Regist
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
 import javax.swing.JOptionPane;
 
 /**
- * Classe principal da aplicação
+ * Application entry point and composition root.
  * @author Adroan, Mário, Vini, Raphael
  * @since 10/04/2018
  * @version 1.0
@@ -78,7 +73,7 @@ public class AvicenaMain {
             System.exit(1);
         }
 
-        FrameSistema frameSistema = new FrameSistema();
+        MainFrame mainFrame = new MainFrame();
 
         PatientJpaRepository patientRepository = new PatientJpaRepository();
         PatientRegistrationFrame patientFrame = new PatientRegistrationFrame(new PatientController(
@@ -88,9 +83,9 @@ public class AvicenaMain {
 
         AddressEntryFrame patientAddressFrame = new AddressEntryFrame(patientFrame::useAddress);
 
-        patientFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, patientAddressFrame));
+        patientFrame.getAddressButton().addActionListener(new AddAddressListener(mainFrame, patientAddressFrame));
 
-        frameSistema.getMenuPrincipal().add(new RegisterPatientMenuListener(frameSistema, patientFrame));
+        mainFrame.getMainMenu().add(new RegisterPatientMenuListener(mainFrame, patientFrame));
 
         ReceptionistJpaRepository receptionistRepository = new ReceptionistJpaRepository();
         ReceptionistRegistrationFrame receptionistFrame = new ReceptionistRegistrationFrame(new ReceptionistController(
@@ -102,9 +97,9 @@ public class AvicenaMain {
 
         receptionistFrame
                 .getAddressButton()
-                .addActionListener(new AddAddressListener(frameSistema, receptionistAddressFrame));
+                .addActionListener(new AddAddressListener(mainFrame, receptionistAddressFrame));
 
-        frameSistema.getMenuPrincipal().add(new RegisterReceptionistMenuListener(frameSistema, receptionistFrame));
+        mainFrame.getMainMenu().add(new RegisterReceptionistMenuListener(mainFrame, receptionistFrame));
 
         DoctorJpaRepository doctorRepository = new DoctorJpaRepository();
         DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame(new DoctorController(
@@ -114,9 +109,9 @@ public class AvicenaMain {
 
         AddressEntryFrame doctorAddressFrame = new AddressEntryFrame(doctorFrame::useAddress);
 
-        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
+        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(mainFrame, doctorAddressFrame));
 
-        frameSistema.getMenuPrincipal().add(new RegisterDoctorMenuListener(frameSistema, doctorFrame));
+        mainFrame.getMainMenu().add(new RegisterDoctorMenuListener(mainFrame, doctorFrame));
 
         NurseJpaRepository nurseRepository = new NurseJpaRepository();
         NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame(new NurseController(
@@ -124,9 +119,9 @@ public class AvicenaMain {
 
         AddressEntryFrame nurseAddressFrame = new AddressEntryFrame(nurseFrame::useAddress);
 
-        nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
+        nurseFrame.getAddressButton().addActionListener(new AddAddressListener(mainFrame, nurseAddressFrame));
 
-        frameSistema.getMenuPrincipal().add(new RegisterNurseMenuListener(frameSistema, nurseFrame));
+        mainFrame.getMainMenu().add(new RegisterNurseMenuListener(mainFrame, nurseFrame));
 
         AppointmentJpaRepository appointmentRepository = new AppointmentJpaRepository();
         AppointmentRegistrationFrame appointmentFrame = new AppointmentRegistrationFrame(new AppointmentController(
@@ -136,23 +131,23 @@ public class AvicenaMain {
                 new ListDoctors(doctorRepository),
                 new ListNurses(nurseRepository)));
 
-        frameSistema.getMenuPrincipal().add(new RegisterAppointmentMenuListener(frameSistema, appointmentFrame));
+        mainFrame.getMainMenu().add(new RegisterAppointmentMenuListener(mainFrame, appointmentFrame));
 
         DiagnosisJpaRepository diagnosisRepository = new DiagnosisJpaRepository();
         DiagnosisRegistrationFrame diagnosisFrame = new DiagnosisRegistrationFrame(new DiagnosisController(
                 new RegisterDiagnosis(diagnosisRepository), new DeleteDiagnosis(diagnosisRepository)));
-        diagnosisFrame.getGenerateReceiptButton().addActionListener(new BtGerarReceiraListener(diagnosisFrame));
+        diagnosisFrame.getGenerateReceiptButton().addActionListener(new GeneratePrescriptionListener(diagnosisFrame));
 
-        frameSistema.getMenuPrincipal().add(new RegisterDiagnosisMenuListener(frameSistema, diagnosisFrame));
+        mainFrame.getMainMenu().add(new RegisterDiagnosisMenuListener(mainFrame, diagnosisFrame));
 
         AppointmentListFrame appointmentListFrame = new AppointmentListFrame();
-        frameSistema.getMenuPrincipal().add(new ListAppointmentsMenuListener(frameSistema, appointmentListFrame));
+        mainFrame.getMainMenu().add(new ListAppointmentsMenuListener(mainFrame, appointmentListFrame));
 
         PatientHistoryFrame patientHistoryFrame = new PatientHistoryFrame(new PatientHistoryController());
-        frameSistema.getMenuPrincipal().add(new ShowPatientHistoryMenuListener(frameSistema, patientHistoryFrame));
+        mainFrame.getMainMenu().add(new ShowPatientHistoryMenuListener(mainFrame, patientHistoryFrame));
 
-        frameSistema.getMenuPrincipal().add(new MenuSobreListener(frameSistema));
+        mainFrame.getMainMenu().add(new AboutMenuListener(mainFrame));
 
-        frameSistema.setVisible(true);
+        mainFrame.setVisible(true);
     }
 }

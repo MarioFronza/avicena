@@ -1,23 +1,23 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 
 public class ShowPatientHistoryMenuListener extends MenuActionListener {
 
     private final PatientHistoryFrame patientHistoryFrame;
 
-    public ShowPatientHistoryMenuListener(FrameSistema tela, PatientHistoryFrame patientHistoryFrame) {
-        super(tela, Section.PATIENT, "Histórico", "status_away.png", "Histórico de consultas do paciente");
+    public ShowPatientHistoryMenuListener(MainFrame mainFrame, PatientHistoryFrame patientHistoryFrame) {
+        super(mainFrame, Section.PATIENT, "Histórico", "status_away.png", "Histórico de consultas do paciente");
         this.patientHistoryFrame = patientHistoryFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!patientHistoryFrame.isVisible()) {
-            tela.adicionarFrameInterno(patientHistoryFrame);
+            mainFrame.addInternalFrame(patientHistoryFrame);
             patientHistoryFrame.setVisible(true);
         }
     }

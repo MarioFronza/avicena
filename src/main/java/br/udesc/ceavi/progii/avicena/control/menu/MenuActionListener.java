@@ -1,7 +1,7 @@
-package br.udesc.ceavi.progii.avicena.control.listenersMenu;
+package br.udesc.ceavi.progii.avicena.control.menu;
 
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionListener;
 
 /**
@@ -10,14 +10,14 @@ import java.awt.event.ActionListener;
  */
 public abstract class MenuActionListener implements ActionListener {
 
-    protected final FrameSistema tela;
+    protected final MainFrame mainFrame;
     private final Section section;
     private final String label;
     private final String icon;
     private final String tooltip;
 
-    protected MenuActionListener(FrameSistema tela, Section section, String label, String icon, String tooltip) {
-        this.tela = tela;
+    protected MenuActionListener(MainFrame mainFrame, Section section, String label, String icon, String tooltip) {
+        this.mainFrame = mainFrame;
         this.section = section;
         this.label = label;
         this.icon = icon;

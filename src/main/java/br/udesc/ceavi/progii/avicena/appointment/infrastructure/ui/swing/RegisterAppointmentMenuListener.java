@@ -1,16 +1,16 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 
 public class RegisterAppointmentMenuListener extends MenuActionListener {
 
     private final AppointmentRegistrationFrame appointmentFrame;
 
-    public RegisterAppointmentMenuListener(FrameSistema tela, AppointmentRegistrationFrame appointmentFrame) {
-        super(tela, Section.APPOINTMENT, "Nova Consulta", "table_add.png", "Cadastra uma nova consulta");
+    public RegisterAppointmentMenuListener(MainFrame mainFrame, AppointmentRegistrationFrame appointmentFrame) {
+        super(mainFrame, Section.APPOINTMENT, "Nova Consulta", "table_add.png", "Cadastra uma nova consulta");
         this.appointmentFrame = appointmentFrame;
     }
 
@@ -19,7 +19,7 @@ public class RegisterAppointmentMenuListener extends MenuActionListener {
         appointmentFrame.reloadDoctorsAndNurses();
 
         if (!appointmentFrame.isVisible()) {
-            tela.adicionarFrameInterno(appointmentFrame);
+            mainFrame.addInternalFrame(appointmentFrame);
             appointmentFrame.setVisible(true);
         }
     }

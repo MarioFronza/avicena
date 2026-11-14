@@ -17,53 +17,56 @@ import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-class BtGerarReceiraListenerTest {
+class GeneratePrescriptionListenerTest {
 
     @Test
-    void rejectsAConsultaWhoseMedicoHasNoEndereco() {
-        DoctorEntity medico = newDoctor("Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE);
-        AppointmentEntity consulta = consulta(medico, paciente());
+    void rejectsAnAppointmentWhoseDoctorHasNoAddress() {
+        DoctorEntity doctor = newDoctor("Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE);
+        AppointmentEntity appointment = appointment(doctor, patient());
 
-        assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
+        assertThrows(
+                IllegalStateException.class, () -> GeneratePrescriptionListener.buildPrescriptionLines(appointment));
     }
 
     @Test
-    void rejectsAConsultaWhoseMedicoIsMissing() {
-        AppointmentEntity consulta = consulta(null, paciente());
+    void rejectsAnAppointmentWhoseDoctorIsMissing() {
+        AppointmentEntity appointment = appointment(null, patient());
 
-        assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
+        assertThrows(
+                IllegalStateException.class, () -> GeneratePrescriptionListener.buildPrescriptionLines(appointment));
     }
 
     @Test
-    void rejectsAConsultaWhosePacienteHasNoEndereco() {
-        PatientEntity paciente = newPatient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
-        AppointmentEntity consulta = consulta(medico(), paciente);
+    void rejectsAnAppointmentWhosePatientHasNoAddress() {
+        PatientEntity patient = newPatient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
+        AppointmentEntity appointment = appointment(doctor(), patient);
 
-        assertThrows(IllegalStateException.class, () -> BtGerarReceiraListener.buildReceitaLines(consulta));
+        assertThrows(
+                IllegalStateException.class, () -> GeneratePrescriptionListener.buildPrescriptionLines(appointment));
     }
 
     @Test
-    void buildsReceitaLinesForAFullyPopulatedConsulta() {
-        AppointmentEntity consulta = consulta(medico(), paciente());
+    void buildsPrescriptionLinesForAFullyPopulatedAppointment() {
+        AppointmentEntity appointment = appointment(doctor(), patient());
 
-        List<String> lines = BtGerarReceiraListener.buildReceitaLines(consulta);
+        List<String> lines = GeneratePrescriptionListener.buildPrescriptionLines(appointment);
 
         assertFalse(lines.isEmpty());
     }
 
-    private AppointmentEntity consulta(DoctorEntity medico, PatientEntity paciente) {
+    private AppointmentEntity appointment(DoctorEntity doctor, PatientEntity patient) {
         return new AppointmentEntity(
                 null,
                 LocalDate.of(2026, 8, 5),
                 LocalTime.of(14, 0),
                 "Febre",
-                paciente,
-                medico,
+                patient,
+                doctor,
                 null,
                 new UrgencyStatusEntity(4L, "NOT_URGENT", "Not urgent"));
     }
 
-    private DoctorEntity medico() {
+    private DoctorEntity doctor() {
         AddressEntity address =
                 new AddressEntity(null, 1, "Sala 1", "88000000", "Rua Medico", "Centro", "Florianopolis");
         return newDoctor("Dr Teste", "22222222222", "480000001", address, MaritalStatus.SINGLE);
@@ -81,7 +84,7 @@ class BtGerarReceiraListenerTest {
         return new DoctorEntity(null, person, "CRM-1", new SpecialtyEntity(1L, "Clinica Geral"));
     }
 
-    private PatientEntity paciente() {
+    private PatientEntity patient() {
         AddressEntity address =
                 new AddressEntity(null, 2, "Casa", "88000001", "Rua Paciente", "Centro", "Florianopolis");
         return newPatient("Paciente Teste", "11111111111", "480000000", address, MaritalStatus.SINGLE);

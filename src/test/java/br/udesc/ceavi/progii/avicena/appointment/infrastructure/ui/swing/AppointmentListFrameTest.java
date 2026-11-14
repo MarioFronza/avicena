@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 class AppointmentListFrameTest {
 
     @Test
-    void buildsARowEvenWhenMedicoAndEnfermeiroAreMissing() {
+    void buildsARowEvenWhenDoctorAndNurseAreMissing() {
         PersonEntity person = new PersonEntity(
                 null,
                 "Paciente Teste",
@@ -23,18 +23,18 @@ class AppointmentListFrameTest {
                 "48900000000",
                 null,
                 new MaritalStatusEntity(1L, "SINGLE", "Single"));
-        PatientEntity paciente = new PatientEntity(null, person);
-        AppointmentEntity consulta = new AppointmentEntity(
+        PatientEntity patient = new PatientEntity(null, person);
+        AppointmentEntity appointment = new AppointmentEntity(
                 null,
                 LocalDate.of(2026, 8, 2),
                 LocalTime.of(10, 0),
                 "Febre",
-                paciente,
+                patient,
                 null,
                 null,
                 new UrgencyStatusEntity(4L, "NOT_URGENT", "Not urgent"));
 
-        String[] row = assertDoesNotThrow(() -> AppointmentListFrame.toTableRow(consulta));
+        String[] row = assertDoesNotThrow(() -> AppointmentListFrame.toTableRow(appointment));
 
         assertArrayEquals(new String[] {"02/08/2026", "10:00", "Paciente Teste", "-", "-"}, row);
     }

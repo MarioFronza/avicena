@@ -1,7 +1,7 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class AddressEntryFrame extends FrameCRUD {
+public class AddressEntryFrame extends CrudFrame {
 
     private static final String TITLE = "Address Entry";
     private static final Dimension DIMENSION = new Dimension(400, 280);
@@ -48,10 +48,10 @@ public class AddressEntryFrame extends FrameCRUD {
     }
 
     private void addListeners() {
-        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
-        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> JOptionPane.showMessageDialog(this, "New Address"));
-        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> limparCampos());
-        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> save());
+        getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
+        getCrudActionPanel().getNewButton().addActionListener(e -> JOptionPane.showMessageDialog(this, "New Address"));
+        getCrudActionPanel().getDeleteButton().addActionListener(e -> clearFields());
+        getCrudActionPanel().getSaveButton().addActionListener(e -> save());
     }
 
     private void cancel() {
@@ -76,11 +76,11 @@ public class AddressEntryFrame extends FrameCRUD {
                 cityField.getText()));
         JOptionPane.showMessageDialog(this, "Address saved");
         dispose();
-        limparCampos();
+        clearFields();
     }
 
     @Override
-    public void limparCampos() {
+    public void clearFields() {
         zipCodeField.setText(null);
         streetField.setText(null);
         numberField.setText(null);
@@ -195,6 +195,6 @@ public class AddressEntryFrame extends FrameCRUD {
         constraints.ipadx = 100;
         formPanel.add(cityField, constraints);
 
-        super.addFormulario(formPanel);
+        super.addForm(formPanel);
     }
 }

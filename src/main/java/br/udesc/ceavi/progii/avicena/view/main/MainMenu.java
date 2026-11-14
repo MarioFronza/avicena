@@ -1,6 +1,6 @@
-package br.udesc.ceavi.progii.avicena.view.principal;
+package br.udesc.ceavi.progii.avicena.view.main;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
 import java.awt.Dimension;
 import java.util.EnumMap;
 import java.util.Map;
@@ -12,7 +12,7 @@ import javax.swing.JMenuItem;
 /**
  * Main menu bar. Knows only its top-level sections; each vertical adds its own items.
  */
-public class MenuPrincipal extends JMenuBar {
+public class MainMenu extends JMenuBar {
 
     public enum Section {
         PATIENT("Paciente", "user_red.png", "Cadastro de Diagnóstico,..."),
@@ -33,7 +33,7 @@ public class MenuPrincipal extends JMenuBar {
 
     private final Map<Section, JMenu> menus = new EnumMap<>(Section.class);
 
-    public MenuPrincipal() {
+    public MainMenu() {
         setPreferredSize(new Dimension(30, 30));
         for (Section section : Section.values()) {
             JMenu menu = new JMenu(section.label);

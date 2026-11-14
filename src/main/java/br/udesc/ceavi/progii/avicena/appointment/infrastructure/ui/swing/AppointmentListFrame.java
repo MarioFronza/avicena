@@ -5,7 +5,7 @@ import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameSemCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.ReadOnlyFrame;
 import jakarta.persistence.EntityManager;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -16,7 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-public class AppointmentListFrame extends FrameSemCRUD {
+public class AppointmentListFrame extends ReadOnlyFrame {
 
     private static final String TITLE = "Appointment List";
     private static final Dimension DIMENSION = new Dimension(800, 500);
@@ -66,26 +66,26 @@ public class AppointmentListFrame extends FrameSemCRUD {
         return new String[] {
             appointment.getDate(),
             appointment.getTime(),
-            nomeOuPlaceholder(appointment.getPatient()),
-            nomeOuPlaceholder(appointment.getDoctor()),
-            nomeOuPlaceholder(appointment.getNurse())
+            nameOrPlaceholder(appointment.getPatient()),
+            nameOrPlaceholder(appointment.getDoctor()),
+            nameOrPlaceholder(appointment.getNurse())
         };
     }
 
-    private static String nomeOuPlaceholder(PatientEntity patient) {
+    private static String nameOrPlaceholder(PatientEntity patient) {
         return patient == null ? "-" : patient.getName();
     }
 
-    private static String nomeOuPlaceholder(DoctorEntity doctor) {
+    private static String nameOrPlaceholder(DoctorEntity doctor) {
         return doctor == null ? "-" : doctor.getName();
     }
 
-    private static String nomeOuPlaceholder(NurseEntity nurse) {
+    private static String nameOrPlaceholder(NurseEntity nurse) {
         return nurse == null ? "-" : nurse.getName();
     }
 
     private void addComponents() {
         backgroundPanel.add(scrollPane);
-        super.addFormulario2("North", backgroundPanel);
+        super.addFormAt("North", backgroundPanel);
     }
 }

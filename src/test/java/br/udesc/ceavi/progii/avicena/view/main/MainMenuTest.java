@@ -1,20 +1,20 @@
-package br.udesc.ceavi.progii.avicena.view.principal;
+package br.udesc.ceavi.progii.avicena.view.main;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import org.junit.jupiter.api.Test;
 
-class MenuPrincipalTest {
+class MainMenuTest {
 
-    private final MenuPrincipal menu = new MenuPrincipal();
+    private final MainMenu menu = new MainMenu();
 
     @Test
     void addPutsTheItemInItsSection() {

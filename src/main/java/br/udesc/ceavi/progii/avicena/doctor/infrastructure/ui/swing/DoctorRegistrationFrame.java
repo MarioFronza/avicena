@@ -5,7 +5,7 @@ import br.udesc.ceavi.progii.avicena.doctor.domain.InvalidDoctorDataException;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.controller.DoctorController;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class DoctorRegistrationFrame extends FrameCRUD {
+public class DoctorRegistrationFrame extends CrudFrame {
 
     private JLabel nameLabel;
     private JLabel cpfLabel;
@@ -59,10 +59,10 @@ public class DoctorRegistrationFrame extends FrameCRUD {
     }
 
     private void addListeners() {
-        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
-        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
-        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
-        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+        getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
+        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
+        getCrudActionPanel().getSaveButton().addActionListener(e -> register());
         searchButton.addActionListener(e -> search());
     }
 
@@ -75,7 +75,7 @@ public class DoctorRegistrationFrame extends FrameCRUD {
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             dispose();
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -88,7 +88,7 @@ public class DoctorRegistrationFrame extends FrameCRUD {
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             controller.delete(doctor);
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -107,7 +107,7 @@ public class DoctorRegistrationFrame extends FrameCRUD {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
 
-        limparCampos();
+        clearFields();
     }
 
     private void search() {
@@ -127,7 +127,7 @@ public class DoctorRegistrationFrame extends FrameCRUD {
     }
 
     @Override
-    public void limparCampos() {
+    public void clearFields() {
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);
@@ -183,7 +183,7 @@ public class DoctorRegistrationFrame extends FrameCRUD {
         addField(addressLabel, 0, 6, 1, 10, 0, null);
         addField(addressButton, 1, 6, 1, 0, 0, null);
 
-        super.addFormulario(formPanel);
+        super.addForm(formPanel);
     }
 
     private void addField(

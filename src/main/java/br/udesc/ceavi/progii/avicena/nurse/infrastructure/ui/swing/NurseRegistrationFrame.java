@@ -5,7 +5,7 @@ import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.controller.NurseController;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,7 +19,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class NurseRegistrationFrame extends FrameCRUD {
+public class NurseRegistrationFrame extends CrudFrame {
 
     private static final String TITLE = "Nurse Registration";
     private static final Dimension DIMENSION = new Dimension(360, 300);
@@ -62,10 +62,10 @@ public class NurseRegistrationFrame extends FrameCRUD {
     }
 
     private void addListeners() {
-        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
-        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
-        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
-        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+        getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
+        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
+        getCrudActionPanel().getSaveButton().addActionListener(e -> register());
         searchButton.addActionListener(e -> search());
     }
 
@@ -78,7 +78,7 @@ public class NurseRegistrationFrame extends FrameCRUD {
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             dispose();
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -91,7 +91,7 @@ public class NurseRegistrationFrame extends FrameCRUD {
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             controller.delete(nurse);
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -110,7 +110,7 @@ public class NurseRegistrationFrame extends FrameCRUD {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
 
-        limparCampos();
+        clearFields();
     }
 
     private void search() {
@@ -130,7 +130,7 @@ public class NurseRegistrationFrame extends FrameCRUD {
     }
 
     @Override
-    public void limparCampos() {
+    public void clearFields() {
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);
@@ -289,7 +289,7 @@ public class NurseRegistrationFrame extends FrameCRUD {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         formPanel.add(addressButton, constraints);
 
-        super.addFormulario(formPanel);
+        super.addForm(formPanel);
     }
 
     public JButton getAddressButton() {

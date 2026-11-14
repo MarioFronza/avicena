@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
@@ -26,39 +21,39 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
- * Listener para evento de clique do botão Gerar Receita
+ * Generates the prescription PDF when the "Generate Receipt" button is clicked.
  * @author Adroan, Mário, Vini, Raphael
  * @since 13/04/2018
  * @version 1.0
  */
-public class BtGerarReceiraListener implements ActionListener {
+public class GeneratePrescriptionListener implements ActionListener {
 
     private final DiagnosisRegistrationFrame diagnosisFrame;
 
-    public BtGerarReceiraListener(DiagnosisRegistrationFrame diagnosisFrame) {
+    public GeneratePrescriptionListener(DiagnosisRegistrationFrame diagnosisFrame) {
         this.diagnosisFrame = diagnosisFrame;
     }
 
-    static List<String> buildReceitaLines(AppointmentEntity consulta) {
-        if (consulta.getDoctor() == null || consulta.getDoctor().getAddress() == null) {
+    static List<String> buildPrescriptionLines(AppointmentEntity appointment) {
+        if (appointment.getDoctor() == null || appointment.getDoctor().getAddress() == null) {
             throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
         }
-        if (consulta.getPatient() == null || consulta.getPatient().getAddress() == null) {
+        if (appointment.getPatient() == null || appointment.getPatient().getAddress() == null) {
             throw new IllegalStateException("Paciente ou endereço do paciente não cadastrado");
         }
 
         List<String> lines = new ArrayList<>();
         lines.add("Receira Médica - AVICENA");
         lines.add("------------------------------------------------------------------");
-        lines.add("Dr. " + consulta.getDoctor().getName());
-        lines.add("Rua. " + consulta.getDoctor().getAddress().getStreet() + " , "
-                + consulta.getDoctor().getAddress().getNeighborhood());
+        lines.add("Dr. " + appointment.getDoctor().getName());
+        lines.add("Rua. " + appointment.getDoctor().getAddress().getStreet() + " , "
+                + appointment.getDoctor().getAddress().getNeighborhood());
         lines.add("Telefone: (479921-00081)");
-        lines.add("CRM " + consulta.getDoctor().getCrm());
+        lines.add("CRM " + appointment.getDoctor().getCrm());
         lines.add("------------------------------------------------------------------");
-        lines.add("Paciente " + consulta.getPatient().getName());
-        lines.add("Rua " + consulta.getPatient().getAddress().getStreet() + " , "
-                + consulta.getPatient().getAddress().getNeighborhood());
+        lines.add("Paciente " + appointment.getPatient().getName());
+        lines.add("Rua " + appointment.getPatient().getAddress().getStreet() + " , "
+                + appointment.getPatient().getAddress().getNeighborhood());
         lines.add("Remédios:");
         lines.add(" ");
         lines.add("________________________");
@@ -76,24 +71,24 @@ public class BtGerarReceiraListener implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
-        List<AppointmentEntity> consultas;
+        List<AppointmentEntity> appointments;
         try {
-            consultas = entityManager
+            appointments = entityManager
                     .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
                     .getResultList();
         } finally {
             entityManager.close();
         }
         int selectedIndex = diagnosisFrame.getAppointmentComboBox().getSelectedIndex();
-        if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
+        if (selectedIndex < 0 || selectedIndex >= appointments.size()) {
             JOptionPane.showMessageDialog(diagnosisFrame, "Selecione uma consulta válida");
             return;
         }
-        AppointmentEntity consulta = consultas.get(selectedIndex);
+        AppointmentEntity appointment = appointments.get(selectedIndex);
 
         List<String> lines;
         try {
-            lines = buildReceitaLines(consulta);
+            lines = buildPrescriptionLines(appointment);
         } catch (IllegalStateException ex) {
             JOptionPane.showMessageDialog(diagnosisFrame, ex.getMessage());
             return;
@@ -109,7 +104,7 @@ public class BtGerarReceiraListener implements ActionListener {
             }
             generated = true;
         } catch (FileNotFoundException | DocumentException ex) {
-            Logger.getLogger(BtGerarReceiraListener.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GeneratePrescriptionListener.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             document.close();
         }
@@ -121,7 +116,7 @@ public class BtGerarReceiraListener implements ActionListener {
         try {
             Desktop.getDesktop().open(new File("Receira-Avicena.pdf"));
         } catch (IOException ex) {
-            Logger.getLogger(BtGerarReceiraListener.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(GeneratePrescriptionListener.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

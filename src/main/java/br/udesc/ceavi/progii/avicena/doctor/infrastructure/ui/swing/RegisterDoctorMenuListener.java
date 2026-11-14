@@ -1,23 +1,28 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
-import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 
 public class RegisterDoctorMenuListener extends MenuActionListener {
 
     private final DoctorRegistrationFrame doctorFrame;
 
-    public RegisterDoctorMenuListener(FrameSistema tela, DoctorRegistrationFrame doctorFrame) {
-        super(tela, Section.REGISTRATION, "Cadastro Médico", "vcard_add.png", "Cadastra o médico e sua especialidade");
+    public RegisterDoctorMenuListener(MainFrame mainFrame, DoctorRegistrationFrame doctorFrame) {
+        super(
+                mainFrame,
+                Section.REGISTRATION,
+                "Cadastro Médico",
+                "vcard_add.png",
+                "Cadastra o médico e sua especialidade");
         this.doctorFrame = doctorFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (!doctorFrame.isVisible()) {
-            tela.adicionarFrameInterno(doctorFrame);
+            mainFrame.addInternalFrame(doctorFrame);
             doctorFrame.setVisible(true);
         }
     }
