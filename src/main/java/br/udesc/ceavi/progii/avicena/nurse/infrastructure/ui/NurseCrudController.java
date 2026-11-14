@@ -39,10 +39,18 @@ public class NurseCrudController {
         String cpf = frame.getCpfField().getText();
         String phone = frame.getPhoneField().getText();
         String formation = frame.getFormationField().getText();
-        int hoursCompleted = Integer.parseInt(frame.getHoursCompletedField().getText());
+        int hoursCompleted = parseNumber(frame.getHoursCompletedField().getText(), "Hours completed");
         MaritalStatus maritalStatus =
                 (MaritalStatus) frame.getMaritalStatusComboBox().getSelectedItem();
         nurse = registerNurse.register(new Nurse(name, cpf, phone, address, maritalStatus, formation, hoursCompleted));
+    }
+
+    private static int parseNumber(String text, String field) {
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            throw new InvalidNurseDataException(field + " must be a number");
+        }
     }
 
     public void setNurse(Nurse nurse) {

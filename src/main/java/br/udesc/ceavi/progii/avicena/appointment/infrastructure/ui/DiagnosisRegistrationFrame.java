@@ -25,7 +25,6 @@ import javax.swing.JTextField;
 
 public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListener {
 
-    private static DiagnosisRegistrationFrame instance;
     private static final String TITLE = "Diagnosis Registration";
     private static final Dimension DIMENSION = new Dimension(350, 300);
 
@@ -65,19 +64,11 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public DiagnosisRegistrationFrame(String title, Dimension dimension) {
-        super(title, dimension);
+    public DiagnosisRegistrationFrame() {
+        super(TITLE, DIMENSION);
 
         initializeComponents();
         addComponents();
-        addListeners();
-    }
-
-    public static DiagnosisRegistrationFrame getInstance() {
-        if (instance == null) {
-            instance = new DiagnosisRegistrationFrame(TITLE, DIMENSION);
-        }
-        return instance;
     }
 
     @Override
@@ -352,9 +343,8 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
         }
     }
 
-    private void addListeners() {
-        ActionListener receiptListener = new BtGerarReceiraListener();
-        generateReceiptButton.addActionListener(receiptListener);
+    public JButton getGenerateReceiptButton() {
+        return generateReceiptButton;
     }
 
     public JTextField getBloodPressureField() {

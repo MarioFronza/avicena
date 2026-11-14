@@ -20,8 +20,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class PatientHistoryFrame extends FrameSemCRUD {
 
-    private static PatientHistoryFrame instance;
-
     private static final String TITLE = "Patient History";
     private static final Dimension DIMENSION = new Dimension(720, 480);
 
@@ -31,8 +29,8 @@ public class PatientHistoryFrame extends FrameSemCRUD {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public PatientHistoryFrame(String title, Dimension dimension) throws HeadlessException {
-        super(title, dimension);
+    public PatientHistoryFrame() throws HeadlessException {
+        super(TITLE, DIMENSION);
 
         initializeComponents();
         addComponents();
@@ -44,15 +42,12 @@ public class PatientHistoryFrame extends FrameSemCRUD {
     @Override
     public void carregarCampos() {}
 
-    public static PatientHistoryFrame getInstance() {
-        if (instance == null) {
-            instance = new PatientHistoryFrame(TITLE, DIMENSION);
-        }
-        return instance;
-    }
-
     public JTextField getCpfField() {
         return cpfField;
+    }
+
+    public JButton getSearchButton() {
+        return searchButton;
     }
 
     public void showAppointments(List<AppointmentEntity> appointments) {
@@ -91,8 +86,6 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         table = new JTable();
         table.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Date", "Symptoms"}));
         tableModel = (DefaultTableModel) table.getModel();
-
-        searchButton.addActionListener(new PatientHistorySearchController());
     }
 
     private void addComponents() {

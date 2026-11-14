@@ -33,6 +33,12 @@ import javax.swing.JOptionPane;
  */
 public class BtGerarReceiraListener implements ActionListener {
 
+    private final DiagnosisRegistrationFrame diagnosisFrame;
+
+    public BtGerarReceiraListener(DiagnosisRegistrationFrame diagnosisFrame) {
+        this.diagnosisFrame = diagnosisFrame;
+    }
+
     static List<String> buildReceitaLines(AppointmentEntity consulta) {
         if (consulta.getDoctor() == null || consulta.getDoctor().getAddress() == null) {
             throw new IllegalStateException("Médico ou endereço do médico não cadastrado");
@@ -78,11 +84,9 @@ public class BtGerarReceiraListener implements ActionListener {
         } finally {
             entityManager.close();
         }
-        int selectedIndex = DiagnosisRegistrationFrame.getInstance()
-                .getAppointmentComboBox()
-                .getSelectedIndex();
+        int selectedIndex = diagnosisFrame.getAppointmentComboBox().getSelectedIndex();
         if (selectedIndex < 0 || selectedIndex >= consultas.size()) {
-            JOptionPane.showMessageDialog(DiagnosisRegistrationFrame.getInstance(), "Selecione uma consulta válida");
+            JOptionPane.showMessageDialog(diagnosisFrame, "Selecione uma consulta válida");
             return;
         }
         AppointmentEntity consulta = consultas.get(selectedIndex);
@@ -91,7 +95,7 @@ public class BtGerarReceiraListener implements ActionListener {
         try {
             lines = buildReceitaLines(consulta);
         } catch (IllegalStateException ex) {
-            JOptionPane.showMessageDialog(DiagnosisRegistrationFrame.getInstance(), ex.getMessage());
+            JOptionPane.showMessageDialog(diagnosisFrame, ex.getMessage());
             return;
         }
 
