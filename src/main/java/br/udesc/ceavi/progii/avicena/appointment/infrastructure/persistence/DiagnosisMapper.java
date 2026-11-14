@@ -14,7 +14,7 @@ final class DiagnosisMapper {
                 diagnosis.getFinalDescription(),
                 diagnosis.getExamNotes());
         return new DiagnosisEntity(
-                diagnosis.getId(),
+                null,
                 diagnosis.getBloodPressure(),
                 diagnosis.getTemperature(),
                 diagnosis.getHeight(),
@@ -22,6 +22,22 @@ final class DiagnosisMapper {
                 diagnosis.getNotes(),
                 appointment,
                 finalDiagnosis);
+    }
+
+    static void update(DiagnosisEntity entity, Diagnosis diagnosis, AppointmentEntity appointment) {
+        entity.update(
+                diagnosis.getBloodPressure(),
+                diagnosis.getTemperature(),
+                diagnosis.getHeight(),
+                diagnosis.getWeight(),
+                diagnosis.getNotes(),
+                appointment);
+        entity.getFinalDiagnosis()
+                .update(
+                        diagnosis.getDisease(),
+                        diagnosis.getMedications(),
+                        diagnosis.getFinalDescription(),
+                        diagnosis.getExamNotes());
     }
 
     static Diagnosis toDomain(DiagnosisEntity entity) {

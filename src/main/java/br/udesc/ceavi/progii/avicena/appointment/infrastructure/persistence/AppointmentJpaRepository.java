@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.AppointmentRepository;
 import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import br.udesc.ceavi.progii.avicena.control.dao.Lookups;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
@@ -15,18 +16,20 @@ public class AppointmentJpaRepository implements AppointmentRepository {
     @Override
     public Appointment save(Appointment appointment) {
         return JpaTransactions.write(entityManager -> {
-            AppointmentEntity entity = AppointmentMapper.toEntity(
-                    appointment,
-                    entityManager.getReference(PatientEntity.class, appointment.getPatientId()),
-                    reference(entityManager, DoctorEntity.class, appointment.getDoctorId()),
-                    reference(entityManager, NurseEntity.class, appointment.getNurseId()),
-                    entityManager
-                            .createQuery(
-                                    "SELECT u FROM UrgencyStatusEntity u WHERE u.code = :code",
-                                    UrgencyStatusEntity.class)
-                            .setParameter("code", appointment.getUrgencyStatus().name())
-                            .getSingleResult());
-            entityManager.persist(entity);
+            PatientEntity patient = entityManager.getReference(PatientEntity.class, appointment.getPatientId());
+            DoctorEntity doctor = reference(entityManager, DoctorEntity.class, appointment.getDoctorId());
+            NurseEntity nurse = reference(entityManager, NurseEntity.class, appointment.getNurseId());
+            UrgencyStatusEntity urgencyStatus =
+                    Lookups.byCode(entityManager, UrgencyStatusEntity.class, appointment.getUrgencyStatus());
+            AppointmentEntity entity = appointment.getId() == null
+                    ? null
+                    : entityManager.find(AppointmentEntity.class, appointment.getId());
+            if (entity == null) {
+                entity = AppointmentMapper.toEntity(appointment, patient, doctor, nurse, urgencyStatus);
+                entityManager.persist(entity);
+            } else {
+                AppointmentMapper.update(entity, appointment, patient, doctor, nurse, urgencyStatus);
+            }
             return AppointmentMapper.toDomain(entity);
         });
     }

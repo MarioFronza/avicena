@@ -38,6 +38,13 @@ public class FinalDiagnosisEntity {
         this.examNotes = examNotes;
     }
 
+    public void update(String disease, String medications, String description, String examNotes) {
+        this.disease = disease;
+        this.medications = medications;
+        this.description = description;
+        this.examNotes = examNotes;
+    }
+
     public Long getId() {
         return id;
     }

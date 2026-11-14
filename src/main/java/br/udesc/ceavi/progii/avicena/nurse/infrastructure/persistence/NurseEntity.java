@@ -39,6 +39,11 @@ public class NurseEntity {
         this.hoursCompleted = hoursCompleted;
     }
 
+    public void update(String formation, int hoursCompleted) {
+        this.formation = formation;
+        this.hoursCompleted = hoursCompleted;
+    }
+
     public Long getId() {
         return id;
     }

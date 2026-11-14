@@ -1,10 +1,10 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import br.udesc.ceavi.progii.avicena.control.dao.Lookups;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.ReceptionistRepository;
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +13,17 @@ public class ReceptionistJpaRepository implements ReceptionistRepository {
     @Override
     public Receptionist save(Receptionist receptionist) {
         return JpaTransactions.write(entityManager -> {
-            ReceptionistEntity entity =
-                    ReceptionistMapper.toEntity(receptionist, findMaritalStatus(entityManager, receptionist));
-            entityManager.persist(entity);
+            MaritalStatusEntity maritalStatus =
+                    Lookups.byCode(entityManager, MaritalStatusEntity.class, receptionist.getMaritalStatus());
+            ReceptionistEntity entity = receptionist.getId() == null
+                    ? null
+                    : entityManager.find(ReceptionistEntity.class, receptionist.getId());
+            if (entity == null) {
+                entity = ReceptionistMapper.toEntity(receptionist, maritalStatus);
+                entityManager.persist(entity);
+            } else {
+                ReceptionistMapper.update(entity, receptionist, maritalStatus);
+            }
             return ReceptionistMapper.toDomain(entity);
         });
     }
@@ -57,15 +65,5 @@ public class ReceptionistJpaRepository implements ReceptionistRepository {
                     .ifPresent(entityManager::remove);
             return null;
         });
-    }
-
-    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Receptionist receptionist) {
-        if (receptionist.getMaritalStatus() == null) {
-            return null;
-        }
-        return entityManager
-                .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
-                .setParameter("code", receptionist.getMaritalStatus().name())
-                .getSingleResult();
     }
 }

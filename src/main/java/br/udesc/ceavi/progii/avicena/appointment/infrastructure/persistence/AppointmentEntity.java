@@ -69,6 +69,23 @@ public class AppointmentEntity {
         this.urgencyStatus = urgencyStatus;
     }
 
+    public void update(
+            LocalDate date,
+            LocalTime time,
+            String symptoms,
+            PatientEntity patient,
+            DoctorEntity doctor,
+            NurseEntity nurse,
+            UrgencyStatusEntity urgencyStatus) {
+        this.date = date;
+        this.time = time;
+        this.symptoms = symptoms;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.nurse = nurse;
+        this.urgencyStatus = urgencyStatus;
+    }
+
     public Long getId() {
         return id;
     }

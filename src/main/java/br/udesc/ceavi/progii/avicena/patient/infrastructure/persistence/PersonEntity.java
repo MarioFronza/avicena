@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -28,7 +29,7 @@ public class PersonEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "address_id")
     private AddressEntity address;
 
@@ -41,6 +42,15 @@ public class PersonEntity {
     public PersonEntity(
             Long id, String name, String cpf, String phone, AddressEntity address, MaritalStatusEntity maritalStatus) {
         this.id = id;
+        this.name = name;
+        this.cpf = cpf;
+        this.phone = phone;
+        this.address = address;
+        this.maritalStatus = maritalStatus;
+    }
+
+    public void update(
+            String name, String cpf, String phone, AddressEntity address, MaritalStatusEntity maritalStatus) {
         this.name = name;
         this.cpf = cpf;
         this.phone = phone;

@@ -1,10 +1,10 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import br.udesc.ceavi.progii.avicena.control.dao.Lookups;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.domain.NurseRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,8 +13,15 @@ public class NurseJpaRepository implements NurseRepository {
     @Override
     public Nurse save(Nurse nurse) {
         return JpaTransactions.write(entityManager -> {
-            NurseEntity entity = NurseMapper.toEntity(nurse, findMaritalStatus(entityManager, nurse));
-            entityManager.persist(entity);
+            MaritalStatusEntity maritalStatus =
+                    Lookups.byCode(entityManager, MaritalStatusEntity.class, nurse.getMaritalStatus());
+            NurseEntity entity = nurse.getId() == null ? null : entityManager.find(NurseEntity.class, nurse.getId());
+            if (entity == null) {
+                entity = NurseMapper.toEntity(nurse, maritalStatus);
+                entityManager.persist(entity);
+            } else {
+                NurseMapper.update(entity, nurse, maritalStatus);
+            }
             return NurseMapper.toDomain(entity);
         });
     }
@@ -54,15 +61,5 @@ public class NurseJpaRepository implements NurseRepository {
                     .ifPresent(entityManager::remove);
             return null;
         });
-    }
-
-    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Nurse nurse) {
-        if (nurse.getMaritalStatus() == null) {
-            return null;
-        }
-        return entityManager
-                .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
-                .setParameter("code", nurse.getMaritalStatus().name())
-                .getSingleResult();
     }
 }

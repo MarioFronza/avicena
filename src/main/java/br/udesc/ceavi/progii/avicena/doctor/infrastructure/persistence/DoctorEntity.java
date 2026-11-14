@@ -42,6 +42,11 @@ public class DoctorEntity {
         this.specialty = specialty;
     }
 
+    public void update(String crm, SpecialtyEntity specialty) {
+        this.crm = crm;
+        this.specialty = specialty;
+    }
+
     public Long getId() {
         return id;
     }

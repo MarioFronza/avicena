@@ -7,8 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Database;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -127,5 +129,41 @@ class DoctorJpaRepositoryTest {
     private static Doctor doctor(Long id, String cpf) {
         return new Doctor(
                 id, "Doctor Test", cpf, "48999990000", null, MaritalStatus.SINGLE, "CRM-" + cpf, "Cardiology");
+    }
+
+    @Test
+    void saveOfAnExistingDoctorUpdatesItInPlace() {
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+        Doctor saved = repository.save(Fixtures.doctor("10000000021"));
+        Address moved = new Address(7, null, "88000999", "New St", "Center", "Blumenau");
+
+        repository.save(new Doctor(
+                saved.getId(),
+                "Renamed",
+                saved.getCpf(),
+                "48911112222",
+                moved,
+                MaritalStatus.MARRIED,
+                "CRM-NEW",
+                "Pediatrics"));
+
+        Doctor reloaded = repository.findById(saved.getId()).orElseThrow();
+        assertEquals("Renamed", reloaded.getName());
+        assertEquals("48911112222", reloaded.getPhone());
+        assertEquals(moved, reloaded.getAddress());
+        assertEquals(MaritalStatus.MARRIED, reloaded.getMaritalStatus());
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM people"));
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM addresses"));
+    }
+
+    @Test
+    void deleteRemovesThePersonAndTheAddressRows() {
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+        Doctor saved = repository.save(Fixtures.doctor("10000000022"));
+
+        repository.delete(saved);
+
+        assertEquals(0, Database.count("SELECT COUNT(*) FROM people"));
+        assertEquals(0, Database.count("SELECT COUNT(*) FROM addresses"));
     }
 }

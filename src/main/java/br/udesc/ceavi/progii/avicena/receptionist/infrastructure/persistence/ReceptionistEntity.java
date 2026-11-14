@@ -48,6 +48,13 @@ public class ReceptionistEntity {
         this.laborCardNumber = laborCardNumber;
     }
 
+    public void update(int workHours, float salary, int overtimeHours, int laborCardNumber) {
+        this.workHours = workHours;
+        this.salary = salary;
+        this.overtimeHours = overtimeHours;
+        this.laborCardNumber = laborCardNumber;
+    }
+
     public Long getId() {
         return id;
     }

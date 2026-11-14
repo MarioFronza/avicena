@@ -1,9 +1,9 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import br.udesc.ceavi.progii.avicena.control.dao.Lookups;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.domain.PatientRepository;
-import jakarta.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,8 +12,16 @@ public class PatientJpaRepository implements PatientRepository {
     @Override
     public Patient save(Patient patient) {
         return JpaTransactions.write(entityManager -> {
-            PatientEntity entity = PatientMapper.toEntity(patient, findMaritalStatus(entityManager, patient));
-            entityManager.persist(entity);
+            MaritalStatusEntity maritalStatus =
+                    Lookups.byCode(entityManager, MaritalStatusEntity.class, patient.getMaritalStatus());
+            PatientEntity entity =
+                    patient.getId() == null ? null : entityManager.find(PatientEntity.class, patient.getId());
+            if (entity == null) {
+                entity = PatientMapper.toEntity(patient, maritalStatus);
+                entityManager.persist(entity);
+            } else {
+                PatientMapper.update(entity, patient, maritalStatus);
+            }
             return PatientMapper.toDomain(entity);
         });
     }
@@ -54,15 +62,5 @@ public class PatientJpaRepository implements PatientRepository {
                     .ifPresent(entityManager::remove);
             return null;
         });
-    }
-
-    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Patient patient) {
-        if (patient.getMaritalStatus() == null) {
-            return null;
-        }
-        return entityManager
-                .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
-                .setParameter("code", patient.getMaritalStatus().name())
-                .getSingleResult();
     }
 }

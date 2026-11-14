@@ -47,6 +47,15 @@ public class AddressEntity {
         this.city = city;
     }
 
+    public void update(int number, String complement, String zipCode, String street, String neighborhood, String city) {
+        this.number = number;
+        this.complement = complement;
+        this.zipCode = zipCode;
+        this.street = street;
+        this.neighborhood = neighborhood;
+        this.city = city;
+    }
+
     public Long getId() {
         return id;
     }

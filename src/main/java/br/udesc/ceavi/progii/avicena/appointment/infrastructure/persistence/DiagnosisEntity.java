@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,7 +39,7 @@ public class DiagnosisEntity {
     @JoinColumn(name = "appointment_id")
     private AppointmentEntity appointment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "final_diagnosis_id")
     private FinalDiagnosisEntity finalDiagnosis;
 
@@ -61,6 +62,21 @@ public class DiagnosisEntity {
         this.medicationHistory = medicationHistory;
         this.appointment = appointment;
         this.finalDiagnosis = finalDiagnosis;
+    }
+
+    public void update(
+            float bloodPressure,
+            int temperature,
+            int height,
+            int weight,
+            String medicationHistory,
+            AppointmentEntity appointment) {
+        this.bloodPressure = bloodPressure;
+        this.temperature = temperature;
+        this.height = height;
+        this.weight = weight;
+        this.medicationHistory = medicationHistory;
+        this.appointment = appointment;
     }
 
     public Long getId() {
