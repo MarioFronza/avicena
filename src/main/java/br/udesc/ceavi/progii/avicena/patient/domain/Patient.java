@@ -1,5 +1,8 @@
 package br.udesc.ceavi.progii.avicena.patient.domain;
 
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+
 public class Patient {
 
     private final Long id;

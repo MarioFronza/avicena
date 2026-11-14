@@ -1,10 +1,10 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.InvalidPatientDataException;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.controller.PatientController;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

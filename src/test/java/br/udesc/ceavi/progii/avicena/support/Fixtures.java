@@ -1,6 +1,6 @@
 package br.udesc.ceavi.progii.avicena.support;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 
 public final class Fixtures {
 

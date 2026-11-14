@@ -4,8 +4,8 @@ import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import java.util.Optional;
 
 public class DoctorController {

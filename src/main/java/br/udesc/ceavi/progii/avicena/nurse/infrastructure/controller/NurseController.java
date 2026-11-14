@@ -5,8 +5,8 @@ import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import java.util.Optional;
 import java.util.function.Function;
 

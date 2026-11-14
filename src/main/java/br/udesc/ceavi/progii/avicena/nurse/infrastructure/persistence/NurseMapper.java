@@ -1,11 +1,11 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 final class NurseMapper {
 

@@ -1,11 +1,11 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.controller;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
 import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import java.util.Optional;
 
 public class PatientController {

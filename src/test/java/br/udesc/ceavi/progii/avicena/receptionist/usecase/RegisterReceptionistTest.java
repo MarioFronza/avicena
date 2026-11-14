@@ -3,8 +3,8 @@ package br.udesc.ceavi.progii.avicena.receptionist.usecase;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.InMemoryReceptionistRepository;
 import org.junit.jupiter.api.Test;
 

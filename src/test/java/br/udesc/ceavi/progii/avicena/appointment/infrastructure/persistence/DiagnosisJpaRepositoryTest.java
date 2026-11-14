@@ -8,9 +8,9 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 

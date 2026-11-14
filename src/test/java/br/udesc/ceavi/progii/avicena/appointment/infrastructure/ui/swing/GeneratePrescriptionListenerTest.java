@@ -7,11 +7,11 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.Appo
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.UrgencyStatusEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.SpecialtyEntity;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;

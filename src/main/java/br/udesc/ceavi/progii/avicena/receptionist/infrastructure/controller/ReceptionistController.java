@@ -1,12 +1,12 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.controller;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import java.util.Optional;
 import java.util.function.Function;
 
