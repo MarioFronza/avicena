@@ -4,10 +4,7 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.DiagnosisController;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
-import jakarta.persistence.EntityManager;
 import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -64,17 +61,19 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
     private JPanel buttonsPanel;
     private JPanel cardPanel;
 
-    private List<AppointmentEntity> appointments;
+    private List<AppointmentController.Row> appointments;
 
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
     private final DiagnosisController controller;
+    private final AppointmentController appointmentController;
     private Diagnosis diagnosis;
 
-    public DiagnosisRegistrationFrame(DiagnosisController controller) {
+    public DiagnosisRegistrationFrame(DiagnosisController controller, AppointmentController appointmentController) {
         super(TITLE, DIMENSION);
         this.controller = controller;
+        this.appointmentController = appointmentController;
 
         initializeComponents();
         addComponents();
@@ -139,30 +138,19 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
     public void clearFields() {}
 
     public void reloadAppointments() {
-        appointments = findAllAppointments();
+        appointments = appointmentController.list();
         appointmentComboBox.removeAllItems();
-        for (AppointmentEntity appointment : appointments) {
-            appointmentComboBox.addItem(appointment.getTime().format(AppointmentController.TIME_FORMAT) + " - "
-                    + appointment.getPatient().getName());
+        for (AppointmentController.Row appointment : appointments) {
+            appointmentComboBox.addItem(
+                    appointment.time().format(AppointmentController.TIME_FORMAT) + " - " + appointment.patientName());
         }
     }
 
-    private List<AppointmentEntity> findAllAppointments() {
-        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
-        try {
-            return entityManager
-                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
-                    .getResultList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    private Long getSelectedAppointmentId() {
+    public Long getSelectedAppointmentId() {
         int index = appointmentComboBox.getSelectedIndex();
         return index < 0 || appointments == null
                 ? null
-                : appointments.get(index).getId();
+                : appointments.get(index).id();
     }
 
     private void initializeComponents() {
@@ -406,9 +394,5 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
 
     public JButton getGenerateReceiptButton() {
         return generateReceiptButton;
-    }
-
-    public JComboBox<String> getAppointmentComboBox() {
-        return appointmentComboBox;
     }
 }

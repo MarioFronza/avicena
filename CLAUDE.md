@@ -192,10 +192,12 @@ cases and return the domain object or throw the domain's `Invalid*DataException`
 web front end should reuse them unchanged. Controller tests drive them directly against
 the shared `support` `InMemory*Repository` fakes, with no frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
 
-`AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
-`GeneratePrescriptionListener` still query `AppointmentEntity` directly through
-`PersistenceConfig.entityManagerFactory()`. Removing that needs new use cases and
-repository queries.
+No screen touches JPA. Read-only views get plain records from their controller:
+`AppointmentController.list()` returns `Row`s (with people names) for the appointment
+list and the diagnosis combo box, and `prescription(appointmentId)` returns the checked
+`Prescription` the PDF prints, picked by id. `ArchitectureTest` pins the layer rules:
+only `infrastructure/persistence` and `control/dao` import JPA or `*Entity`, controllers
+import no UI, and domain/use cases import no infrastructure.
 
 ### Outside the six packages
 
@@ -230,14 +232,14 @@ it finishes, code that doesn't match yet is a target, not a precedent.
 
 ## Known issues / refactor targets
 
-- **UI layer is the least refactored part.** Doctor got a cleanup (#85): an `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
-  boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
+- **Frame layout code**: Doctor got an `addField` helper (#85) replacing
+  `GridBagConstraints` boilerplate; the other registration frames don't have it yet.
 - `DotenvLoader` has no quote handling: `KEY="value"` keeps the quotes.
 - `GeneratePrescriptionListener` writes `Avicena-Prescription.pdf` to a hardcoded
   relative path.
-- `AppointmentRegistrationFrame` stores patient/doctor/nurse by ID only; names are
-  shown at selection time but not re-displayed afterwards. `AppointmentListFrame` gets
-  names through the JPA relationships instead.
+- Read views (`AppointmentController.list()`, `prescription`) resolve people by listing
+  each vertical and indexing by id. Fine at this size; a dedicated query would scale.
+- Appointment and Diagnosis screens can't edit: they have no search to load a record.
 
 ### Next steps
 

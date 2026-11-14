@@ -1,12 +1,11 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
+import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidAppointmentDataException;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import jakarta.persistence.EntityManager;
 import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,31 +28,24 @@ import javax.swing.JOptionPane;
 public class GeneratePrescriptionListener implements ActionListener {
 
     private final DiagnosisRegistrationFrame diagnosisFrame;
+    private final AppointmentController controller;
 
-    public GeneratePrescriptionListener(DiagnosisRegistrationFrame diagnosisFrame) {
+    public GeneratePrescriptionListener(DiagnosisRegistrationFrame diagnosisFrame, AppointmentController controller) {
         this.diagnosisFrame = diagnosisFrame;
+        this.controller = controller;
     }
 
-    static List<String> buildPrescriptionLines(AppointmentEntity appointment) {
-        if (appointment.getDoctor() == null || appointment.getDoctor().getAddress() == null) {
-            throw new IllegalStateException("Doctor or doctor's address not registered");
-        }
-        if (appointment.getPatient() == null || appointment.getPatient().getAddress() == null) {
-            throw new IllegalStateException("Patient or patient's address not registered");
-        }
-
+    static List<String> buildPrescriptionLines(AppointmentController.Prescription prescription) {
         List<String> lines = new ArrayList<>();
         lines.add("Medical Prescription - AVICENA");
         lines.add("------------------------------------------------------------------");
-        lines.add("Dr. " + appointment.getDoctor().getName());
-        lines.add("Street: " + appointment.getDoctor().getAddress().getStreet() + " , "
-                + appointment.getDoctor().getAddress().getNeighborhood());
+        lines.add("Dr. " + prescription.doctorName());
+        lines.add("Street: " + prescription.doctorStreet() + " , " + prescription.doctorNeighborhood());
         lines.add("Phone: (479921-00081)");
-        lines.add("CRM " + appointment.getDoctor().getCrm());
+        lines.add("CRM " + prescription.crm());
         lines.add("------------------------------------------------------------------");
-        lines.add("Patient: " + appointment.getPatient().getName());
-        lines.add("Street: " + appointment.getPatient().getAddress().getStreet() + " , "
-                + appointment.getPatient().getAddress().getNeighborhood());
+        lines.add("Patient: " + prescription.patientName());
+        lines.add("Street: " + prescription.patientStreet() + " , " + prescription.patientNeighborhood());
         lines.add("Medications:");
         lines.add(" ");
         lines.add("________________________");
@@ -70,26 +62,10 @@ public class GeneratePrescriptionListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
-        List<AppointmentEntity> appointments;
-        try {
-            appointments = entityManager
-                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
-                    .getResultList();
-        } finally {
-            entityManager.close();
-        }
-        int selectedIndex = diagnosisFrame.getAppointmentComboBox().getSelectedIndex();
-        if (selectedIndex < 0 || selectedIndex >= appointments.size()) {
-            JOptionPane.showMessageDialog(diagnosisFrame, "Select a valid appointment");
-            return;
-        }
-        AppointmentEntity appointment = appointments.get(selectedIndex);
-
         List<String> lines;
         try {
-            lines = buildPrescriptionLines(appointment);
-        } catch (IllegalStateException ex) {
+            lines = buildPrescriptionLines(controller.prescription(diagnosisFrame.getSelectedAppointmentId()));
+        } catch (InvalidAppointmentDataException ex) {
             JOptionPane.showMessageDialog(diagnosisFrame, ex.getMessage());
             return;
         }

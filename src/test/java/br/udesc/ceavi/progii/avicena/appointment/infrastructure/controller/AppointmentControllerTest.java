@@ -8,6 +8,7 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidAppointmentDataException;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.ListAppointments;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
@@ -15,6 +16,7 @@ import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.FindPatientByCpf;
+import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
 import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDoctorRepository;
@@ -38,7 +40,9 @@ class AppointmentControllerTest {
     private final AppointmentController controller = new AppointmentController(
             new RegisterAppointment(appointments),
             new DeleteAppointment(appointments),
+            new ListAppointments(appointments),
             new FindPatientByCpf(patients),
+            new ListPatients(patients),
             new ListDoctors(doctors),
             new ListNurses(nurses));
     private Patient patient;
@@ -112,6 +116,97 @@ class AppointmentControllerTest {
 
         assertEquals(List.of(doctor), controller.doctors());
         assertEquals(List.of(nurse), controller.nurses());
+    }
+
+    @Test
+    void listShowsEachAppointmentWithItsPeopleNames() {
+        Doctor doctor = doctors.save(Fixtures.doctor("22222222222"));
+        Appointment appointment = appointments.save(new Appointment(
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 30),
+                "Fever",
+                patient.getId(),
+                doctor.getId(),
+                null,
+                UrgencyStatus.URGENT));
+
+        assertEquals(
+                List.of(new AppointmentController.Row(
+                        appointment.getId(),
+                        LocalDate.of(2026, 8, 5),
+                        LocalTime.of(14, 30),
+                        "Patient Test",
+                        "Doctor Test",
+                        null)),
+                controller.list());
+    }
+
+    @Test
+    void prescriptionUsesTheAppointmentWithTheGivenId() {
+        Doctor doctor = doctors.save(Fixtures.doctor("22222222222"));
+        Patient other =
+                patients.save(new Patient("Other Patient", "44444444444", "48999990000", Fixtures.address(), null));
+        appointments.save(appointmentWith(patient.getId(), doctor.getId()));
+        Appointment second = appointments.save(appointmentWith(other.getId(), doctor.getId()));
+
+        assertEquals("Other Patient", controller.prescription(second.getId()).patientName());
+    }
+
+    @Test
+    void prescriptionCarriesTheDoctorAndPatientDetails() {
+        Doctor doctor = doctors.save(Fixtures.doctor("22222222222"));
+        Appointment appointment = appointments.save(appointmentWith(patient.getId(), doctor.getId()));
+
+        assertEquals(
+                new AppointmentController.Prescription(
+                        "Doctor Test", "Main St", "Downtown", "CRM-22222222222", "Patient Test", "Main St", "Downtown"),
+                controller.prescription(appointment.getId()));
+    }
+
+    @Test
+    void prescriptionRejectsAnUnknownAppointment() {
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.prescription(999L));
+    }
+
+    @Test
+    void prescriptionRejectsANullAppointmentId() {
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.prescription(null));
+    }
+
+    @Test
+    void prescriptionRejectsAnAppointmentWithoutDoctor() {
+        Appointment appointment = appointments.save(appointmentWith(patient.getId(), null));
+
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.prescription(appointment.getId()));
+    }
+
+    @Test
+    void prescriptionRejectsADoctorWithoutAddress() {
+        Doctor doctor =
+                doctors.save(new Doctor("No Address", "55555555555", "48999990000", null, null, "CRM-5", "Cardiology"));
+        Appointment appointment = appointments.save(appointmentWith(patient.getId(), doctor.getId()));
+
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.prescription(appointment.getId()));
+    }
+
+    @Test
+    void prescriptionRejectsAPatientWithoutAddress() {
+        Doctor doctor = doctors.save(Fixtures.doctor("22222222222"));
+        Patient homeless = patients.save(new Patient("No Address", "66666666666", "48999990000", null, null));
+        Appointment appointment = appointments.save(appointmentWith(homeless.getId(), doctor.getId()));
+
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.prescription(appointment.getId()));
+    }
+
+    private static Appointment appointmentWith(Long patientId, Long doctorId) {
+        return new Appointment(
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 30),
+                "Fever",
+                patientId,
+                doctorId,
+                null,
+                UrgencyStatus.URGENT);
     }
 
     private static AppointmentController.Form form(String patientCpf, String date, String time) {
