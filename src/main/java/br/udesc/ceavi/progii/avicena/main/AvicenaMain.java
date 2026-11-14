@@ -40,7 +40,6 @@ import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddAddressListener;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryController;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.AddressEntryFrame;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.PatientController;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.PatientRegistrationFrame;
@@ -86,8 +85,7 @@ public class AvicenaMain {
                 new DeleteDoctor(doctorRepository),
                 new ListDoctors(doctorRepository)));
 
-        AddressEntryFrame doctorAddressFrame = new AddressEntryFrame();
-        new AddressEntryController(doctorAddressFrame, doctorFrame::useAddress);
+        AddressEntryFrame doctorAddressFrame = new AddressEntryFrame(doctorFrame::useAddress);
 
         doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
 
@@ -99,8 +97,7 @@ public class AvicenaMain {
                 new DeletePatient(patientRepository),
                 new ListPatients(patientRepository)));
 
-        AddressEntryFrame patientAddressFrame = new AddressEntryFrame();
-        new AddressEntryController(patientAddressFrame, patientFrame::useAddress);
+        AddressEntryFrame patientAddressFrame = new AddressEntryFrame(patientFrame::useAddress);
 
         patientFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, patientAddressFrame));
 
@@ -110,8 +107,7 @@ public class AvicenaMain {
         NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame(new NurseController(
                 new RegisterNurse(nurseRepository), new DeleteNurse(nurseRepository), new ListNurses(nurseRepository)));
 
-        AddressEntryFrame nurseAddressFrame = new AddressEntryFrame();
-        new AddressEntryController(nurseAddressFrame, nurseFrame::useAddress);
+        AddressEntryFrame nurseAddressFrame = new AddressEntryFrame(nurseFrame::useAddress);
 
         nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
 
@@ -123,8 +119,7 @@ public class AvicenaMain {
                 new DeleteReceptionist(receptionistRepository),
                 new ListReceptionists(receptionistRepository)));
 
-        AddressEntryFrame receptionistAddressFrame = new AddressEntryFrame();
-        new AddressEntryController(receptionistAddressFrame, receptionistFrame::useAddress);
+        AddressEntryFrame receptionistAddressFrame = new AddressEntryFrame(receptionistFrame::useAddress);
 
         receptionistFrame
                 .getAddressButton()

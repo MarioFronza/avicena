@@ -1,12 +1,15 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui;
 
+import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.LayoutManager;
+import java.util.function.Consumer;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -33,15 +36,47 @@ public class AddressEntryFrame extends FrameCRUD {
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public AddressEntryFrame() {
-        this(TITLE, DIMENSION);
-    }
+    private final Consumer<Address> onSave;
 
-    public AddressEntryFrame(String title, Dimension dimension) {
-        super(title, dimension);
+    public AddressEntryFrame(Consumer<Address> onSave) {
+        super(TITLE, DIMENSION);
+        this.onSave = onSave;
 
         initializeComponents();
         addComponents();
+        addListeners();
+    }
+
+    private void addListeners() {
+        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
+        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> JOptionPane.showMessageDialog(this, "New Address"));
+        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> limparCampos());
+        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> save());
+    }
+
+    private void cancel() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you really want to close this window?",
+                "Confirm Close",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            dispose();
+        }
+    }
+
+    private void save() {
+        onSave.accept(new Address(
+                Integer.parseInt(numberField.getText()),
+                complementField.getText(),
+                zipCodeField.getText(),
+                streetField.getText(),
+                neighborhoodField.getText(),
+                cityField.getText()));
+        JOptionPane.showMessageDialog(this, "Address saved");
+        dispose();
+        limparCampos();
     }
 
     @Override
@@ -164,29 +199,5 @@ public class AddressEntryFrame extends FrameCRUD {
         formPanel.add(cityField, constraints);
 
         super.addFormulario(formPanel);
-    }
-
-    public JTextField getZipCodeField() {
-        return zipCodeField;
-    }
-
-    public JTextField getStreetField() {
-        return streetField;
-    }
-
-    public JTextField getNumberField() {
-        return numberField;
-    }
-
-    public JTextField getComplementField() {
-        return complementField;
-    }
-
-    public JTextField getNeighborhoodField() {
-        return neighborhoodField;
-    }
-
-    public JTextField getCityField() {
-        return cityField;
     }
 }
