@@ -25,9 +25,8 @@ import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
-import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorCrudController;
+import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorController;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorRegistrationFrame;
-import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorSearchController;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.RegisterDoctorMenuListener;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
@@ -85,17 +84,14 @@ public class AvicenaMain {
         FrameSistema frameSistema = new FrameSistema();
 
         DoctorJpaRepository doctorRepository = new DoctorJpaRepository();
-        DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame();
-        DoctorCrudController doctorController = new DoctorCrudController(
-                doctorFrame, new RegisterDoctor(doctorRepository), new DeleteDoctor(doctorRepository));
+        DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame(new DoctorController(
+                new RegisterDoctor(doctorRepository),
+                new DeleteDoctor(doctorRepository),
+                new ListDoctors(doctorRepository)));
 
         AddressEntryFrame doctorAddressFrame = new AddressEntryFrame();
-        new AddressEntryController(doctorAddressFrame, doctorController::useAddress);
+        new AddressEntryController(doctorAddressFrame, doctorFrame::useAddress);
 
-        doctorFrame
-                .getSearchButton()
-                .addActionListener(
-                        new DoctorSearchController(doctorFrame, new ListDoctors(doctorRepository), doctorController));
         doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
 
         frameSistema.getMenuPrincipal().onRegisterDoctor(new RegisterDoctorMenuListener(frameSistema, doctorFrame));
