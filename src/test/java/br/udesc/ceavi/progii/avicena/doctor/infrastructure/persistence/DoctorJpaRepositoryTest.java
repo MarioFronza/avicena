@@ -7,10 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import br.udesc.ceavi.progii.avicena.support.Database;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +47,7 @@ class DoctorJpaRepositoryTest {
     }
 
     @Test
-    void reusesTheSameSpecialtyRowWhenTwoDoctorsShareASpecialtyName() throws Exception {
+    void reusesTheSameSpecialtyRowWhenTwoDoctorsShareASpecialtyName() {
         Doctor first = new Doctor(
                 "First Test", "44444444444", "48911110000", null, MaritalStatus.SINGLE, "11111", "Dermatology");
         Doctor second = new Doctor(
@@ -60,16 +57,7 @@ class DoctorJpaRepositoryTest {
         repository.save(first);
         repository.save(second);
 
-        try (Connection connection = DriverManager.getConnection(
-                        System.getProperty("AVICENA_DB_URL"),
-                        System.getProperty("AVICENA_DB_USER"),
-                        System.getProperty("AVICENA_DB_PASSWORD"));
-                Statement statement = connection.createStatement();
-                ResultSet resultSet =
-                        statement.executeQuery("SELECT COUNT(*) FROM specialties WHERE name = 'Dermatology'")) {
-            resultSet.next();
-            assertEquals(1, resultSet.getInt(1));
-        }
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM specialties WHERE name = 'Dermatology'"));
     }
 
     @Test
