@@ -1,25 +1,43 @@
 package br.udesc.ceavi.progii.avicena.receptionist.usecase;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
-import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryReceptionistRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class RegisterReceptionistTest {
 
+    private final InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
+    private final RegisterReceptionist useCase = new RegisterReceptionist(repository);
+
     @Test
-    void savesTheReceptionistThroughTheRepository() {
-        InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
-        RegisterReceptionist useCase = new RegisterReceptionist(repository);
-        Receptionist receptionist = new Receptionist(
-                "Ana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+    void registerSavesTheReceptionistAndAssignsAnId() {
+        Receptionist registered = useCase.register(Fixtures.receptionist("12345678900"));
 
-        Receptionist registered = useCase.register(receptionist);
+        assertNotNull(registered.getId());
+        assertEquals(List.of(registered), repository.findAll());
+    }
 
-        assertEquals(receptionist, registered);
-        assertTrue(repository.findAll().contains(receptionist));
+    @Test
+    void registerRejectsACpfAnotherReceptionistAlreadyUses() {
+        useCase.register(Fixtures.receptionist("12345678900"));
+
+        assertThrows(
+                InvalidReceptionistDataException.class, () -> useCase.register(Fixtures.receptionist("12345678900")));
+    }
+
+    @Test
+    void registerAcceptsTheSameReceptionistAgain() {
+        Receptionist registered = useCase.register(Fixtures.receptionist("12345678900"));
+
+        assertDoesNotThrow(() -> useCase.register(registered));
+        assertEquals(1, repository.findAll().size());
     }
 }

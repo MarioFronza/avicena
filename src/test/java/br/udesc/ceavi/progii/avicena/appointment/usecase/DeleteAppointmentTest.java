@@ -1,26 +1,33 @@
 package br.udesc.ceavi.progii.avicena.appointment.usecase;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
-import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class DeleteAppointmentTest {
 
+    private final InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
+    private final DeleteAppointment useCase = new DeleteAppointment(repository);
+
     @Test
-    void deletesTheAppointmentThroughTheRepository() {
-        InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
-        Appointment appointment = new Appointment(
-                LocalDate.of(2026, 8, 5), LocalTime.of(14, 0), "Fever", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
-        repository.save(appointment);
-        DeleteAppointment useCase = new DeleteAppointment(repository);
+    void deleteRemovesTheAppointment() {
+        Appointment saved = repository.save(Fixtures.appointment(1L));
 
-        useCase.delete(appointment);
+        useCase.delete(saved);
 
-        assertFalse(repository.findAll().contains(appointment));
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    void deleteOfAnUnsavedAppointmentIsANoOp() {
+        repository.save(Fixtures.appointment(1L));
+
+        useCase.delete(Fixtures.appointment(1L));
+
+        assertEquals(1, repository.findAll().size());
     }
 }

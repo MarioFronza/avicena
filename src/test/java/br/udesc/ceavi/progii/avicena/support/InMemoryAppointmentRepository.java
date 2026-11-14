@@ -2,26 +2,24 @@ package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.AppointmentRepository;
-import java.util.ArrayList;
-import java.util.List;
 
-public class InMemoryAppointmentRepository implements AppointmentRepository {
-
-    private final List<Appointment> appointments = new ArrayList<>();
+public class InMemoryAppointmentRepository extends InMemoryRepository<Appointment> implements AppointmentRepository {
 
     @Override
-    public Appointment save(Appointment appointment) {
-        appointments.add(appointment);
-        return appointment;
+    protected Long idOf(Appointment appointment) {
+        return appointment.getId();
     }
 
     @Override
-    public List<Appointment> findAll() {
-        return appointments;
-    }
-
-    @Override
-    public void delete(Appointment appointment) {
-        appointments.remove(appointment);
+    protected Appointment withId(Appointment appointment, Long id) {
+        return new Appointment(
+                id,
+                appointment.getDate(),
+                appointment.getTime(),
+                appointment.getSymptoms(),
+                appointment.getPatientId(),
+                appointment.getDoctorId(),
+                appointment.getNurseId(),
+                appointment.getUrgencyStatus());
     }
 }

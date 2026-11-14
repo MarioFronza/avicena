@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Database;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -72,5 +74,58 @@ class DoctorJpaRepositoryTest {
         boolean stillPresent =
                 repository.findAll().stream().anyMatch(d -> d.getCpf().equals("98765432100"));
         assertFalse(stillPresent);
+    }
+
+    @Test
+    void findByIdReturnsTheSavedDoctor() {
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+        Doctor saved = repository.save(doctor("10000000001"));
+
+        assertEquals(
+                "10000000001", repository.findById(saved.getId()).orElseThrow().getCpf());
+    }
+
+    @Test
+    void findByIdIsEmptyForAnUnknownId() {
+        assertTrue(new DoctorJpaRepository().findById(999_999L).isEmpty());
+    }
+
+    @Test
+    void findByCpfReturnsTheSavedDoctor() {
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+        Doctor saved = repository.save(doctor("10000000002"));
+
+        assertEquals(
+                saved.getId(), repository.findByCpf("10000000002").orElseThrow().getId());
+    }
+
+    @Test
+    void findByCpfIsEmptyForAnUnknownCpf() {
+        assertTrue(new DoctorJpaRepository().findByCpf("00000000000").isEmpty());
+    }
+
+    @Test
+    void findAllIsOrderedById() {
+        DoctorJpaRepository repository = new DoctorJpaRepository();
+        Doctor first = repository.save(doctor("10000000003"));
+        Doctor second = repository.save(doctor("10000000004"));
+
+        assertEquals(
+                List.of(first.getId(), second.getId()),
+                repository.findAll().stream().map(Doctor::getId).toList());
+    }
+
+    @Test
+    void deleteOfAMissingDoctorIsANoOp() {
+        assertDoesNotThrow(() -> new DoctorJpaRepository().delete(doctor(999_999L, "10000000005")));
+    }
+
+    private static Doctor doctor(String cpf) {
+        return doctor(null, cpf);
+    }
+
+    private static Doctor doctor(Long id, String cpf) {
+        return new Doctor(
+                id, "Doctor Test", cpf, "48999990000", null, MaritalStatus.SINGLE, "CRM-" + cpf, "Cardiology");
     }
 }

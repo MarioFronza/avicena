@@ -2,44 +2,46 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.DiagnosisRepository;
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
+import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import java.util.List;
+import java.util.Optional;
 
 public class DiagnosisJpaRepository implements DiagnosisRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    public DiagnosisJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
+    @Override
+    public Diagnosis save(Diagnosis diagnosis) {
+        return JpaTransactions.write(entityManager -> {
+            DiagnosisEntity entity = DiagnosisMapper.toEntity(
+                    diagnosis, entityManager.getReference(AppointmentEntity.class, diagnosis.getAppointmentId()));
+            entityManager.persist(entity);
+            return DiagnosisMapper.toDomain(entity);
+        });
     }
 
     @Override
-    public Diagnosis save(Diagnosis diagnosis) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            AppointmentEntity appointment =
-                    entityManager.getReference(AppointmentEntity.class, diagnosis.getAppointmentId());
-            DiagnosisEntity entity = DiagnosisMapper.toEntity(diagnosis, appointment);
-            entityManager.getTransaction().begin();
-            entityManager.persist(entity);
-            entityManager.getTransaction().commit();
-            return DiagnosisMapper.toDomain(entity);
-        } finally {
-            entityManager.close();
-        }
+    public List<Diagnosis> findAll() {
+        return JpaTransactions.read(
+                entityManager -> entityManager
+                        .createQuery("SELECT e FROM DiagnosisEntity e ORDER BY e.id", DiagnosisEntity.class)
+                        .getResultList()
+                        .stream()
+                        .map(DiagnosisMapper::toDomain)
+                        .toList());
+    }
+
+    @Override
+    public Optional<Diagnosis> findById(Long id) {
+        return JpaTransactions.read(entityManager -> Optional.ofNullable(entityManager.find(DiagnosisEntity.class, id))
+                .map(DiagnosisMapper::toDomain));
     }
 
     @Override
     public void delete(Diagnosis diagnosis) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            DiagnosisEntity entity = entityManager.find(DiagnosisEntity.class, diagnosis.getId());
-            entityManager.remove(entity);
-            entityManager.getTransaction().commit();
-        } finally {
-            entityManager.close();
-        }
+        JpaTransactions.write(entityManager -> {
+            Optional.ofNullable(diagnosis.getId())
+                    .map(id -> entityManager.find(DiagnosisEntity.class, id))
+                    .ifPresent(entityManager::remove);
+            return null;
+        });
     }
 }

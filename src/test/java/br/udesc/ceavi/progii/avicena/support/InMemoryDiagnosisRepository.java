@@ -2,25 +2,27 @@ package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.DiagnosisRepository;
-import java.util.ArrayList;
-import java.util.List;
 
-public class InMemoryDiagnosisRepository implements DiagnosisRepository {
-
-    private final List<Diagnosis> diagnoses = new ArrayList<>();
+public class InMemoryDiagnosisRepository extends InMemoryRepository<Diagnosis> implements DiagnosisRepository {
 
     @Override
-    public Diagnosis save(Diagnosis diagnosis) {
-        diagnoses.add(diagnosis);
-        return diagnosis;
+    protected Long idOf(Diagnosis diagnosis) {
+        return diagnosis.getId();
     }
 
     @Override
-    public void delete(Diagnosis diagnosis) {
-        diagnoses.remove(diagnosis);
-    }
-
-    public List<Diagnosis> findAll() {
-        return diagnoses;
+    protected Diagnosis withId(Diagnosis diagnosis, Long id) {
+        return new Diagnosis(
+                id,
+                diagnosis.getAppointmentId(),
+                diagnosis.getBloodPressure(),
+                diagnosis.getTemperature(),
+                diagnosis.getHeight(),
+                diagnosis.getWeight(),
+                diagnosis.getNotes(),
+                diagnosis.getDisease(),
+                diagnosis.getMedications(),
+                diagnosis.getExamNotes(),
+                diagnosis.getFinalDescription());
     }
 }

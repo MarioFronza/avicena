@@ -2,26 +2,34 @@ package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.ReceptionistRepository;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-public class InMemoryReceptionistRepository implements ReceptionistRepository {
-
-    private final List<Receptionist> receptionists = new ArrayList<>();
+public class InMemoryReceptionistRepository extends InMemoryRepository<Receptionist> implements ReceptionistRepository {
 
     @Override
-    public Receptionist save(Receptionist receptionist) {
-        receptionists.add(receptionist);
-        return receptionist;
+    protected Long idOf(Receptionist receptionist) {
+        return receptionist.getId();
     }
 
     @Override
-    public List<Receptionist> findAll() {
-        return receptionists;
+    protected Receptionist withId(Receptionist receptionist, Long id) {
+        return new Receptionist(
+                id,
+                receptionist.getName(),
+                receptionist.getCpf(),
+                receptionist.getPhone(),
+                receptionist.getAddress(),
+                receptionist.getMaritalStatus(),
+                receptionist.getWorkHours(),
+                receptionist.getSalary(),
+                receptionist.getOvertimeHours(),
+                receptionist.getLaborCardNumber());
     }
 
     @Override
-    public void delete(Receptionist receptionist) {
-        receptionists.remove(receptionist);
+    public Optional<Receptionist> findByCpf(String cpf) {
+        return findAll().stream()
+                .filter(receptionist -> receptionist.getCpf().equals(cpf))
+                .findFirst();
     }
 }

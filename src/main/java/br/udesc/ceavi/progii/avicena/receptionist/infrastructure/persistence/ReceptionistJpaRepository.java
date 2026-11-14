@@ -1,37 +1,65 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence;
 
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
+import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.ReceptionistRepository;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class ReceptionistJpaRepository implements ReceptionistRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    public ReceptionistJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
+    @Override
+    public Receptionist save(Receptionist receptionist) {
+        return JpaTransactions.write(entityManager -> {
+            ReceptionistEntity entity =
+                    ReceptionistMapper.toEntity(receptionist, findMaritalStatus(entityManager, receptionist));
+            entityManager.persist(entity);
+            return ReceptionistMapper.toDomain(entity);
+        });
     }
 
     @Override
-    public Receptionist save(Receptionist receptionist) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, receptionist);
-            ReceptionistEntity entity = ReceptionistMapper.toEntity(receptionist, maritalStatus);
-            entityManager.getTransaction().begin();
-            entityManager.persist(entity);
-            entityManager.getTransaction().commit();
-            return ReceptionistMapper.toDomain(entity);
-        } finally {
-            entityManager.close();
-        }
+    public List<Receptionist> findAll() {
+        return JpaTransactions.read(entityManager -> entityManager
+                .createQuery("SELECT e FROM ReceptionistEntity e ORDER BY e.id", ReceptionistEntity.class)
+                .getResultList()
+                .stream()
+                .map(ReceptionistMapper::toDomain)
+                .toList());
     }
 
-    private MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Receptionist receptionist) {
+    @Override
+    public Optional<Receptionist> findById(Long id) {
+        return JpaTransactions.read(
+                entityManager -> Optional.ofNullable(entityManager.find(ReceptionistEntity.class, id))
+                        .map(ReceptionistMapper::toDomain));
+    }
+
+    @Override
+    public Optional<Receptionist> findByCpf(String cpf) {
+        return JpaTransactions.read(entityManager -> entityManager
+                .createQuery(
+                        "SELECT e FROM ReceptionistEntity e WHERE e.person.cpf = :cpf ORDER BY e.id",
+                        ReceptionistEntity.class)
+                .setParameter("cpf", cpf)
+                .getResultStream()
+                .findFirst()
+                .map(ReceptionistMapper::toDomain));
+    }
+
+    @Override
+    public void delete(Receptionist receptionist) {
+        JpaTransactions.write(entityManager -> {
+            Optional.ofNullable(receptionist.getId())
+                    .map(id -> entityManager.find(ReceptionistEntity.class, id))
+                    .ifPresent(entityManager::remove);
+            return null;
+        });
+    }
+
+    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Receptionist receptionist) {
         if (receptionist.getMaritalStatus() == null) {
             return null;
         }
@@ -39,33 +67,5 @@ public class ReceptionistJpaRepository implements ReceptionistRepository {
                 .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
                 .setParameter("code", receptionist.getMaritalStatus().name())
                 .getSingleResult();
-    }
-
-    @Override
-    public List<Receptionist> findAll() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return entityManager
-                    .createQuery("SELECT r FROM ReceptionistEntity r", ReceptionistEntity.class)
-                    .getResultList()
-                    .stream()
-                    .map(ReceptionistMapper::toDomain)
-                    .toList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public void delete(Receptionist receptionist) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            ReceptionistEntity entity = entityManager.find(ReceptionistEntity.class, receptionist.getId());
-            entityManager.remove(entity);
-            entityManager.getTransaction().commit();
-        } finally {
-            entityManager.close();
-        }
     }
 }
