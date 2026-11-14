@@ -11,9 +11,16 @@ public class DiagnosisJpaRepository implements DiagnosisRepository {
     @Override
     public Diagnosis save(Diagnosis diagnosis) {
         return JpaTransactions.write(entityManager -> {
-            DiagnosisEntity entity = DiagnosisMapper.toEntity(
-                    diagnosis, entityManager.getReference(AppointmentEntity.class, diagnosis.getAppointmentId()));
-            entityManager.persist(entity);
+            AppointmentEntity appointment =
+                    entityManager.getReference(AppointmentEntity.class, diagnosis.getAppointmentId());
+            DiagnosisEntity entity =
+                    diagnosis.getId() == null ? null : entityManager.find(DiagnosisEntity.class, diagnosis.getId());
+            if (entity == null) {
+                entity = DiagnosisMapper.toEntity(diagnosis, appointment);
+                entityManager.persist(entity);
+            } else {
+                DiagnosisMapper.update(entity, diagnosis, appointment);
+            }
             return DiagnosisMapper.toDomain(entity);
         });
     }

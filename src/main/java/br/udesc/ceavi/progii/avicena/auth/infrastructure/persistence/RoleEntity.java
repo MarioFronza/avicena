@@ -18,7 +18,7 @@ public class RoleEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "description")
@@ -53,5 +53,17 @@ public class RoleEntity {
 
     public Set<PermissionEntity> getPermissions() {
         return permissions;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof RoleEntity that) || id == null) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return RoleEntity.class.hashCode();
     }
 }

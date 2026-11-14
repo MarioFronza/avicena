@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,19 +9,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "patients")
-public class PatientEntity {
+public class PatientEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "patients_seq")
+    @SequenceGenerator(name = "patients_seq", sequenceName = "patients_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
     protected PatientEntity() {}

@@ -98,11 +98,19 @@ Four uniform slices, none importing another's `domain`:
   `nurses`, `receptionists`) holds a `@OneToOne(cascade = {PERSIST, REMOVE})
   PersonEntity` (table `people`, in `patient.infrastructure.persistence`) plus
   delegating getters (`getName()`, `getCpf()`, ...) used by appointment screens.
-  `PersonEntity` has a `@ManyToOne(cascade = PERSIST)` to `AddressEntity` (`addresses`)
-  and a `MaritalStatusEntity` (`marital_statuses`). Role-specific columns stay on the
-  role table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse
-  `formation`/`hoursCompleted`, Receptionist
-  `workHours`/`salary`/`overtimeHours`/`laborCardNumber`.
+  `PersonEntity` has a `@OneToOne(cascade = ALL, orphanRemoval = true)` to
+  `AddressEntity` (`addresses`), so deleting a person deletes its address, and a
+  `MaritalStatusEntity` (`marital_statuses`). Role-specific columns stay on the role
+  table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse `formation`/`hoursCompleted`,
+  Receptionist `workHours`/`salary`/`overtimeHours`/`laborCardNumber`. The public
+  `PersonMapper` maps the person and address part for all four mappers.
+- **Saving**: `save` inserts when the domain id is null or unknown, otherwise loads the
+  entity and calls its `update(...)` (entities have no setters), keeping person and
+  address rows. Seeded lookups are resolved with `control.dao.Lookups.byCode`. Every
+  non-lookup entity extends `control.dao.AuditedEntity` (`@CreationTimestamp`/
+  `@UpdateTimestamp`), ids come from explicit `@SequenceGenerator`s named after the
+  real `<table>_seq`, and `hibernate.hbm2ddl.auto=validate` checks every mapping
+  against the Flyway schema at boot.
 - **`infrastructure/controller/`**: `*Controller` (`register(Form)`, `delete`,
   `findByCpf` through `Find*ByCpf`). Numbers are parsed by
   `shared.infrastructure.controller.FormNumbers`. UI-agnostic interface adapter, see
@@ -113,7 +121,8 @@ Four uniform slices, none importing another's `domain`:
   `swing`). `patient.infrastructure.ui.swing` also owns the "Add Address" popup
   (`AddressEntryFrame`/`AddAddressListener`), one instance per registration screen. It
   hands the `Address` it builds to the screen's `useAddress`; the cascade persists it
-  with the parent.
+  with the parent. On every CRUD screen, New clears the form and the record on screen,
+  Save registers or updates that record, and Delete needs a record loaded by search.
 
 Lookup entities that are closed, pre-seeded sets (`MaritalStatusEntity`,
 `UrgencyStatusEntity`, `RoleEntity`) have no `@GeneratedValue` and are only read by
@@ -133,8 +142,8 @@ Deviates from the person template on purpose:
   but is deliberately unmapped: nothing reads or writes it yet.
 - `Diagnosis` is nested here, not a sibling package, because it has no independent use
   case. `DiagnosisRepository` only exposes `save`/`delete`. `DiagnosisEntity`
-  (`diagnoses`) has a `@ManyToOne(cascade = ALL) FinalDiagnosisEntity`
-  (`final_diagnoses`), the one cascade in the codebase that also cascades removal.
+  (`diagnoses`) has a `@OneToOne(cascade = ALL, orphanRemoval = true)
+  FinalDiagnosisEntity` (`final_diagnoses`).
 - `infrastructure/controller/`: `AppointmentController`, `DiagnosisController` and
   `PatientHistoryController` (CPF search over appointments).
 - `infrastructure/ui/swing/`: `AppointmentRegistrationFrame`, `AppointmentListFrame`

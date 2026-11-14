@@ -10,7 +10,16 @@ import java.util.Optional;
 
 public class PatientController {
 
-    public record Form(String name, String cpf, String phone, Address address, MaritalStatus maritalStatus) {}
+    public record Form(Long id, String name, String cpf, String phone, Address address, MaritalStatus maritalStatus) {
+
+        public Form(String name, String cpf, String phone, Address address, MaritalStatus maritalStatus) {
+            this(null, name, cpf, phone, address, maritalStatus);
+        }
+
+        public Form withId(Long id) {
+            return new Form(id, name, cpf, phone, address, maritalStatus);
+        }
+    }
 
     private final RegisterPatient registerPatient;
     private final DeletePatient deletePatient;
@@ -25,7 +34,7 @@ public class PatientController {
 
     public Patient register(Form form) {
         return registerPatient.register(
-                new Patient(form.name(), form.cpf(), form.phone(), form.address(), form.maritalStatus()));
+                new Patient(form.id(), form.name(), form.cpf(), form.phone(), form.address(), form.maritalStatus()));
     }
 
     public void delete(Patient patient) {

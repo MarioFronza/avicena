@@ -83,7 +83,7 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
 
     private void addListeners() {
         getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
-        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getNewButton().addActionListener(e -> clearFields());
         getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
         getCrudActionPanel().getSaveButton().addActionListener(e -> register());
     }
@@ -108,7 +108,7 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
+        if (response == JOptionPane.YES_OPTION && diagnosis != null) {
             controller.delete(diagnosis);
             clearFields();
         }

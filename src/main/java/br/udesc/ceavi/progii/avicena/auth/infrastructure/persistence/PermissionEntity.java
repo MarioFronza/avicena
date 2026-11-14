@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -12,11 +13,12 @@ import jakarta.persistence.Table;
 public class PermissionEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permissions_seq")
+    @SequenceGenerator(name = "permissions_seq", sequenceName = "permissions_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, length = 100)
     private String code;
 
     @Column(name = "description")
@@ -40,5 +42,17 @@ public class PermissionEntity {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof PermissionEntity that) || id == null) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return PermissionEntity.class.hashCode();
     }
 }

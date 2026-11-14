@@ -13,6 +13,8 @@ import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Database;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import jakarta.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -116,5 +118,41 @@ class DiagnosisJpaRepositoryTest {
         Diagnosis missing = new Diagnosis(999_999L, 1L, 120f, 37, 170, 70, null, null, null, null, null);
 
         assertDoesNotThrow(() -> new DiagnosisJpaRepository().delete(missing));
+    }
+
+    @Test
+    void saveOfAnExistingDiagnosisUpdatesItInPlace() {
+        DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
+        Diagnosis saved = repository.save(Fixtures.diagnosis(anAppointment().getId()));
+
+        repository.save(new Diagnosis(
+                saved.getId(),
+                saved.getAppointmentId(),
+                13f,
+                39,
+                175,
+                75,
+                "New notes",
+                "Covid",
+                "Isolation",
+                "PCR",
+                "Done"));
+
+        Diagnosis reloaded = repository.findById(saved.getId()).orElseThrow();
+        assertEquals(39, reloaded.getTemperature());
+        assertEquals("Covid", reloaded.getDisease());
+        assertEquals("Done", reloaded.getFinalDescription());
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM diagnoses"));
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM final_diagnoses"));
+    }
+
+    @Test
+    void deleteRemovesTheFinalDiagnosisRow() {
+        DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
+        Diagnosis saved = repository.save(Fixtures.diagnosis(anAppointment().getId()));
+
+        repository.delete(saved);
+
+        assertEquals(0, Database.count("SELECT COUNT(*) FROM final_diagnoses"));
     }
 }

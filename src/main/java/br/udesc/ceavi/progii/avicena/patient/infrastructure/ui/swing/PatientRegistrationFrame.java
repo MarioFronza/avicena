@@ -59,7 +59,7 @@ public class PatientRegistrationFrame extends CrudFrame {
 
     private void addListeners() {
         getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
-        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getNewButton().addActionListener(e -> clearFields());
         getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
         getCrudActionPanel().getSaveButton().addActionListener(e -> register());
         searchButton.addActionListener(e -> search());
@@ -85,7 +85,7 @@ public class PatientRegistrationFrame extends CrudFrame {
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
+        if (response == JOptionPane.YES_OPTION && patient != null) {
             controller.delete(patient);
             clearFields();
         }
@@ -94,8 +94,12 @@ public class PatientRegistrationFrame extends CrudFrame {
     private void register() {
         try {
             patient = controller.register(new PatientController.Form(
-                    nameField.getText(), cpfField.getText(), phoneField.getText(), address, (MaritalStatus)
-                            maritalStatusComboBox.getSelectedItem()));
+                    patient == null ? null : patient.getId(),
+                    nameField.getText(),
+                    cpfField.getText(),
+                    phoneField.getText(),
+                    address,
+                    (MaritalStatus) maritalStatusComboBox.getSelectedItem()));
             JOptionPane.showMessageDialog(this, "Patient saved");
         } catch (InvalidPatientDataException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -113,6 +117,7 @@ public class PatientRegistrationFrame extends CrudFrame {
     private void show(Patient found) {
         JOptionPane.showMessageDialog(this, "Patient found");
         patient = found;
+        address = found.getAddress();
         nameField.setText(found.getName());
         phoneField.setText(found.getPhone());
         maritalStatusComboBox.setSelectedItem(found.getMaritalStatus());
@@ -120,6 +125,8 @@ public class PatientRegistrationFrame extends CrudFrame {
 
     @Override
     public void clearFields() {
+        patient = null;
+        address = null;
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);

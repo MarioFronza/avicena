@@ -1,22 +1,26 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
-import br.udesc.ceavi.progii.avicena.shared.domain.Address;
-import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 final class PatientMapper {
 
     private PatientMapper() {}
 
     static PatientEntity toEntity(Patient patient, MaritalStatusEntity maritalStatus) {
-        PersonEntity person = new PersonEntity(
+        return new PatientEntity(
                 null,
+                PersonMapper.toEntity(
+                        patient.getName(), patient.getCpf(), patient.getPhone(), patient.getAddress(), maritalStatus));
+    }
+
+    static void update(PatientEntity entity, Patient patient, MaritalStatusEntity maritalStatus) {
+        PersonMapper.update(
+                entity.getPerson(),
                 patient.getName(),
                 patient.getCpf(),
                 patient.getPhone(),
-                toEntity(patient.getAddress()),
+                patient.getAddress(),
                 maritalStatus);
-        return new PatientEntity(patient.getId(), person);
     }
 
     static Patient toDomain(PatientEntity entity) {
@@ -26,38 +30,7 @@ final class PatientMapper {
                 person.getName(),
                 person.getCpf(),
                 person.getPhone(),
-                toDomain(person.getAddress()),
-                toDomain(person.getMaritalStatus()));
-    }
-
-    private static AddressEntity toEntity(Address address) {
-        if (address == null) {
-            return null;
-        }
-        return new AddressEntity(
-                null,
-                address.getNumber(),
-                address.getComplement(),
-                address.getZipCode(),
-                address.getStreet(),
-                address.getNeighborhood(),
-                address.getCity());
-    }
-
-    private static Address toDomain(AddressEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        return new Address(
-                entity.getNumber(),
-                entity.getComplement(),
-                entity.getZipCode(),
-                entity.getStreet(),
-                entity.getNeighborhood(),
-                entity.getCity());
-    }
-
-    private static MaritalStatus toDomain(MaritalStatusEntity entity) {
-        return entity == null ? null : MaritalStatus.valueOf(entity.getCode());
+                PersonMapper.toDomain(person.getAddress()),
+                PersonMapper.toDomain(person.getMaritalStatus()));
     }
 }

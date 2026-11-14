@@ -17,7 +17,24 @@ final class AppointmentMapper {
             NurseEntity nurse,
             UrgencyStatusEntity urgencyStatus) {
         return new AppointmentEntity(
-                appointment.getId(),
+                null,
+                appointment.getDate(),
+                appointment.getTime(),
+                appointment.getSymptoms(),
+                patient,
+                doctor,
+                nurse,
+                urgencyStatus);
+    }
+
+    static void update(
+            AppointmentEntity entity,
+            Appointment appointment,
+            PatientEntity patient,
+            DoctorEntity doctor,
+            NurseEntity nurse,
+            UrgencyStatusEntity urgencyStatus) {
+        entity.update(
                 appointment.getDate(),
                 appointment.getTime(),
                 appointment.getSymptoms(),

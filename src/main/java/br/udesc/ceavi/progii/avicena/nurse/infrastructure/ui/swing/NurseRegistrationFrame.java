@@ -63,7 +63,7 @@ public class NurseRegistrationFrame extends CrudFrame {
 
     private void addListeners() {
         getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
-        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getNewButton().addActionListener(e -> clearFields());
         getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
         getCrudActionPanel().getSaveButton().addActionListener(e -> register());
         searchButton.addActionListener(e -> search());
@@ -89,7 +89,7 @@ public class NurseRegistrationFrame extends CrudFrame {
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
+        if (response == JOptionPane.YES_OPTION && nurse != null) {
             controller.delete(nurse);
             clearFields();
         }
@@ -98,6 +98,7 @@ public class NurseRegistrationFrame extends CrudFrame {
     private void register() {
         try {
             nurse = controller.register(new NurseController.Form(
+                    nurse == null ? null : nurse.getId(),
                     nameField.getText(),
                     cpfField.getText(),
                     phoneField.getText(),
@@ -122,6 +123,7 @@ public class NurseRegistrationFrame extends CrudFrame {
     private void show(Nurse found) {
         JOptionPane.showMessageDialog(this, "Nurse found");
         nurse = found;
+        address = found.getAddress();
         nameField.setText(found.getName());
         phoneField.setText(found.getPhone());
         formationField.setText(found.getFormation());
@@ -131,6 +133,8 @@ public class NurseRegistrationFrame extends CrudFrame {
 
     @Override
     public void clearFields() {
+        nurse = null;
+        address = null;
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);

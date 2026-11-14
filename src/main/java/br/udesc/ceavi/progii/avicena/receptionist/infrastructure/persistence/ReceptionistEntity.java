@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,19 +10,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "receptionists")
-public class ReceptionistEntity {
+public class ReceptionistEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "receptionists_seq")
+    @SequenceGenerator(name = "receptionists_seq", sequenceName = "receptionists_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
     @Column(name = "work_hours", nullable = false)
@@ -42,6 +45,13 @@ public class ReceptionistEntity {
             Long id, PersonEntity person, int workHours, float salary, int overtimeHours, int laborCardNumber) {
         this.id = id;
         this.person = person;
+        this.workHours = workHours;
+        this.salary = salary;
+        this.overtimeHours = overtimeHours;
+        this.laborCardNumber = laborCardNumber;
+    }
+
+    public void update(int workHours, float salary, int overtimeHours, int laborCardNumber) {
         this.workHours = workHours;
         this.salary = salary;
         this.overtimeHours = overtimeHours;

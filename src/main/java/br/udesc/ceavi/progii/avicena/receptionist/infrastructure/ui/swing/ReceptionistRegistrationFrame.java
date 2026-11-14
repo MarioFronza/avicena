@@ -67,7 +67,7 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
 
     private void addListeners() {
         getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
-        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getNewButton().addActionListener(e -> clearFields());
         getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
         getCrudActionPanel().getSaveButton().addActionListener(e -> register());
         searchButton.addActionListener(e -> search());
@@ -93,7 +93,7 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
+        if (response == JOptionPane.YES_OPTION && receptionist != null) {
             controller.delete(receptionist);
             clearFields();
         }
@@ -102,6 +102,7 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
     private void register() {
         try {
             receptionist = controller.register(new ReceptionistController.Form(
+                    receptionist == null ? null : receptionist.getId(),
                     nameField.getText(),
                     cpfField.getText(),
                     phoneField.getText(),
@@ -128,6 +129,7 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
     private void show(Receptionist found) {
         JOptionPane.showMessageDialog(this, "Receptionist found");
         receptionist = found;
+        address = found.getAddress();
         nameField.setText(found.getName());
         phoneField.setText(found.getPhone());
         workHoursField.setText(String.valueOf(found.getWorkHours()));
@@ -139,6 +141,8 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
 
     @Override
     public void clearFields() {
+        receptionist = null;
+        address = null;
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);

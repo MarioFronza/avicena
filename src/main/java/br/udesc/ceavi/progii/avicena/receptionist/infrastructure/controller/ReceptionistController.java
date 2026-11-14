@@ -13,6 +13,7 @@ import java.util.Optional;
 public class ReceptionistController {
 
     public record Form(
+            Long id,
             String name,
             String cpf,
             String phone,
@@ -21,7 +22,26 @@ public class ReceptionistController {
             String workHours,
             String salary,
             String overtimeHours,
-            String laborCardNumber) {}
+            String laborCardNumber) {
+
+        public Form(
+                String name,
+                String cpf,
+                String phone,
+                Address address,
+                MaritalStatus maritalStatus,
+                String workHours,
+                String salary,
+                String overtimeHours,
+                String laborCardNumber) {
+            this(null, name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber);
+        }
+
+        public Form withId(Long id) {
+            return new Form(
+                    id, name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber);
+        }
+    }
 
     private final RegisterReceptionist registerReceptionist;
     private final DeleteReceptionist deleteReceptionist;
@@ -38,6 +58,7 @@ public class ReceptionistController {
 
     public Receptionist register(Form form) {
         return registerReceptionist.register(new Receptionist(
+                form.id(),
                 form.name(),
                 form.cpf(),
                 form.phone(),

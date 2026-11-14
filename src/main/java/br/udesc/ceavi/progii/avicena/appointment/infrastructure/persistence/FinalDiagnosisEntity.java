@@ -1,18 +1,21 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "final_diagnoses")
-public class FinalDiagnosisEntity {
+public class FinalDiagnosisEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "final_diagnoses_seq")
+    @SequenceGenerator(name = "final_diagnoses_seq", sequenceName = "final_diagnoses_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
@@ -32,6 +35,13 @@ public class FinalDiagnosisEntity {
 
     public FinalDiagnosisEntity(Long id, String disease, String medications, String description, String examNotes) {
         this.id = id;
+        this.disease = disease;
+        this.medications = medications;
+        this.description = description;
+        this.examNotes = examNotes;
+    }
+
+    public void update(String disease, String medications, String description, String examNotes) {
         this.disease = disease;
         this.medications = medications;
         this.description = description;

@@ -130,4 +130,26 @@ class AppointmentJpaRepositoryTest {
         return new Appointment(
                 LocalDate.of(2026, 8, 5), LocalTime.of(9, 30), "Fever", patientId, null, null, UrgencyStatus.URGENT);
     }
+
+    @Test
+    void saveOfAnExistingAppointmentUpdatesItInPlace() {
+        AppointmentJpaRepository repository = new AppointmentJpaRepository();
+        Appointment saved = repository.save(appointmentFor(savedPatient("10000000031")));
+
+        repository.save(new Appointment(
+                saved.getId(),
+                LocalDate.of(2026, 9, 1),
+                LocalTime.of(8, 0),
+                "Headache",
+                saved.getPatientId(),
+                null,
+                null,
+                UrgencyStatus.EMERGENCY));
+
+        Appointment reloaded = repository.findById(saved.getId()).orElseThrow();
+        assertEquals(LocalDate.of(2026, 9, 1), reloaded.getDate());
+        assertEquals("Headache", reloaded.getSymptoms());
+        assertEquals(UrgencyStatus.EMERGENCY, reloaded.getUrgencyStatus());
+        assertEquals(1, repository.findAll().size());
+    }
 }

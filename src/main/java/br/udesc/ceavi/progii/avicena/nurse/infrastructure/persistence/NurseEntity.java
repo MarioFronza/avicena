@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,19 +10,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "nurses")
-public class NurseEntity {
+public class NurseEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "nurses_seq")
+    @SequenceGenerator(name = "nurses_seq", sequenceName = "nurses_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinColumn(name = "person_id")
+    @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
     @Column(name = "formation", nullable = false)
@@ -35,6 +38,11 @@ public class NurseEntity {
     public NurseEntity(Long id, PersonEntity person, String formation, int hoursCompleted) {
         this.id = id;
         this.person = person;
+        this.formation = formation;
+        this.hoursCompleted = hoursCompleted;
+    }
+
+    public void update(String formation, int hoursCompleted) {
         this.formation = formation;
         this.hoursCompleted = hoursCompleted;
     }

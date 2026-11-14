@@ -7,7 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Database;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -114,5 +117,43 @@ class ReceptionistJpaRepositoryTest {
     private static Receptionist receptionist(Long id, String cpf) {
         return new Receptionist(
                 id, "Receptionist Test", cpf, "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123);
+    }
+
+    @Test
+    void saveOfAnExistingReceptionistUpdatesItInPlace() {
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+        Receptionist saved = repository.save(Fixtures.receptionist("10000000021"));
+        Address moved = new Address(7, null, "88000999", "New St", "Center", "Blumenau");
+
+        repository.save(new Receptionist(
+                saved.getId(),
+                "Renamed",
+                saved.getCpf(),
+                "48911112222",
+                moved,
+                MaritalStatus.MARRIED,
+                30,
+                2000f,
+                1,
+                456));
+
+        Receptionist reloaded = repository.findById(saved.getId()).orElseThrow();
+        assertEquals("Renamed", reloaded.getName());
+        assertEquals("48911112222", reloaded.getPhone());
+        assertEquals(moved, reloaded.getAddress());
+        assertEquals(MaritalStatus.MARRIED, reloaded.getMaritalStatus());
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM people"));
+        assertEquals(1, Database.count("SELECT COUNT(*) FROM addresses"));
+    }
+
+    @Test
+    void deleteRemovesThePersonAndTheAddressRows() {
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+        Receptionist saved = repository.save(Fixtures.receptionist("10000000022"));
+
+        repository.delete(saved);
+
+        assertEquals(0, Database.count("SELECT COUNT(*) FROM people"));
+        assertEquals(0, Database.count("SELECT COUNT(*) FROM addresses"));
     }
 }

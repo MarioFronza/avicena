@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
@@ -10,16 +11,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "appointments")
-public class AppointmentEntity {
+public class AppointmentEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointments_seq")
+    @SequenceGenerator(name = "appointments_seq", sequenceName = "appointments_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
@@ -60,6 +63,23 @@ public class AppointmentEntity {
             NurseEntity nurse,
             UrgencyStatusEntity urgencyStatus) {
         this.id = id;
+        this.date = date;
+        this.time = time;
+        this.symptoms = symptoms;
+        this.patient = patient;
+        this.doctor = doctor;
+        this.nurse = nurse;
+        this.urgencyStatus = urgencyStatus;
+    }
+
+    public void update(
+            LocalDate date,
+            LocalTime time,
+            String symptoms,
+            PatientEntity patient,
+            DoctorEntity doctor,
+            NurseEntity nurse,
+            UrgencyStatusEntity urgencyStatus) {
         this.date = date;
         this.time = time;
         this.symptoms = symptoms;

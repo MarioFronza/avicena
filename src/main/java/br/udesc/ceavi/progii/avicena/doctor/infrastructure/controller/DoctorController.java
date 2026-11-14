@@ -11,13 +11,30 @@ import java.util.Optional;
 public class DoctorController {
 
     public record Form(
+            Long id,
             String name,
             String cpf,
             String phone,
             Address address,
             MaritalStatus maritalStatus,
             String crm,
-            String specialty) {}
+            String specialty) {
+
+        public Form(
+                String name,
+                String cpf,
+                String phone,
+                Address address,
+                MaritalStatus maritalStatus,
+                String crm,
+                String specialty) {
+            this(null, name, cpf, phone, address, maritalStatus, crm, specialty);
+        }
+
+        public Form withId(Long id) {
+            return new Form(id, name, cpf, phone, address, maritalStatus, crm, specialty);
+        }
+    }
 
     private final RegisterDoctor registerDoctor;
     private final DeleteDoctor deleteDoctor;
@@ -31,6 +48,7 @@ public class DoctorController {
 
     public Doctor register(Form form) {
         return registerDoctor.register(new Doctor(
+                form.id(),
                 form.name(),
                 form.cpf(),
                 form.phone(),

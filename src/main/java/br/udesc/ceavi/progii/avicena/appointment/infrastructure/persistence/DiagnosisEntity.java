@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,14 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "diagnoses")
-public class DiagnosisEntity {
+public class DiagnosisEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "diagnoses_seq")
+    @SequenceGenerator(name = "diagnoses_seq", sequenceName = "diagnoses_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
@@ -38,7 +42,7 @@ public class DiagnosisEntity {
     @JoinColumn(name = "appointment_id")
     private AppointmentEntity appointment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "final_diagnosis_id")
     private FinalDiagnosisEntity finalDiagnosis;
 
@@ -61,6 +65,21 @@ public class DiagnosisEntity {
         this.medicationHistory = medicationHistory;
         this.appointment = appointment;
         this.finalDiagnosis = finalDiagnosis;
+    }
+
+    public void update(
+            float bloodPressure,
+            int temperature,
+            int height,
+            int weight,
+            String medicationHistory,
+            AppointmentEntity appointment) {
+        this.bloodPressure = bloodPressure;
+        this.temperature = temperature;
+        this.height = height;
+        this.weight = weight;
+        this.medicationHistory = medicationHistory;
+        this.appointment = appointment;
     }
 
     public Long getId() {

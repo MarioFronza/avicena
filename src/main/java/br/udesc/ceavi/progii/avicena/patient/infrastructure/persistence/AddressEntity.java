@@ -1,18 +1,21 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
-public class AddressEntity {
+public class AddressEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "addresses_seq")
+    @SequenceGenerator(name = "addresses_seq", sequenceName = "addresses_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
@@ -39,6 +42,15 @@ public class AddressEntity {
     public AddressEntity(
             Long id, int number, String complement, String zipCode, String street, String neighborhood, String city) {
         this.id = id;
+        this.number = number;
+        this.complement = complement;
+        this.zipCode = zipCode;
+        this.street = street;
+        this.neighborhood = neighborhood;
+        this.city = city;
+    }
+
+    public void update(int number, String complement, String zipCode, String street, String neighborhood, String city) {
         this.number = number;
         this.complement = complement;
         this.zipCode = zipCode;

@@ -1,6 +1,7 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence;
 
 import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
+import br.udesc.ceavi.progii.avicena.control.dao.Lookups;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.DoctorRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
@@ -13,9 +14,17 @@ public class DoctorJpaRepository implements DoctorRepository {
     @Override
     public Doctor save(Doctor doctor) {
         return JpaTransactions.write(entityManager -> {
-            DoctorEntity entity = DoctorMapper.toEntity(
-                    doctor, findMaritalStatus(entityManager, doctor), findOrCreateSpecialty(entityManager, doctor));
-            entityManager.persist(entity);
+            MaritalStatusEntity maritalStatus =
+                    Lookups.byCode(entityManager, MaritalStatusEntity.class, doctor.getMaritalStatus());
+            SpecialtyEntity specialty = findOrCreateSpecialty(entityManager, doctor);
+            DoctorEntity entity =
+                    doctor.getId() == null ? null : entityManager.find(DoctorEntity.class, doctor.getId());
+            if (entity == null) {
+                entity = DoctorMapper.toEntity(doctor, maritalStatus, specialty);
+                entityManager.persist(entity);
+            } else {
+                DoctorMapper.update(entity, doctor, maritalStatus, specialty);
+            }
             return DoctorMapper.toDomain(entity);
         });
     }
@@ -55,16 +64,6 @@ public class DoctorJpaRepository implements DoctorRepository {
                     .ifPresent(entityManager::remove);
             return null;
         });
-    }
-
-    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Doctor doctor) {
-        if (doctor.getMaritalStatus() == null) {
-            return null;
-        }
-        return entityManager
-                .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
-                .setParameter("code", doctor.getMaritalStatus().name())
-                .getSingleResult();
     }
 
     private static SpecialtyEntity findOrCreateSpecialty(EntityManager entityManager, Doctor doctor) {
