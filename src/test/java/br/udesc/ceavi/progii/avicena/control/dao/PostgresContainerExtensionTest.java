@@ -24,7 +24,7 @@ class PostgresContainerExtensionTest {
     @Test
     @Order(1)
     void insertsAPatientThatShouldNotLeakIntoTheNextTest() {
-        Patient patient = new Patient("Leak Teste", CPF, "48900000000", null, MaritalStatus.SINGLE);
+        Patient patient = new Patient("Leak Test", CPF, "48900000000", null, MaritalStatus.SINGLE);
         Patient saved = new PatientJpaRepository().save(patient);
 
         assertNotNull(saved.getId());

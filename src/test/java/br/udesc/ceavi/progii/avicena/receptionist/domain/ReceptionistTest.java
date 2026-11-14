@@ -22,9 +22,9 @@ class ReceptionistTest {
         Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
 
         Receptionist receptionist = new Receptionist(
-                "Ana Teste", "12345678900", "48999990000", address, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+                "Ana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
 
-        assertEquals("Ana Teste", receptionist.getName());
+        assertEquals("Ana Test", receptionist.getName());
         assertEquals("12345678900", receptionist.getCpf());
         assertEquals("48999990000", receptionist.getPhone());
         assertEquals(address, receptionist.getAddress());

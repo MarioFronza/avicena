@@ -1,15 +1,16 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 
 public class ListAppointmentsMenuListener extends MenuActionListener {
 
     private final AppointmentListFrame appointmentListFrame;
 
-    public ListAppointmentsMenuListener(FrameSistema tela, AppointmentListFrame appointmentListFrame) {
-        super(tela);
+    public ListAppointmentsMenuListener(MainFrame mainFrame, AppointmentListFrame appointmentListFrame) {
+        super(mainFrame, Section.APPOINTMENT, "Appointment List", "table_gear.png", "Show registered appointments");
         this.appointmentListFrame = appointmentListFrame;
     }
 
@@ -18,7 +19,7 @@ public class ListAppointmentsMenuListener extends MenuActionListener {
         appointmentListFrame.reloadAppointments();
 
         if (!appointmentListFrame.isVisible()) {
-            tela.adicionarFrameInterno(appointmentListFrame);
+            mainFrame.addInternalFrame(appointmentListFrame);
             appointmentListFrame.setVisible(true);
         }
     }

@@ -21,9 +21,9 @@ class NurseTest {
         Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
 
         Nurse nurse =
-                new Nurse("Joana Teste", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "Tecnico", 1200);
+                new Nurse("Joana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "Tecnico", 1200);
 
-        assertEquals("Joana Teste", nurse.getName());
+        assertEquals("Joana Test", nurse.getName());
         assertEquals("12345678900", nurse.getCpf());
         assertEquals("48999990000", nurse.getPhone());
         assertEquals(address, nurse.getAddress());

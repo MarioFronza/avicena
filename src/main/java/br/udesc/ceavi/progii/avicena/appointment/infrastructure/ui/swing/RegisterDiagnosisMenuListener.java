@@ -1,15 +1,16 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
-import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.control.menu.MenuActionListener;
+import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
+import br.udesc.ceavi.progii.avicena.view.main.MainMenu.Section;
 import java.awt.event.ActionEvent;
 
 public class RegisterDiagnosisMenuListener extends MenuActionListener {
 
     private final DiagnosisRegistrationFrame diagnosisFrame;
 
-    public RegisterDiagnosisMenuListener(FrameSistema tela, DiagnosisRegistrationFrame diagnosisFrame) {
-        super(tela);
+    public RegisterDiagnosisMenuListener(MainFrame mainFrame, DiagnosisRegistrationFrame diagnosisFrame) {
+        super(mainFrame, Section.PATIENT, "Diagnosis", "report_edit.png", "Register primary and final diagnoses");
         this.diagnosisFrame = diagnosisFrame;
     }
 
@@ -18,7 +19,7 @@ public class RegisterDiagnosisMenuListener extends MenuActionListener {
         diagnosisFrame.reloadAppointments();
 
         if (!diagnosisFrame.isVisible()) {
-            tela.adicionarFrameInterno(diagnosisFrame);
+            mainFrame.addInternalFrame(diagnosisFrame);
             diagnosisFrame.setVisible(true);
         }
     }

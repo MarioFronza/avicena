@@ -17,13 +17,13 @@ class PatientHistoryFrameTest {
 
     @Test
     void buildsARowWithDateAndSymptoms() {
-        PatientEntity patient = newPatient("Paciente Teste", "11111111111", "48900000000");
+        PatientEntity patient = newPatient("Patient Test", "11111111111", "48900000000");
         AppointmentEntity appointment = new AppointmentEntity(
-                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Febre", patient, null, null, NOT_URGENT);
+                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Fever", patient, null, null, NOT_URGENT);
 
         String[] row = PatientHistoryFrame.toTableRow(appointment);
 
-        assertArrayEquals(new String[] {"02/08/2026", "Febre"}, row);
+        assertArrayEquals(new String[] {"02/08/2026", "Fever"}, row);
     }
 
     private static PatientEntity newPatient(String name, String cpf, String phone) {

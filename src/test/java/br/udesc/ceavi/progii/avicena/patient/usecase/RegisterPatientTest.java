@@ -13,7 +13,7 @@ class RegisterPatientTest {
     void savesThePatientThroughTheRepository() {
         InMemoryPatientRepository repository = new InMemoryPatientRepository();
         RegisterPatient useCase = new RegisterPatient(repository);
-        Patient patient = new Patient("Maria Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE);
+        Patient patient = new Patient("Maria Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE);
 
         Patient registered = useCase.register(patient);
 

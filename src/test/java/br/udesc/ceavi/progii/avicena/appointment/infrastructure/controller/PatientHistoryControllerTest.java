@@ -21,11 +21,11 @@ class PatientHistoryControllerTest {
         PatientEntity matching = newPatient("Match", "11111111111", "48900000000");
         PatientEntity other = newPatient("Other", "22222222222", "48900000001");
         AppointmentEntity matchingAppointment = new AppointmentEntity(
-                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Febre", matching, null, null, NOT_URGENT);
+                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Fever", matching, null, null, NOT_URGENT);
         AppointmentEntity otherAppointment = new AppointmentEntity(
-                null, LocalDate.of(2026, 8, 3), LocalTime.of(11, 0), "Tosse", other, null, null, NOT_URGENT);
+                null, LocalDate.of(2026, 8, 3), LocalTime.of(11, 0), "Cough", other, null, null, NOT_URGENT);
         AppointmentEntity noPatientAppointment = new AppointmentEntity(
-                null, LocalDate.of(2026, 8, 4), LocalTime.of(12, 0), "Dor", null, null, null, NOT_URGENT);
+                null, LocalDate.of(2026, 8, 4), LocalTime.of(12, 0), "Pain", null, null, null, NOT_URGENT);
 
         List<AppointmentEntity> filtered = PatientHistoryController.filterByPatientCpf(
                 List.of(matchingAppointment, otherAppointment, noPatientAppointment), "11111111111");

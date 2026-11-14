@@ -32,11 +32,11 @@ public class DiagnosisController {
                 parseNumber(form.temperature(), "Temperature", Integer::parseInt),
                 parseNumber(form.height(), "Height", Integer::parseInt),
                 parseNumber(form.weight(), "Weight", Integer::parseInt),
-                "Padrão",
+                "Default",
                 form.disease(),
                 form.medications(),
-                "Exame paddão",
-                "Padrão"));
+                "Default exam",
+                "Default"));
     }
 
     public void delete(Diagnosis diagnosis) {

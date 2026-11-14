@@ -12,8 +12,7 @@ class RegisterDiagnosisTest {
     void savesTheDiagnosisThroughTheRepository() {
         InMemoryDiagnosisRepository repository = new InMemoryDiagnosisRepository();
         RegisterDiagnosis useCase = new RegisterDiagnosis(repository);
-        Diagnosis diagnosis =
-                new Diagnosis(1L, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
+        Diagnosis diagnosis = new Diagnosis(1L, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
 
         Diagnosis registered = useCase.register(diagnosis);
 

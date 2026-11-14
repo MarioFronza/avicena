@@ -1,7 +1,7 @@
 # Avicena Requirements
 
 Original project requirements for Avicena, a clinic management system built for the
-Programação II course at UDESC. Translated and reorganized from the original
+Programming II course at UDESC. Translated and reorganized from the original
 `AvicenaRequisitos.txt` (Portuguese, ISO-8859-1) into English Markdown, grouped by
 entity and process rather than a flat numbered list. No requirement or business rule
 was added, dropped, or changed in meaning during this rewrite.

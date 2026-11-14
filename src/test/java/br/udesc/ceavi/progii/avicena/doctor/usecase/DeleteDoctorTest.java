@@ -12,7 +12,7 @@ class DeleteDoctorTest {
     void deletesTheDoctorThroughTheRepository() {
         InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
         Doctor doctor = new Doctor(
-                "Joao Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
+                "Joao Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
         repository.save(doctor);
         DeleteDoctor useCase = new DeleteDoctor(repository);
 

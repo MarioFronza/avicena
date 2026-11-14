@@ -2,7 +2,7 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.PatientHistoryController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameSemCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.ReadOnlyFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -17,7 +17,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class PatientHistoryFrame extends FrameSemCRUD {
+public class PatientHistoryFrame extends ReadOnlyFrame {
 
     private static final String TITLE = "Patient History";
     private static final Dimension DIMENSION = new Dimension(720, 480);
@@ -37,12 +37,6 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         initializeComponents();
         addComponents();
     }
-
-    @Override
-    public void limparCampos() {}
-
-    @Override
-    public void carregarCampos() {}
 
     private void showAppointments(List<AppointmentEntity> appointments) {
         tableModel.setRowCount(0);
@@ -90,7 +84,7 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         JPanel tablePanel = new JPanel(new GridLayout(1, 1));
         tablePanel.add(new JScrollPane(table));
 
-        super.addFormulario2("North", searchPanel);
-        super.addFormulario2("Center", tablePanel);
+        super.addFormAt("North", searchPanel);
+        super.addFormAt("Center", tablePanel);
     }
 }

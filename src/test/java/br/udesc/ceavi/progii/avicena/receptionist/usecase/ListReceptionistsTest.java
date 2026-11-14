@@ -13,7 +13,7 @@ class ListReceptionistsTest {
     void listsReceptionistsFromTheRepository() {
         InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
         Receptionist receptionist = new Receptionist(
-                "Ana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+                "Ana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
         repository.save(receptionist);
         ListReceptionists useCase = new ListReceptionists(repository);
 

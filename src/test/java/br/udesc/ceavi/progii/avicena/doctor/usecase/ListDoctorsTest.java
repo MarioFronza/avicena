@@ -13,7 +13,7 @@ class ListDoctorsTest {
     void listsDoctorsFromTheRepository() {
         InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
         Doctor doctor = new Doctor(
-                "Joao Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
+                "Joao Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
         repository.save(doctor);
         ListDoctors useCase = new ListDoctors(repository);
 

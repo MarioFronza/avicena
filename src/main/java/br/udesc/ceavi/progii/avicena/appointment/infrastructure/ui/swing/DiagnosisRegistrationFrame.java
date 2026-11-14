@@ -5,7 +5,7 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataExce
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.DiagnosisController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
+import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import jakarta.persistence.EntityManager;
 import java.awt.CardLayout;
 import java.awt.Dimension;
@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListener {
+public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListener {
 
     private static final String TITLE = "Diagnosis Registration";
     private static final Dimension DIMENSION = new Dimension(350, 300);
@@ -81,10 +81,10 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
     }
 
     private void addListeners() {
-        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
-        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
-        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
-        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+        getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
+        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
+        getCrudActionPanel().getSaveButton().addActionListener(e -> register());
     }
 
     private void cancel() {
@@ -96,7 +96,7 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             dispose();
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -109,7 +109,7 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
                 JOptionPane.QUESTION_MESSAGE);
         if (response == JOptionPane.YES_OPTION) {
             controller.delete(diagnosis);
-            limparCampos();
+            clearFields();
         }
     }
 
@@ -128,14 +128,11 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
 
-        limparCampos();
+        clearFields();
     }
 
     @Override
-    public void limparCampos() {}
-
-    @Override
-    public void carregarCampos() {}
+    public void clearFields() {}
 
     public void reloadAppointments() {
         appointments = findAllAppointments();
@@ -387,8 +384,8 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
         cardPanel.add(primaryPanel, "primary");
         cardPanel.add(finalPanel, "final");
 
-        super.addFormulario2("North", buttonsPanel);
-        super.addFormulario2("Center", cardPanel);
+        super.addFormAt("North", buttonsPanel);
+        super.addFormAt("Center", cardPanel);
     }
 
     @Override
