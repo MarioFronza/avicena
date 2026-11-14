@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
-public class AddressEntity {
+public class AddressEntity extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

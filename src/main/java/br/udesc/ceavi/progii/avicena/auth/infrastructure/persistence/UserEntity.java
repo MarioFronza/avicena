@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.auth.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

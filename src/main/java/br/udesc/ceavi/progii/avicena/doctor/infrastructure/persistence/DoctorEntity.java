@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence;
 
+import br.udesc.ceavi.progii.avicena.control.dao.AuditedEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.AddressEntity;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import jakarta.persistence.CascadeType;
@@ -15,7 +16,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "doctors")
-public class DoctorEntity {
+public class DoctorEntity extends AuditedEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
