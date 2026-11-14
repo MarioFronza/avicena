@@ -8,6 +8,7 @@ import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.function.Function;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
@@ -41,14 +42,23 @@ public class ReceptionistCrudController {
         String name = frame.getNameField().getText();
         String cpf = frame.getCpfField().getText();
         String phone = frame.getPhoneField().getText();
-        int workHours = Integer.parseInt(frame.getWorkHoursField().getText());
-        int overtimeHours = Integer.parseInt(frame.getOvertimeHoursField().getText());
-        float salary = Float.parseFloat(frame.getSalaryField().getText());
-        int laborCardNumber = Integer.parseInt(frame.getLaborCardNumberField().getText());
+        int workHours = parseNumber(frame.getWorkHoursField().getText(), "Work hours", Integer::parseInt);
+        int overtimeHours = parseNumber(frame.getOvertimeHoursField().getText(), "Overtime hours", Integer::parseInt);
+        float salary = parseNumber(frame.getSalaryField().getText(), "Salary", Float::parseFloat);
+        int laborCardNumber =
+                parseNumber(frame.getLaborCardNumberField().getText(), "Labor card number", Integer::parseInt);
         MaritalStatus maritalStatus =
                 (MaritalStatus) frame.getMaritalStatusComboBox().getSelectedItem();
         receptionist = registerReceptionist.register(new Receptionist(
                 name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber));
+    }
+
+    private static <T> T parseNumber(String text, String field, Function<String, T> parser) {
+        try {
+            return parser.apply(text);
+        } catch (NumberFormatException e) {
+            throw new InvalidReceptionistDataException(field + " must be a number");
+        }
     }
 
     public void setReceptionist(Receptionist receptionist) {
