@@ -19,7 +19,7 @@ application {
 
 dependencies {
     implementation("org.hibernate.orm:hibernate-core:7.4.15.Final")
-    implementation("org.flywaydb:flyway-core:13.11.1")
+    implementation("org.flywaydb:flyway-core:13.12.1")
     implementation("org.flywaydb:flyway-database-postgresql:13.11.1")
     implementation("org.postgresql:postgresql:42.7.14")
     implementation("com.itextpdf:itextpdf:5.5.13.6")
