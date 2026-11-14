@@ -10,7 +10,7 @@ public class RegisterAppointmentMenuListener extends MenuActionListener {
     private final AppointmentRegistrationFrame appointmentFrame;
 
     public RegisterAppointmentMenuListener(MainFrame mainFrame, AppointmentRegistrationFrame appointmentFrame) {
-        super(mainFrame, Section.APPOINTMENT, "Nova Consulta", "table_add.png", "Cadastra uma nova consulta");
+        super(mainFrame, Section.APPOINTMENT, "New Appointment", "table_add.png", "Register a new appointment");
         this.appointmentFrame = appointmentFrame;
     }
 

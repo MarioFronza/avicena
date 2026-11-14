@@ -15,10 +15,10 @@ import javax.swing.JMenuItem;
 public class MainMenu extends JMenuBar {
 
     public enum Section {
-        PATIENT("Paciente", "user_red.png", "Cadastro de Diagnóstico,..."),
-        REGISTRATION("Cadastro", "user_add.png", "Cadastros gerais"),
-        APPOINTMENT("Consulta", "pill_add.png", "Cadastro e lista de consultas"),
-        HELP("Ajuda", "help.png", "Ajuda do sistema");
+        PATIENT("Patient", "user_red.png", "Diagnosis and patient history"),
+        REGISTRATION("Registration", "user_add.png", "General registrations"),
+        APPOINTMENT("Appointments", "pill_add.png", "Register and list appointments"),
+        HELP("Help", "help.png", "System help");
 
         private final String label;
         private final String icon;

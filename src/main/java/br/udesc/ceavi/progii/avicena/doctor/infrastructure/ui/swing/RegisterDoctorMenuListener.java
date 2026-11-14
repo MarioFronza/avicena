@@ -13,9 +13,9 @@ public class RegisterDoctorMenuListener extends MenuActionListener {
         super(
                 mainFrame,
                 Section.REGISTRATION,
-                "Cadastro Médico",
+                "Doctor Registration",
                 "vcard_add.png",
-                "Cadastra o médico e sua especialidade");
+                "Register doctors and their specialty");
         this.doctorFrame = doctorFrame;
     }
 

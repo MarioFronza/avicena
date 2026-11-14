@@ -18,10 +18,10 @@ class MainMenuTest {
 
     @Test
     void addPutsTheItemInItsSection() {
-        menu.add(item(Section.REGISTRATION, "Cadastro Teste"));
+        menu.add(item(Section.REGISTRATION, "Registration Test"));
 
         assertEquals(
-                "Cadastro Teste",
+                "Registration Test",
                 menu.getMenu(Section.REGISTRATION.ordinal()).getItem(0).getText());
     }
 
@@ -38,7 +38,7 @@ class MainMenuTest {
     @Test
     void clickingTheItemRunsTheListener() {
         AtomicBoolean clicked = new AtomicBoolean();
-        menu.add(item(Section.APPOINTMENT, "Nova Consulta", () -> clicked.set(true)));
+        menu.add(item(Section.APPOINTMENT, "New Appointment", () -> clicked.set(true)));
 
         menu.getMenu(Section.APPOINTMENT.ordinal()).getItem(0).doClick();
 
@@ -47,18 +47,18 @@ class MainMenuTest {
 
     @Test
     void sectionsAppearInAFixedOrder() {
-        menu.add(item(Section.HELP, "Sobre"));
-        menu.add(item(Section.PATIENT, "Diagnóstico"));
+        menu.add(item(Section.HELP, "About"));
+        menu.add(item(Section.PATIENT, "Diagnosis"));
 
-        assertEquals("Paciente", menu.getMenu(0).getText());
-        assertEquals("Cadastro", menu.getMenu(1).getText());
-        assertEquals("Consulta", menu.getMenu(2).getText());
-        assertEquals("Ajuda", menu.getMenu(3).getText());
+        assertEquals("Patient", menu.getMenu(0).getText());
+        assertEquals("Registration", menu.getMenu(1).getText());
+        assertEquals("Appointments", menu.getMenu(2).getText());
+        assertEquals("Help", menu.getMenu(3).getText());
     }
 
     @Test
     void itemShowsItsTooltipAndIcon() {
-        menu.add(item(Section.REGISTRATION, "Cadastro Teste"));
+        menu.add(item(Section.REGISTRATION, "Registration Test"));
 
         JMenuItem menuItem = menu.getMenu(Section.REGISTRATION.ordinal()).getItem(0);
         assertEquals("Tooltip", menuItem.getToolTipText());

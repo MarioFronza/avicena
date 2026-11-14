@@ -17,8 +17,8 @@ class UserEntityTest {
         EntityManagerFactory entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            PersonEntity person = new PersonEntity(null, "Login Teste", "10101010101", "48900000000", null, null);
-            UserEntity user = new UserEntity(null, person, "login.teste", "hashed-password", true);
+            PersonEntity person = new PersonEntity(null, "Login Test", "10101010101", "48900000000", null, null);
+            UserEntity user = new UserEntity(null, person, "login.test", "hashed-password", true);
 
             entityManager.getTransaction().begin();
             entityManager.persist(person);
@@ -27,7 +27,7 @@ class UserEntityTest {
 
             UserEntity found = entityManager.find(UserEntity.class, user.getId());
             assertNotNull(found);
-            assertEquals("login.teste", found.getUsername());
+            assertEquals("login.test", found.getUsername());
             assertEquals("hashed-password", found.getPasswordHash());
             assertTrue(found.isActive());
         } finally {

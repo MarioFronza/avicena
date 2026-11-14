@@ -11,23 +11,22 @@ class DiagnosisTest {
     void rejectsNullAppointmentId() {
         assertThrows(
                 InvalidDiagnosisDataException.class,
-                () -> new Diagnosis(null, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão"));
+                () -> new Diagnosis(null, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default"));
     }
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Diagnosis diagnosis =
-                new Diagnosis(1L, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
+        Diagnosis diagnosis = new Diagnosis(1L, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
 
         assertEquals(1L, diagnosis.getAppointmentId());
         assertEquals(120f, diagnosis.getBloodPressure());
         assertEquals(37, diagnosis.getTemperature());
         assertEquals(170, diagnosis.getHeight());
         assertEquals(70, diagnosis.getWeight());
-        assertEquals("Padrão", diagnosis.getNotes());
-        assertEquals("Gripe", diagnosis.getDisease());
-        assertEquals("Repouso", diagnosis.getMedications());
-        assertEquals("Exame padrão", diagnosis.getExamNotes());
-        assertEquals("Padrão", diagnosis.getFinalDescription());
+        assertEquals("Default", diagnosis.getNotes());
+        assertEquals("Flu", diagnosis.getDisease());
+        assertEquals("Rest", diagnosis.getMedications());
+        assertEquals("Default exam", diagnosis.getExamNotes());
+        assertEquals("Default", diagnosis.getFinalDescription());
     }
 }

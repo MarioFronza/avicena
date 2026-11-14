@@ -13,9 +13,9 @@ public class RegisterPatientMenuListener extends MenuActionListener {
         super(
                 mainFrame,
                 Section.REGISTRATION,
-                "Cadastro Paciente",
+                "Patient Registration",
                 "vcard_add.png",
-                "Cadastra o paciente e busca por seu CPF");
+                "Register patients and search them by CPF");
         this.patientFrame = patientFrame;
     }
 

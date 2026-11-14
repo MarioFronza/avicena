@@ -22,23 +22,22 @@ class AppointmentJpaRepositoryTest {
     @Test
     void savePersistsAnAppointmentThatIsRetrievableAfterward() {
         Patient patient = new PatientJpaRepository()
-                .save(new Patient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE));
+                .save(new Patient("Patient Test", "11111111111", "480000000", null, MaritalStatus.SINGLE));
         Doctor doctor = new DoctorJpaRepository()
                 .save(new Doctor(
-                        "Doutor Teste",
+                        "Doctor Test",
                         "22222222222",
                         "480000001",
                         null,
                         MaritalStatus.SINGLE,
                         "CRM-1",
-                        "Clinica Geral"));
+                        "General Practice"));
         Nurse nurse = new NurseJpaRepository()
-                .save(new Nurse(
-                        "Enfermeira Teste", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Tecnico", 1200));
+                .save(new Nurse("Nurse Test", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Tecnico", 1200));
         Appointment appointment = new Appointment(
                 "05/08/2026",
                 "14:00",
-                "Febre",
+                "Fever",
                 patient.getId(),
                 doctor.getId(),
                 nurse.getId(),
@@ -52,7 +51,7 @@ class AppointmentJpaRepositoryTest {
                 .filter(a -> a.getId().equals(saved.getId()))
                 .findFirst();
         assertTrue(found.isPresent());
-        assertEquals("Febre", found.get().getSymptoms());
+        assertEquals("Fever", found.get().getSymptoms());
         assertEquals(patient.getId(), found.get().getPatientId());
         assertEquals(doctor.getId(), found.get().getDoctorId());
         assertEquals(nurse.getId(), found.get().getNurseId());
@@ -61,9 +60,9 @@ class AppointmentJpaRepositoryTest {
     @Test
     void deleteRemovesAPreviouslyPersistedAppointment() {
         Patient patient = new PatientJpaRepository()
-                .save(new Patient("Paciente Dois", "44444444444", "480000003", null, MaritalStatus.SINGLE));
+                .save(new Patient("Second Patient", "44444444444", "480000003", null, MaritalStatus.SINGLE));
         Appointment appointment =
-                new Appointment("05/08/2026", "15:00", "Tosse", patient.getId(), null, null, UrgencyStatus.NOT_URGENT);
+                new Appointment("05/08/2026", "15:00", "Cough", patient.getId(), null, null, UrgencyStatus.NOT_URGENT);
         AppointmentJpaRepository repository = new AppointmentJpaRepository();
         Appointment saved = repository.save(appointment);
 

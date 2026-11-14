@@ -21,9 +21,9 @@ class DoctorTest {
         Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
 
         Doctor doctor = new Doctor(
-                "Joao Teste", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "12345", "Cardiology");
+                "Joao Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "12345", "Cardiology");
 
-        assertEquals("Joao Teste", doctor.getName());
+        assertEquals("Joao Test", doctor.getName());
         assertEquals("12345678900", doctor.getCpf());
         assertEquals("48999990000", doctor.getPhone());
         assertEquals(address, doctor.getAddress());

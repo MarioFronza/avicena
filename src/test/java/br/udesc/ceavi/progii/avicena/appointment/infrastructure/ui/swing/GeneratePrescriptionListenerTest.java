@@ -21,7 +21,7 @@ class GeneratePrescriptionListenerTest {
 
     @Test
     void rejectsAnAppointmentWhoseDoctorHasNoAddress() {
-        DoctorEntity doctor = newDoctor("Dr Teste", "22222222222", "480000001", null, MaritalStatus.SINGLE);
+        DoctorEntity doctor = newDoctor("Dr Test", "22222222222", "480000001", null, MaritalStatus.SINGLE);
         AppointmentEntity appointment = appointment(doctor, patient());
 
         assertThrows(
@@ -38,7 +38,7 @@ class GeneratePrescriptionListenerTest {
 
     @Test
     void rejectsAnAppointmentWhosePatientHasNoAddress() {
-        PatientEntity patient = newPatient("Paciente Teste", "11111111111", "480000000", null, MaritalStatus.SINGLE);
+        PatientEntity patient = newPatient("Patient Test", "11111111111", "480000000", null, MaritalStatus.SINGLE);
         AppointmentEntity appointment = appointment(doctor(), patient);
 
         assertThrows(
@@ -59,7 +59,7 @@ class GeneratePrescriptionListenerTest {
                 null,
                 LocalDate.of(2026, 8, 5),
                 LocalTime.of(14, 0),
-                "Febre",
+                "Fever",
                 patient,
                 doctor,
                 null,
@@ -68,8 +68,8 @@ class GeneratePrescriptionListenerTest {
 
     private DoctorEntity doctor() {
         AddressEntity address =
-                new AddressEntity(null, 1, "Sala 1", "88000000", "Rua Medico", "Centro", "Florianopolis");
-        return newDoctor("Dr Teste", "22222222222", "480000001", address, MaritalStatus.SINGLE);
+                new AddressEntity(null, 1, "Room 1", "88000000", "Doctor Street", "Downtown", "Florianopolis");
+        return newDoctor("Dr Test", "22222222222", "480000001", address, MaritalStatus.SINGLE);
     }
 
     private static DoctorEntity newDoctor(
@@ -81,13 +81,13 @@ class GeneratePrescriptionListenerTest {
                 phone,
                 address,
                 new MaritalStatusEntity(1L, maritalStatus.name(), maritalStatus.name()));
-        return new DoctorEntity(null, person, "CRM-1", new SpecialtyEntity(1L, "Clinica Geral"));
+        return new DoctorEntity(null, person, "CRM-1", new SpecialtyEntity(1L, "General Practice"));
     }
 
     private PatientEntity patient() {
         AddressEntity address =
-                new AddressEntity(null, 2, "Casa", "88000001", "Rua Paciente", "Centro", "Florianopolis");
-        return newPatient("Paciente Teste", "11111111111", "480000000", address, MaritalStatus.SINGLE);
+                new AddressEntity(null, 2, "House", "88000001", "Patient Street", "Downtown", "Florianopolis");
+        return newPatient("Patient Test", "11111111111", "480000000", address, MaritalStatus.SINGLE);
     }
 
     private static PatientEntity newPatient(

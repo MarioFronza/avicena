@@ -10,7 +10,7 @@ public class ListAppointmentsMenuListener extends MenuActionListener {
     private final AppointmentListFrame appointmentListFrame;
 
     public ListAppointmentsMenuListener(MainFrame mainFrame, AppointmentListFrame appointmentListFrame) {
-        super(mainFrame, Section.APPOINTMENT, "Lista Consulta", "table_gear.png", "Mostra as consultas cadastradas");
+        super(mainFrame, Section.APPOINTMENT, "Appointment List", "table_gear.png", "Show registered appointments");
         this.appointmentListFrame = appointmentListFrame;
     }
 

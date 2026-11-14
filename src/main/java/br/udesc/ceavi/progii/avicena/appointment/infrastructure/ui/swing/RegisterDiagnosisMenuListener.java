@@ -10,12 +10,7 @@ public class RegisterDiagnosisMenuListener extends MenuActionListener {
     private final DiagnosisRegistrationFrame diagnosisFrame;
 
     public RegisterDiagnosisMenuListener(MainFrame mainFrame, DiagnosisRegistrationFrame diagnosisFrame) {
-        super(
-                mainFrame,
-                Section.PATIENT,
-                "Diagnóstico",
-                "report_edit.png",
-                "Cadastro dos diagnósticos primário e final");
+        super(mainFrame, Section.PATIENT, "Diagnosis", "report_edit.png", "Register primary and final diagnoses");
         this.diagnosisFrame = diagnosisFrame;
     }
 

@@ -14,7 +14,7 @@ class RegisterDoctorTest {
         InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
         RegisterDoctor useCase = new RegisterDoctor(repository);
         Doctor doctor = new Doctor(
-                "Joao Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
+                "Joao Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
 
         Doctor registered = useCase.register(doctor);
 

@@ -18,23 +18,23 @@ class PatientTest {
     void rejectsBlankCpf() {
         assertThrows(
                 InvalidPatientDataException.class,
-                () -> new Patient("Maria Teste", "", "48999990000", null, MaritalStatus.SINGLE));
+                () -> new Patient("Maria Test", "", "48999990000", null, MaritalStatus.SINGLE));
     }
 
     @Test
     void rejectsBlankPhone() {
         assertThrows(
                 InvalidPatientDataException.class,
-                () -> new Patient("Maria Teste", "12345678900", "", null, MaritalStatus.SINGLE));
+                () -> new Patient("Maria Test", "12345678900", "", null, MaritalStatus.SINGLE));
     }
 
     @Test
     void exposesFieldsAfterValidConstruction() {
         Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
 
-        Patient patient = new Patient("Maria Teste", "12345678900", "48999990000", address, MaritalStatus.SINGLE);
+        Patient patient = new Patient("Maria Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE);
 
-        assertEquals("Maria Teste", patient.getName());
+        assertEquals("Maria Test", patient.getName());
         assertEquals("12345678900", patient.getCpf());
         assertEquals("48999990000", patient.getPhone());
         assertEquals(address, patient.getAddress());

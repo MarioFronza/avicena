@@ -15,8 +15,8 @@ class UserRolesTest {
         EntityManagerFactory entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            PersonEntity person = new PersonEntity(null, "Papel Teste", "20202020202", "48900000001", null, null);
-            UserEntity user = new UserEntity(null, person, "papel.teste", "hashed-password", true);
+            PersonEntity person = new PersonEntity(null, "Role Test", "20202020202", "48900000001", null, null);
+            UserEntity user = new UserEntity(null, person, "role.test", "hashed-password", true);
 
             entityManager.getTransaction().begin();
             entityManager.persist(person);

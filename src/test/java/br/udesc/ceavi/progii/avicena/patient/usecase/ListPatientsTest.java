@@ -12,7 +12,7 @@ class ListPatientsTest {
     @Test
     void returnsAllPatientsFromTheRepository() {
         InMemoryPatientRepository repository = new InMemoryPatientRepository();
-        Patient patient = new Patient("Maria Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE);
+        Patient patient = new Patient("Maria Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE);
         repository.save(patient);
         ListPatients useCase = new ListPatients(repository);
 

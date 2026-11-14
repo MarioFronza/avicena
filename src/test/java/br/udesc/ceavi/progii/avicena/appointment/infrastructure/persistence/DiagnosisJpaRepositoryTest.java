@@ -20,20 +20,20 @@ class DiagnosisJpaRepositoryTest {
     void savePersistsADiagnosisThatCascadesTheLinkedFinalDiagnosis() {
         Appointment appointment = anAppointment();
         Diagnosis diagnosis = new Diagnosis(
-                appointment.getId(), 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
+                appointment.getId(), 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
 
         Diagnosis saved = repository.save(diagnosis);
 
         assertNotNull(saved.getId());
-        assertEquals("Gripe", findByCodigo(saved.getId()).getFinalDiagnosis().getDisease());
+        assertEquals("Flu", findByCodigo(saved.getId()).getFinalDiagnosis().getDisease());
     }
 
     @Test
     void deleteRemovesAPreviouslyPersistedDiagnosis() {
         Appointment appointment = anAppointment();
         Diagnosis diagnosis = new Diagnosis(
-                appointment.getId(), 110f, 36, 165, 60, "Padrão", "Tosse", "Xarope", "Exame padrão", "Padrão");
+                appointment.getId(), 110f, 36, 165, 60, "Default", "Cough", "Xarope", "Default exam", "Default");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Diagnosis saved = repository.save(diagnosis);
 
@@ -44,10 +44,10 @@ class DiagnosisJpaRepositoryTest {
 
     private Appointment anAppointment() {
         Patient patient = new PatientJpaRepository()
-                .save(new Patient("Paciente Diagnostico", "55555555555", "480000004", null, MaritalStatus.SINGLE));
+                .save(new Patient("Diagnosis Patient", "55555555555", "480000004", null, MaritalStatus.SINGLE));
         return new br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentJpaRepository()
                 .save(new Appointment(
-                        "05/08/2026", "16:00", "Febre", patient.getId(), null, null, UrgencyStatus.NOT_URGENT));
+                        "05/08/2026", "16:00", "Fever", patient.getId(), null, null, UrgencyStatus.NOT_URGENT));
     }
 
     private DiagnosisEntity findByCodigo(Long id) {

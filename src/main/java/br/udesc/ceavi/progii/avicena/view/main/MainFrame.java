@@ -30,7 +30,7 @@ public class MainFrame extends JFrame {
         super();
         super.setIconImage(Toolkit.getDefaultToolkit()
                 .getImage(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/logo.png")));
-        super.setTitle("Avicena - Software Gerenciador de Clínica Geral");
+        super.setTitle("Avicena - General Practice Clinic Management");
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {

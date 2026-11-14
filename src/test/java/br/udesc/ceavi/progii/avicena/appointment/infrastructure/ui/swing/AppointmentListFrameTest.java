@@ -18,7 +18,7 @@ class AppointmentListFrameTest {
     void buildsARowEvenWhenDoctorAndNurseAreMissing() {
         PersonEntity person = new PersonEntity(
                 null,
-                "Paciente Teste",
+                "Patient Test",
                 "11111111111",
                 "48900000000",
                 null,
@@ -28,7 +28,7 @@ class AppointmentListFrameTest {
                 null,
                 LocalDate.of(2026, 8, 2),
                 LocalTime.of(10, 0),
-                "Febre",
+                "Fever",
                 patient,
                 null,
                 null,
@@ -36,6 +36,6 @@ class AppointmentListFrameTest {
 
         String[] row = assertDoesNotThrow(() -> AppointmentListFrame.toTableRow(appointment));
 
-        assertArrayEquals(new String[] {"02/08/2026", "10:00", "Paciente Teste", "-", "-"}, row);
+        assertArrayEquals(new String[] {"02/08/2026", "10:00", "Patient Test", "-", "-"}, row);
     }
 }

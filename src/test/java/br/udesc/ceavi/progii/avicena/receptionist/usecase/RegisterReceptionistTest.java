@@ -14,7 +14,7 @@ class RegisterReceptionistTest {
         InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
         RegisterReceptionist useCase = new RegisterReceptionist(repository);
         Receptionist receptionist = new Receptionist(
-                "Ana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+                "Ana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
 
         Receptionist registered = useCase.register(receptionist);
 

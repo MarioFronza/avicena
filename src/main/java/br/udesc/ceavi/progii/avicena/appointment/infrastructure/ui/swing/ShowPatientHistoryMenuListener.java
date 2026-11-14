@@ -10,7 +10,7 @@ public class ShowPatientHistoryMenuListener extends MenuActionListener {
     private final PatientHistoryFrame patientHistoryFrame;
 
     public ShowPatientHistoryMenuListener(MainFrame mainFrame, PatientHistoryFrame patientHistoryFrame) {
-        super(mainFrame, Section.PATIENT, "Histórico", "status_away.png", "Histórico de consultas do paciente");
+        super(mainFrame, Section.PATIENT, "History", "status_away.png", "Patient appointment history");
         this.patientHistoryFrame = patientHistoryFrame;
     }
 

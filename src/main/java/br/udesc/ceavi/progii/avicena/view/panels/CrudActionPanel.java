@@ -43,16 +43,16 @@ public class CrudActionPanel extends JPanel {
 
         layout = new FlowLayout(FlowLayout.CENTER);
 
-        cancelButton = new JButton("Cancelar");
+        cancelButton = new JButton("Cancel");
         cancelButton.setSize(buttonSize);
 
-        newButton = new JButton("Novo");
+        newButton = new JButton("New");
         newButton.setSize(buttonSize);
 
-        saveButton = new JButton("Gravar");
+        saveButton = new JButton("Save");
         saveButton.setSize(buttonSize);
 
-        deleteButton = new JButton("Excluir");
+        deleteButton = new JButton("Delete");
         deleteButton.setSize(buttonSize);
     }
 

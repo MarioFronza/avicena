@@ -10,8 +10,7 @@ class DeleteDiagnosisTest {
     @Test
     void deletesTheDiagnosisThroughTheRepository() {
         InMemoryDiagnosisRepository repository = new InMemoryDiagnosisRepository();
-        Diagnosis diagnosis =
-                new Diagnosis(1L, 120f, 37, 170, 70, "Padrão", "Gripe", "Repouso", "Exame padrão", "Padrão");
+        Diagnosis diagnosis = new Diagnosis(1L, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
         repository.save(diagnosis);
         DeleteDiagnosis useCase = new DeleteDiagnosis(repository);
 

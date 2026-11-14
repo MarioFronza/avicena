@@ -13,7 +13,7 @@ class ListNursesTest {
     void listsNursesFromTheRepository() {
         InMemoryNurseRepository repository = new InMemoryNurseRepository();
         Nurse nurse =
-                new Nurse("Joana Teste", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
         repository.save(nurse);
         ListNurses useCase = new ListNurses(repository);
 

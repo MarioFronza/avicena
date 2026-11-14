@@ -13,9 +13,9 @@ public class RegisterReceptionistMenuListener extends MenuActionListener {
         super(
                 mainFrame,
                 Section.REGISTRATION,
-                "Cadastro Atendente",
+                "Receptionist Registration",
                 "vcard_add.png",
-                "Cadastra a atendente, secretaria,...");
+                "Register receptionists and front-desk staff");
         this.receptionistFrame = receptionistFrame;
     }
 

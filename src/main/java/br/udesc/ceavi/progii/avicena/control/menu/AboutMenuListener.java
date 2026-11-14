@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class AboutMenuListener extends MenuActionListener {
 
     public AboutMenuListener(MainFrame mainFrame) {
-        super(mainFrame, Section.HELP, "Sobre", "information.png", null);
+        super(mainFrame, Section.HELP, "About", "information.png", null);
     }
 
     @Override
@@ -22,8 +22,8 @@ public class AboutMenuListener extends MenuActionListener {
 
         JOptionPane.showMessageDialog(
                 mainFrame,
-                "Desenvolvido na disciplina de Programação II - PRO2\n"
-                        + "Universidade do Estado de Santa Catarina \n"
-                        + "Centro de Educação Superior do Alto Vale do Itajaí");
+                "Developed for the Programming II course (PRO2)\n"
+                        + "Santa Catarina State University (UDESC)\n"
+                        + "Alto Vale do Itajaí Higher Education Center (CEAVI)");
     }
 }

@@ -10,7 +10,7 @@ public class RegisterNurseMenuListener extends MenuActionListener {
     private final NurseRegistrationFrame nurseFrame;
 
     public RegisterNurseMenuListener(MainFrame mainFrame, NurseRegistrationFrame nurseFrame) {
-        super(mainFrame, Section.REGISTRATION, "Cadastro Enfermeiro", "vcard_add.png", "Cadastra o enfermeiro ");
+        super(mainFrame, Section.REGISTRATION, "Nurse Registration", "vcard_add.png", "Register nurses");
         this.nurseFrame = nurseFrame;
     }
 
