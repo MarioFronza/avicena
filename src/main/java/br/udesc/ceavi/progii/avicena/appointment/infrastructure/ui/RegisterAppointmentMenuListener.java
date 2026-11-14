@@ -6,21 +6,20 @@ import java.awt.event.ActionEvent;
 
 public class RegisterAppointmentMenuListener extends MenuActionListener {
 
-    public RegisterAppointmentMenuListener(FrameSistema tela) {
+    private final AppointmentRegistrationFrame appointmentFrame;
+
+    public RegisterAppointmentMenuListener(FrameSistema tela, AppointmentRegistrationFrame appointmentFrame) {
         super(tela);
+        this.appointmentFrame = appointmentFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        AppointmentRegistrationFrame registrationFrame = AppointmentRegistrationFrame.getInstance();
-        frame = registrationFrame;
+        appointmentFrame.reloadDoctorsAndNurses();
 
-        AppointmentCrudController.getInstance(registrationFrame);
-        registrationFrame.reloadDoctorsAndNurses();
-
-        if (!frame.isVisible()) {
-            tela.adicionarFrameInterno(frame);
-            frame.setVisible(true);
+        if (!appointmentFrame.isVisible()) {
+            tela.adicionarFrameInterno(appointmentFrame);
+            appointmentFrame.setVisible(true);
         }
     }
 }

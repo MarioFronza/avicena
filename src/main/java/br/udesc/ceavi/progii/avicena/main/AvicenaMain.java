@@ -5,6 +5,12 @@
  */
 package br.udesc.ceavi.progii.avicena.main;
 
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentJpaRepository;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentCrudController;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorCrudController;
@@ -135,6 +141,19 @@ public class AvicenaMain {
         frameSistema
                 .getMenuPrincipal()
                 .onRegisterReceptionist(new RegisterReceptionistMenuListener(frameSistema, receptionistFrame));
+
+        AppointmentJpaRepository appointmentRepository = new AppointmentJpaRepository();
+        AppointmentRegistrationFrame appointmentFrame =
+                new AppointmentRegistrationFrame(new ListDoctors(doctorRepository), new ListNurses(nurseRepository));
+        new AppointmentCrudController(
+                appointmentFrame,
+                new RegisterAppointment(appointmentRepository),
+                new DeleteAppointment(appointmentRepository),
+                new ListPatients(patientRepository));
+
+        frameSistema
+                .getMenuPrincipal()
+                .onRegisterAppointment(new RegisterAppointmentMenuListener(frameSistema, appointmentFrame));
 
         frameSistema.setVisible(true);
     }

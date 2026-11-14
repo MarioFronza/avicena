@@ -6,7 +6,6 @@
 package br.udesc.ceavi.progii.avicena.view.principal;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagnosisMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ShowPatientHistoryMenuListener;
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
@@ -166,6 +165,10 @@ public class MenuPrincipal extends JMenuBar {
         menuItemCadAtendente.addActionListener(listener);
     }
 
+    public void onRegisterAppointment(ActionListener listener) {
+        menuItemNovaConsulta.addActionListener(listener);
+    }
+
     private void adicionaListenersMenu() {
         // Istancia o Listener para o item de menu Cadastro de Endereço
         ActionListener listenerSobreListener = new MenuSobreListener(frame);
@@ -173,14 +176,12 @@ public class MenuPrincipal extends JMenuBar {
         ActionListener listenerHistorico = new ShowPatientHistoryMenuListener(frame);
 
         // Listeners para os itens do Menu Consula
-        ActionListener listenerConsultaNova = new RegisterAppointmentMenuListener(frame);
         ActionListener listenerConsultaListar = new ListAppointmentsMenuListener(frame);
 
         // Adiciona o Listener para o item
         menuItemCadHistorico.addActionListener(listenerHistorico);
         menuItemCadDiagnostico.addActionListener(listenerCadDiagnostico);
 
-        menuItemNovaConsulta.addActionListener(listenerConsultaNova);
         menuItemListaConsulta.addActionListener(listenerConsultaListar);
 
         menuItemSobre.addActionListener(listenerSobreListener);
