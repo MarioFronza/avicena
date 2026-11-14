@@ -1,11 +1,11 @@
-package br.udesc.ceavi.progii.avicena.nurse.usecase;
+package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.domain.NurseRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryNurseRepository implements NurseRepository {
+public class InMemoryNurseRepository implements NurseRepository {
 
     private final List<Nurse> nurses = new ArrayList<>();
 

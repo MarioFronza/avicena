@@ -33,7 +33,8 @@ class AppointmentJpaRepositoryTest {
                         "CRM-1",
                         "General Practice"));
         Nurse nurse = new NurseJpaRepository()
-                .save(new Nurse("Nurse Test", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Tecnico", 1200));
+                .save(new Nurse(
+                        "Nurse Test", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Technician", 1200));
         Appointment appointment = new Appointment(
                 "05/08/2026",
                 "14:00",

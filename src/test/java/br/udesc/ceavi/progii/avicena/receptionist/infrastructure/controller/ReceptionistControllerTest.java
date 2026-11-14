@@ -11,13 +11,14 @@ import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
+import br.udesc.ceavi.progii.avicena.support.InMemoryReceptionistRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ReceptionistControllerTest {
 
-    private static final Address ADDRESS =
-            new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+    private static final Address ADDRESS = Fixtures.address();
 
     private InMemoryReceptionistRepository repo;
     private ReceptionistController ctrl;

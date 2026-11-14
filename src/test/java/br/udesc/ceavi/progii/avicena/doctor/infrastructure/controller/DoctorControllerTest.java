@@ -11,13 +11,14 @@ import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
+import br.udesc.ceavi.progii.avicena.support.InMemoryDoctorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DoctorControllerTest {
 
-    private static final Address ADDRESS =
-            new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+    private static final Address ADDRESS = Fixtures.address();
 
     private InMemoryDoctorRepository repo;
     private DoctorController ctrl;

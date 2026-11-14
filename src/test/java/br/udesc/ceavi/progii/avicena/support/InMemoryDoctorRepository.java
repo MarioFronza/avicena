@@ -1,11 +1,11 @@
-package br.udesc.ceavi.progii.avicena.doctor.usecase;
+package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.DoctorRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryDoctorRepository implements DoctorRepository {
+public class InMemoryDoctorRepository implements DoctorRepository {
 
     private final List<Doctor> doctors = new ArrayList<>();
 

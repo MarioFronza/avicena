@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.InMemoryNurseRepository;
 import org.junit.jupiter.api.Test;
 
 class DeleteNurseTest {
@@ -12,7 +13,7 @@ class DeleteNurseTest {
     void deletesTheNurseThroughTheRepository() {
         InMemoryNurseRepository repository = new InMemoryNurseRepository();
         Nurse nurse =
-                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Technician", 1200);
         repository.save(nurse);
         DeleteNurse useCase = new DeleteNurse(repository);
 

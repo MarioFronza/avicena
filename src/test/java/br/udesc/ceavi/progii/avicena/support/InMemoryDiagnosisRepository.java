@@ -1,11 +1,11 @@
-package br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller;
+package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.DiagnosisRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryDiagnosisRepository implements DiagnosisRepository {
+public class InMemoryDiagnosisRepository implements DiagnosisRepository {
 
     private final List<Diagnosis> diagnoses = new ArrayList<>();
 
@@ -20,7 +20,7 @@ class InMemoryDiagnosisRepository implements DiagnosisRepository {
         diagnoses.remove(diagnosis);
     }
 
-    List<Diagnosis> findAll() {
+    public List<Diagnosis> findAll() {
         return diagnoses;
     }
 }

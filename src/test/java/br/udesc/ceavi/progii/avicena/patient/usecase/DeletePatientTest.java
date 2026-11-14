@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
+import br.udesc.ceavi.progii.avicena.support.InMemoryPatientRepository;
 import org.junit.jupiter.api.Test;
 
 class DeletePatientTest {

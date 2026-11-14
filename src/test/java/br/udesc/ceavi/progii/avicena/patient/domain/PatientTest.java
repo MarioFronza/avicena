@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.patient.domain;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import org.junit.jupiter.api.Test;
 
 class PatientTest {
@@ -30,7 +31,7 @@ class PatientTest {
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        Address address = Fixtures.address();
 
         Patient patient = new Patient("Maria Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE);
 

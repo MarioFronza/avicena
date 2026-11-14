@@ -1,11 +1,11 @@
-package br.udesc.ceavi.progii.avicena.patient.infrastructure.controller;
+package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.domain.PatientRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryPatientRepository implements PatientRepository {
+public class InMemoryPatientRepository implements PatientRepository {
 
     private final List<Patient> patients = new ArrayList<>();
 

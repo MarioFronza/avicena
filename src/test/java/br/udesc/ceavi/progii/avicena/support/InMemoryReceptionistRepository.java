@@ -1,11 +1,11 @@
-package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.controller;
+package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.ReceptionistRepository;
 import java.util.ArrayList;
 import java.util.List;
 
-class InMemoryReceptionistRepository implements ReceptionistRepository {
+public class InMemoryReceptionistRepository implements ReceptionistRepository {
 
     private final List<Receptionist> receptionists = new ArrayList<>();
 

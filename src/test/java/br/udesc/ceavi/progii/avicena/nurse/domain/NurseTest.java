@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import org.junit.jupiter.api.Test;
 
 class NurseTest {
@@ -13,22 +14,22 @@ class NurseTest {
     void rejectsBlankName() {
         assertThrows(
                 InvalidNurseDataException.class,
-                () -> new Nurse("", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200));
+                () -> new Nurse("", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Technician", 1200));
     }
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        Address address = Fixtures.address();
 
-        Nurse nurse =
-                new Nurse("Joana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "Tecnico", 1200);
+        Nurse nurse = new Nurse(
+                "Joana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, "Technician", 1200);
 
         assertEquals("Joana Test", nurse.getName());
         assertEquals("12345678900", nurse.getCpf());
         assertEquals("48999990000", nurse.getPhone());
         assertEquals(address, nurse.getAddress());
         assertEquals(MaritalStatus.SINGLE, nurse.getMaritalStatus());
-        assertEquals("Tecnico", nurse.getFormation());
+        assertEquals("Technician", nurse.getFormation());
         assertEquals(1200, nurse.getHoursCompleted());
     }
 }

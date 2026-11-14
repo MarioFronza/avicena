@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.appointment.usecase;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
+import br.udesc.ceavi.progii.avicena.support.InMemoryDiagnosisRepository;
 import org.junit.jupiter.api.Test;
 
 class DeleteDiagnosisTest {

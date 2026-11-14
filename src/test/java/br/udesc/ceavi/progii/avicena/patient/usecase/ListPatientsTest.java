@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
+import br.udesc.ceavi.progii.avicena.support.InMemoryPatientRepository;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
