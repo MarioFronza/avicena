@@ -1,9 +1,7 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameSemCRUD;
-import jakarta.persistence.EntityManager;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -29,8 +27,11 @@ public class PatientHistoryFrame extends FrameSemCRUD {
     private JTable table;
     private DefaultTableModel tableModel;
 
-    public PatientHistoryFrame() throws HeadlessException {
+    private final PatientHistoryController controller;
+
+    public PatientHistoryFrame(PatientHistoryController controller) throws HeadlessException {
         super(TITLE, DIMENSION);
+        this.controller = controller;
 
         initializeComponents();
         addComponents();
@@ -42,15 +43,7 @@ public class PatientHistoryFrame extends FrameSemCRUD {
     @Override
     public void carregarCampos() {}
 
-    public JTextField getCpfField() {
-        return cpfField;
-    }
-
-    public JButton getSearchButton() {
-        return searchButton;
-    }
-
-    public void showAppointments(List<AppointmentEntity> appointments) {
+    private void showAppointments(List<AppointmentEntity> appointments) {
         tableModel.setRowCount(0);
         for (AppointmentEntity appointment : appointments) {
             tableModel.addRow(toTableRow(appointment));
@@ -61,24 +54,6 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         return new String[] {appointment.getDate(), appointment.getSymptoms()};
     }
 
-    static List<AppointmentEntity> filterByPatientCpf(List<AppointmentEntity> appointments, String cpf) {
-        return appointments.stream()
-                .filter(appointment -> appointment.getPatient() != null
-                        && cpf.equals(appointment.getPatient().getCpf()))
-                .toList();
-    }
-
-    static List<AppointmentEntity> findAll() {
-        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
-        try {
-            return entityManager
-                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
-                    .getResultList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
     private void initializeComponents() {
         cpfLabel = new JLabel("Cpf: ");
         cpfField = new JTextField();
@@ -86,6 +61,8 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         table = new JTable();
         table.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Date", "Symptoms"}));
         tableModel = (DefaultTableModel) table.getModel();
+
+        searchButton.addActionListener(e -> showAppointments(controller.findByPatientCpf(cpfField.getText())));
     }
 
     private void addComponents() {

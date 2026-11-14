@@ -1,5 +1,7 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
+import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
+import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
@@ -18,6 +20,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -64,11 +67,67 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public DiagnosisRegistrationFrame() {
+    private final DiagnosisController controller;
+    private Diagnosis diagnosis;
+
+    public DiagnosisRegistrationFrame(DiagnosisController controller) {
         super(TITLE, DIMENSION);
+        this.controller = controller;
 
         initializeComponents();
         addComponents();
+        addListeners();
+    }
+
+    private void addListeners() {
+        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
+        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
+        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
+        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+    }
+
+    private void cancel() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you really want to close this window?",
+                "Confirm Close",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            dispose();
+            limparCampos();
+        }
+    }
+
+    private void delete() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to delete this Diagnosis?",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            controller.delete(diagnosis);
+            limparCampos();
+        }
+    }
+
+    private void register() {
+        try {
+            diagnosis = controller.register(new DiagnosisController.Form(
+                    getSelectedAppointmentId(),
+                    bloodPressureField.getText(),
+                    temperatureField.getText(),
+                    heightField.getText(),
+                    weightField.getText(),
+                    diseaseField.getText(),
+                    medicationsField.getText()));
+            JOptionPane.showMessageDialog(this, "Diagnosis saved");
+        } catch (InvalidDiagnosisDataException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+
+        limparCampos();
     }
 
     @Override
@@ -97,7 +156,7 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
         }
     }
 
-    public Long getSelectedAppointmentId() {
+    private Long getSelectedAppointmentId() {
         int index = appointmentComboBox.getSelectedIndex();
         return index < 0 || appointments == null
                 ? null
@@ -345,34 +404,6 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
 
     public JButton getGenerateReceiptButton() {
         return generateReceiptButton;
-    }
-
-    public JTextField getBloodPressureField() {
-        return bloodPressureField;
-    }
-
-    public JTextField getTemperatureField() {
-        return temperatureField;
-    }
-
-    public JTextField getHeightField() {
-        return heightField;
-    }
-
-    public JTextField getWeightField() {
-        return weightField;
-    }
-
-    public JTextField getDiseaseField() {
-        return diseaseField;
-    }
-
-    public JTextField getMedicationsField() {
-        return medicationsField;
-    }
-
-    public JTextField getExamNotesField() {
-        return examNotesField;
     }
 
     public JComboBox<String> getAppointmentComboBox() {

@@ -39,7 +39,7 @@ class PatientHistoryFrameTest {
         AppointmentEntity noPatientAppointment = new AppointmentEntity(
                 null, LocalDate.of(2026, 8, 4), LocalTime.of(12, 0), "Dor", null, null, null, NOT_URGENT);
 
-        List<AppointmentEntity> filtered = PatientHistoryFrame.filterByPatientCpf(
+        List<AppointmentEntity> filtered = PatientHistoryController.filterByPatientCpf(
                 List.of(matchingAppointment, otherAppointment, noPatientAppointment), "11111111111");
 
         assertEquals(1, filtered.size());

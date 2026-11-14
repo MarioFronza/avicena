@@ -1,10 +1,10 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
+import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
+import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidAppointmentDataException;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
-import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
-import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -17,6 +17,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
@@ -42,8 +43,8 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     private JComboBox<String> nurseComboBox;
     private JComboBox<UrgencyStatus> urgencyComboBox;
 
-    private final ListDoctors listDoctors;
-    private final ListNurses listNurses;
+    private final AppointmentController controller;
+    private Appointment appointment;
     private List<Doctor> doctors;
     private List<Nurse> nurses;
 
@@ -51,13 +52,64 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public AppointmentRegistrationFrame(ListDoctors listDoctors, ListNurses listNurses) {
+    public AppointmentRegistrationFrame(AppointmentController controller) {
         super(TITLE, DIMENSION);
-        this.listDoctors = listDoctors;
-        this.listNurses = listNurses;
+        this.controller = controller;
 
         initializeComponents();
         addComponents();
+        addListeners();
+    }
+
+    private void addListeners() {
+        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
+        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
+        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
+        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+    }
+
+    private void cancel() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you really want to close this window?",
+                "Confirm Close",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            dispose();
+            limparCampos();
+        }
+    }
+
+    private void delete() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to delete this Appointment?",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            controller.delete(appointment);
+            limparCampos();
+        }
+    }
+
+    private void register() {
+        try {
+            appointment = controller.register(new AppointmentController.Form(
+                    dateField.getText(),
+                    timeField.getText(),
+                    symptomsField.getText(),
+                    patientCpfField.getText(),
+                    getSelectedDoctorId(),
+                    getSelectedNurseId(),
+                    (UrgencyStatus) urgencyComboBox.getSelectedItem()));
+            JOptionPane.showMessageDialog(this, "Appointment saved");
+        } catch (InvalidAppointmentDataException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+
+        limparCampos();
     }
 
     @Override
@@ -72,25 +124,25 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     public void carregarCampos() {}
 
     public void reloadDoctorsAndNurses() {
-        doctors = listDoctors.list();
+        doctors = controller.doctors();
         doctorComboBox.removeAllItems();
         for (Doctor doctor : doctors) {
             doctorComboBox.addItem(doctor.getName() + " - " + doctor.getSpecialty());
         }
 
-        nurses = listNurses.list();
+        nurses = controller.nurses();
         nurseComboBox.removeAllItems();
         for (Nurse nurse : nurses) {
             nurseComboBox.addItem(nurse.getName() + " - " + nurse.getFormation());
         }
     }
 
-    public Long getSelectedDoctorId() {
+    private Long getSelectedDoctorId() {
         int index = doctorComboBox.getSelectedIndex();
         return index < 0 || doctors == null ? null : doctors.get(index).getId();
     }
 
-    public Long getSelectedNurseId() {
+    private Long getSelectedNurseId() {
         int index = nurseComboBox.getSelectedIndex();
         return index < 0 || nurses == null ? null : nurses.get(index).getId();
     }
@@ -225,33 +277,5 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
         formPanel.add(urgencyComboBox, constraints);
 
         super.addFormulario(formPanel);
-    }
-
-    public JTextField getDateField() {
-        return dateField;
-    }
-
-    public JTextField getTimeField() {
-        return timeField;
-    }
-
-    public JTextField getSymptomsField() {
-        return symptomsField;
-    }
-
-    public JTextField getPatientCpfField() {
-        return patientCpfField;
-    }
-
-    public JComboBox<String> getDoctorComboBox() {
-        return doctorComboBox;
-    }
-
-    public JComboBox<String> getNurseComboBox() {
-        return nurseComboBox;
-    }
-
-    public JComboBox<UrgencyStatus> getUrgencyComboBox() {
-        return urgencyComboBox;
     }
 }
