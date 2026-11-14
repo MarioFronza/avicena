@@ -2,10 +2,8 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisJpaRepository;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
@@ -13,31 +11,46 @@ import javax.swing.JOptionPane;
 
 public class DiagnosisCrudController {
 
-    private static DiagnosisCrudController instance;
-
     private Diagnosis diagnosis;
-    private final FrameCRUD frame;
+    private final DiagnosisRegistrationFrame frame;
     private final RegisterDiagnosis registerDiagnosis;
     private final DeleteDiagnosis deleteDiagnosis;
 
-    public DiagnosisCrudController(FrameCRUD frame) {
+    public DiagnosisCrudController(
+            DiagnosisRegistrationFrame frame, RegisterDiagnosis registerDiagnosis, DeleteDiagnosis deleteDiagnosis) {
         this.frame = frame;
-        DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
-        this.registerDiagnosis = new RegisterDiagnosis(repository);
-        this.deleteDiagnosis = new DeleteDiagnosis(repository);
-
+        this.registerDiagnosis = registerDiagnosis;
+        this.deleteDiagnosis = deleteDiagnosis;
         addCrudListeners();
     }
 
-    public static DiagnosisCrudController getInstance(FrameCRUD frame) {
-        if (instance == null) {
-            instance = new DiagnosisCrudController(frame);
-        }
-        return instance;
+    public void delete() {
+        deleteDiagnosis.delete(diagnosis);
     }
 
-    public static DiagnosisCrudController getInstance() {
-        return instance;
+    public void register() {
+        Long appointmentId = frame.getSelectedAppointmentId();
+        float bloodPressure = Float.parseFloat(frame.getBloodPressureField().getText());
+        int temperature = Integer.parseInt(frame.getTemperatureField().getText());
+        int height = Integer.parseInt(frame.getHeightField().getText());
+        int weight = Integer.parseInt(frame.getWeightField().getText());
+        String disease = frame.getDiseaseField().getText();
+        String medications = frame.getMedicationsField().getText();
+        diagnosis = registerDiagnosis.register(new Diagnosis(
+                appointmentId,
+                bloodPressure,
+                temperature,
+                height,
+                weight,
+                "Padrão",
+                disease,
+                medications,
+                "Exame paddão",
+                "Padrão"));
+    }
+
+    public void setDiagnosis(Diagnosis diagnosis) {
+        this.diagnosis = diagnosis;
     }
 
     private void addCrudListeners() {
@@ -81,7 +94,7 @@ public class DiagnosisCrudController {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
             if (response == JOptionPane.YES_OPTION) {
-                deleteDiagnosis.delete(diagnosis);
+                delete();
                 frame.limparCampos();
             }
         }
@@ -91,29 +104,8 @@ public class DiagnosisCrudController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            DiagnosisRegistrationFrame registrationFrame = DiagnosisRegistrationFrame.getInstance();
-            Long appointmentId = registrationFrame.getSelectedAppointmentId();
-            float bloodPressure =
-                    Float.parseFloat(registrationFrame.getBloodPressureField().getText());
-            int temperature =
-                    Integer.parseInt(registrationFrame.getTemperatureField().getText());
-            int height = Integer.parseInt(registrationFrame.getHeightField().getText());
-            int weight = Integer.parseInt(registrationFrame.getWeightField().getText());
-            String disease = registrationFrame.getDiseaseField().getText();
-            String medications = registrationFrame.getMedicationsField().getText();
-
             try {
-                diagnosis = registerDiagnosis.register(new Diagnosis(
-                        appointmentId,
-                        bloodPressure,
-                        temperature,
-                        height,
-                        weight,
-                        "Padrão",
-                        disease,
-                        medications,
-                        "Exame paddão",
-                        "Padrão"));
+                register();
                 JOptionPane.showMessageDialog(frame, "Diagnosis saved");
             } catch (InvalidDiagnosisDataException ex) {
                 JOptionPane.showMessageDialog(frame, ex.getMessage());

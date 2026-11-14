@@ -6,11 +6,18 @@
 package br.udesc.ceavi.progii.avicena.main;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentJpaRepository;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisJpaRepository;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentCrudController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.BtGerarReceiraListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisCrudController;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagnosisMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.DoctorCrudController;
@@ -154,6 +161,16 @@ public class AvicenaMain {
         frameSistema
                 .getMenuPrincipal()
                 .onRegisterAppointment(new RegisterAppointmentMenuListener(frameSistema, appointmentFrame));
+
+        DiagnosisJpaRepository diagnosisRepository = new DiagnosisJpaRepository();
+        DiagnosisRegistrationFrame diagnosisFrame = new DiagnosisRegistrationFrame();
+        new DiagnosisCrudController(
+                diagnosisFrame, new RegisterDiagnosis(diagnosisRepository), new DeleteDiagnosis(diagnosisRepository));
+        diagnosisFrame.getGenerateReceiptButton().addActionListener(new BtGerarReceiraListener(diagnosisFrame));
+
+        frameSistema
+                .getMenuPrincipal()
+                .onRegisterDiagnosis(new RegisterDiagnosisMenuListener(frameSistema, diagnosisFrame));
 
         frameSistema.setVisible(true);
     }
