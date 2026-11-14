@@ -1,17 +1,10 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
-import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
-import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseEntity;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.ReadOnlyFrame;
-import jakarta.persistence.EntityManager;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
-import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -28,8 +21,11 @@ public class AppointmentListFrame extends ReadOnlyFrame {
 
     DefaultTableModel tableModel;
 
-    public AppointmentListFrame() throws HeadlessException {
+    private final AppointmentController controller;
+
+    public AppointmentListFrame(AppointmentController controller) throws HeadlessException {
         super(TITLE, DIMENSION);
+        this.controller = controller;
 
         initializeComponents();
         addComponents();
@@ -47,42 +43,23 @@ public class AppointmentListFrame extends ReadOnlyFrame {
 
     public void reloadAppointments() {
         tableModel.setRowCount(0);
-        for (AppointmentEntity appointment : findAll()) {
-            tableModel.addRow(toTableRow(appointment));
+        for (AppointmentController.Row row : controller.list()) {
+            tableModel.addRow(toTableRow(row));
         }
     }
 
-    private List<AppointmentEntity> findAll() {
-        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
-        try {
-            return entityManager
-                    .createQuery("SELECT a FROM AppointmentEntity a", AppointmentEntity.class)
-                    .getResultList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    static String[] toTableRow(AppointmentEntity appointment) {
+    static String[] toTableRow(AppointmentController.Row row) {
         return new String[] {
-            appointment.getDate() == null ? "-" : appointment.getDate().format(AppointmentController.DATE_FORMAT),
-            appointment.getTime() == null ? "-" : appointment.getTime().format(AppointmentController.TIME_FORMAT),
-            nameOrPlaceholder(appointment.getPatient()),
-            nameOrPlaceholder(appointment.getDoctor()),
-            nameOrPlaceholder(appointment.getNurse())
+            row.date().format(AppointmentController.DATE_FORMAT),
+            row.time().format(AppointmentController.TIME_FORMAT),
+            orPlaceholder(row.patientName()),
+            orPlaceholder(row.doctorName()),
+            orPlaceholder(row.nurseName())
         };
     }
 
-    private static String nameOrPlaceholder(PatientEntity patient) {
-        return patient == null ? "-" : patient.getName();
-    }
-
-    private static String nameOrPlaceholder(DoctorEntity doctor) {
-        return doctor == null ? "-" : doctor.getName();
-    }
-
-    private static String nameOrPlaceholder(NurseEntity nurse) {
-        return nurse == null ? "-" : nurse.getName();
+    private static String orPlaceholder(String name) {
+        return name == null ? "-" : name;
     }
 
     private void addComponents() {
