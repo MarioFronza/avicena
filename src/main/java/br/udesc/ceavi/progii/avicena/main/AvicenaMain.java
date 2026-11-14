@@ -24,6 +24,7 @@ import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
+import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.controller.DoctorController;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.swing.DoctorRegistrationFrame;
@@ -79,18 +80,6 @@ public class AvicenaMain {
 
         FrameSistema frameSistema = new FrameSistema();
 
-        DoctorJpaRepository doctorRepository = new DoctorJpaRepository();
-        DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame(new DoctorController(
-                new RegisterDoctor(doctorRepository),
-                new DeleteDoctor(doctorRepository),
-                new ListDoctors(doctorRepository)));
-
-        AddressEntryFrame doctorAddressFrame = new AddressEntryFrame(doctorFrame::useAddress);
-
-        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
-
-        frameSistema.getMenuPrincipal().onRegisterDoctor(new RegisterDoctorMenuListener(frameSistema, doctorFrame));
-
         PatientJpaRepository patientRepository = new PatientJpaRepository();
         PatientRegistrationFrame patientFrame = new PatientRegistrationFrame(new PatientController(
                 new RegisterPatient(patientRepository),
@@ -101,17 +90,7 @@ public class AvicenaMain {
 
         patientFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, patientAddressFrame));
 
-        frameSistema.getMenuPrincipal().onRegisterPatient(new RegisterPatientMenuListener(frameSistema, patientFrame));
-
-        NurseJpaRepository nurseRepository = new NurseJpaRepository();
-        NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame(new NurseController(
-                new RegisterNurse(nurseRepository), new DeleteNurse(nurseRepository), new ListNurses(nurseRepository)));
-
-        AddressEntryFrame nurseAddressFrame = new AddressEntryFrame(nurseFrame::useAddress);
-
-        nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
-
-        frameSistema.getMenuPrincipal().onRegisterNurse(new RegisterNurseMenuListener(frameSistema, nurseFrame));
+        frameSistema.getMenuPrincipal().add(new RegisterPatientMenuListener(frameSistema, patientFrame));
 
         ReceptionistJpaRepository receptionistRepository = new ReceptionistJpaRepository();
         ReceptionistRegistrationFrame receptionistFrame = new ReceptionistRegistrationFrame(new ReceptionistController(
@@ -125,9 +104,29 @@ public class AvicenaMain {
                 .getAddressButton()
                 .addActionListener(new AddAddressListener(frameSistema, receptionistAddressFrame));
 
-        frameSistema
-                .getMenuPrincipal()
-                .onRegisterReceptionist(new RegisterReceptionistMenuListener(frameSistema, receptionistFrame));
+        frameSistema.getMenuPrincipal().add(new RegisterReceptionistMenuListener(frameSistema, receptionistFrame));
+
+        DoctorJpaRepository doctorRepository = new DoctorJpaRepository();
+        DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame(new DoctorController(
+                new RegisterDoctor(doctorRepository),
+                new DeleteDoctor(doctorRepository),
+                new ListDoctors(doctorRepository)));
+
+        AddressEntryFrame doctorAddressFrame = new AddressEntryFrame(doctorFrame::useAddress);
+
+        doctorFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, doctorAddressFrame));
+
+        frameSistema.getMenuPrincipal().add(new RegisterDoctorMenuListener(frameSistema, doctorFrame));
+
+        NurseJpaRepository nurseRepository = new NurseJpaRepository();
+        NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame(new NurseController(
+                new RegisterNurse(nurseRepository), new DeleteNurse(nurseRepository), new ListNurses(nurseRepository)));
+
+        AddressEntryFrame nurseAddressFrame = new AddressEntryFrame(nurseFrame::useAddress);
+
+        nurseFrame.getAddressButton().addActionListener(new AddAddressListener(frameSistema, nurseAddressFrame));
+
+        frameSistema.getMenuPrincipal().add(new RegisterNurseMenuListener(frameSistema, nurseFrame));
 
         AppointmentJpaRepository appointmentRepository = new AppointmentJpaRepository();
         AppointmentRegistrationFrame appointmentFrame = new AppointmentRegistrationFrame(new AppointmentController(
@@ -137,28 +136,22 @@ public class AvicenaMain {
                 new ListDoctors(doctorRepository),
                 new ListNurses(nurseRepository)));
 
-        frameSistema
-                .getMenuPrincipal()
-                .onRegisterAppointment(new RegisterAppointmentMenuListener(frameSistema, appointmentFrame));
+        frameSistema.getMenuPrincipal().add(new RegisterAppointmentMenuListener(frameSistema, appointmentFrame));
 
         DiagnosisJpaRepository diagnosisRepository = new DiagnosisJpaRepository();
         DiagnosisRegistrationFrame diagnosisFrame = new DiagnosisRegistrationFrame(new DiagnosisController(
                 new RegisterDiagnosis(diagnosisRepository), new DeleteDiagnosis(diagnosisRepository)));
         diagnosisFrame.getGenerateReceiptButton().addActionListener(new BtGerarReceiraListener(diagnosisFrame));
 
-        frameSistema
-                .getMenuPrincipal()
-                .onRegisterDiagnosis(new RegisterDiagnosisMenuListener(frameSistema, diagnosisFrame));
+        frameSistema.getMenuPrincipal().add(new RegisterDiagnosisMenuListener(frameSistema, diagnosisFrame));
 
         AppointmentListFrame appointmentListFrame = new AppointmentListFrame();
-        frameSistema
-                .getMenuPrincipal()
-                .onListAppointments(new ListAppointmentsMenuListener(frameSistema, appointmentListFrame));
+        frameSistema.getMenuPrincipal().add(new ListAppointmentsMenuListener(frameSistema, appointmentListFrame));
 
         PatientHistoryFrame patientHistoryFrame = new PatientHistoryFrame(new PatientHistoryController());
-        frameSistema
-                .getMenuPrincipal()
-                .onShowPatientHistory(new ShowPatientHistoryMenuListener(frameSistema, patientHistoryFrame));
+        frameSistema.getMenuPrincipal().add(new ShowPatientHistoryMenuListener(frameSistema, patientHistoryFrame));
+
+        frameSistema.getMenuPrincipal().add(new MenuSobreListener(frameSistema));
 
         frameSistema.setVisible(true);
     }

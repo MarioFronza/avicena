@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
 import java.awt.event.ActionEvent;
 
 public class ListAppointmentsMenuListener extends MenuActionListener {
@@ -9,7 +10,7 @@ public class ListAppointmentsMenuListener extends MenuActionListener {
     private final AppointmentListFrame appointmentListFrame;
 
     public ListAppointmentsMenuListener(FrameSistema tela, AppointmentListFrame appointmentListFrame) {
-        super(tela);
+        super(tela, Section.APPOINTMENT, "Lista Consulta", "table_gear.png", "Mostra as consultas cadastradas");
         this.appointmentListFrame = appointmentListFrame;
     }
 

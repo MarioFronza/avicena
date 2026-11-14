@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
 import java.awt.event.ActionEvent;
 
 public class RegisterReceptionistMenuListener extends MenuActionListener {
@@ -9,7 +10,12 @@ public class RegisterReceptionistMenuListener extends MenuActionListener {
     private final ReceptionistRegistrationFrame receptionistFrame;
 
     public RegisterReceptionistMenuListener(FrameSistema tela, ReceptionistRegistrationFrame receptionistFrame) {
-        super(tela);
+        super(
+                tela,
+                Section.REGISTRATION,
+                "Cadastro Atendente",
+                "vcard_add.png",
+                "Cadastra a atendente, secretaria,...");
         this.receptionistFrame = receptionistFrame;
     }
 

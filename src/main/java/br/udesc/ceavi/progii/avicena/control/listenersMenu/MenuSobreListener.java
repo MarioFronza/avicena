@@ -6,6 +6,7 @@
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
+import br.udesc.ceavi.progii.avicena.view.principal.MenuPrincipal.Section;
 import java.awt.event.ActionEvent;
 import javax.swing.JOptionPane;
 
@@ -18,7 +19,7 @@ import javax.swing.JOptionPane;
 public class MenuSobreListener extends MenuActionListener {
 
     public MenuSobreListener(FrameSistema tela) {
-        super(tela);
+        super(tela, Section.HELP, "Sobre", "information.png", null);
     }
 
     @Override

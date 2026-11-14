@@ -89,7 +89,7 @@ public class FrameSistema extends JFrame {
     }
 
     private void adicionarMenu() {
-        menuPrincipal = new MenuPrincipal(this);
+        menuPrincipal = new MenuPrincipal();
         super.setJMenuBar(menuPrincipal);
     }
 

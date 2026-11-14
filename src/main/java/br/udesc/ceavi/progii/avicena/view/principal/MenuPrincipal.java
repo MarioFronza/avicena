@@ -1,172 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.udesc.ceavi.progii.avicena.view.principal;
 
-import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuSobreListener;
+import br.udesc.ceavi.progii.avicena.control.listenersMenu.MenuActionListener;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
+import java.util.EnumMap;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
 /**
- * Esta classe define o menu principal da aplicação
- * @author Adroan, Mário, Vini, Raphael
- * @since 13/04/2018
- * @version 1.0
+ * Main menu bar. Knows only its top-level sections; each vertical adds its own items.
  */
 public class MenuPrincipal extends JMenuBar {
 
-    private JMenu menuPaciente;
-    private JMenuItem menuItemCadDiagnostico;
-    private JMenuItem menuItemCadHistorico;
+    public enum Section {
+        PATIENT("Paciente", "user_red.png", "Cadastro de Diagnóstico,..."),
+        REGISTRATION("Cadastro", "user_add.png", "Cadastros gerais"),
+        APPOINTMENT("Consulta", "pill_add.png", "Cadastro e lista de consultas"),
+        HELP("Ajuda", "help.png", "Ajuda do sistema");
 
-    private JMenu menuCadastro;
-    private JMenuItem menuItemCadPaciente;
-    private JMenuItem menuItemCadAtendente;
-    private JMenuItem menuItemCadMedico;
-    private JMenuItem menuItemCadEnfermeiro;
+        private final String label;
+        private final String icon;
+        private final String tooltip;
 
-    private JMenu menuConsulta;
-    private JMenuItem menuItemNovaConsulta;
-    private JMenuItem menuItemListaConsulta;
-
-    private JMenu menuAjuda;
-    private JMenuItem menuItemSobre;
-
-    private final FrameSistema frame;
-
-    public MenuPrincipal(FrameSistema frame) {
-        super();
-
-        this.frame = frame;
-
-        initalizeComponets();
-        ConstruirMenu();
-
-        adicionaListenersMenu();
+        Section(String label, String icon, String tooltip) {
+            this.label = label;
+            this.icon = icon;
+            this.tooltip = tooltip;
+        }
     }
 
-    private void initalizeComponets() {
+    private final Map<Section, JMenu> menus = new EnumMap<>(Section.class);
 
-        this.setPreferredSize(new Dimension(30, 30));
-
-        menuPaciente = new JMenu("Paciente");
-        menuItemCadDiagnostico = new JMenuItem("Diagnóstico");
-        menuItemCadHistorico = new JMenuItem("Histórico");
-
-        menuCadastro = new JMenu("Cadastro");
-        menuItemCadPaciente = new JMenuItem("Cadastro Paciente");
-        menuItemCadAtendente = new JMenuItem("Cadastro Atendente");
-        menuItemCadMedico = new JMenuItem("Cadastro Médico");
-        menuItemCadEnfermeiro = new JMenuItem("Cadastro Enfermeiro");
-
-        menuConsulta = new JMenu("Consulta");
-        menuItemNovaConsulta = new JMenuItem("Nova Consulta");
-        menuItemListaConsulta = new JMenuItem("Lista Consulta");
-
-        menuAjuda = new JMenu("Ajuda");
-        menuItemSobre = new JMenuItem("Sobre");
+    public MenuPrincipal() {
+        setPreferredSize(new Dimension(30, 30));
+        for (Section section : Section.values()) {
+            JMenu menu = new JMenu(section.label);
+            menu.setIcon(icon(section.icon));
+            menu.setToolTipText(section.tooltip);
+            menus.put(section, menu);
+            super.add(menu);
+        }
     }
 
-    private void ConstruirMenu() {
-
-        menuPaciente.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/user_red.png")));
-        menuItemCadDiagnostico.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/report_edit.png")));
-        menuItemCadHistorico.setIcon(new javax.swing.ImageIcon(
-                getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/status_away.png")));
-        menuPaciente.setToolTipText("Cadastro de Diagnóstico,...");
-        menuItemCadDiagnostico.setToolTipText("Cadastro dos diagnósticos primário e final");
-        menuItemCadHistorico.setToolTipText("Histórico de consultas do paciente");
-        menuPaciente.add(menuItemCadDiagnostico);
-        menuPaciente.add(menuItemCadHistorico);
-
-        super.add(menuPaciente);
-
-        menuCadastro.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/user_add.png")));
-        menuItemCadPaciente.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/vcard_add.png")));
-        menuItemCadAtendente.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/vcard_add.png")));
-        menuItemCadMedico.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/vcard_add.png")));
-        menuItemCadEnfermeiro.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/vcard_add.png")));
-        menuCadastro.setToolTipText("Cadastros gerais");
-        menuItemCadPaciente.setToolTipText("Cadastra o paciente e busca por seu CPF");
-        menuItemCadAtendente.setToolTipText("Cadastra a atendente, secretaria,...");
-        menuItemCadMedico.setToolTipText("Cadastra o médico e sua especialidade");
-        menuItemCadEnfermeiro.setToolTipText("Cadastra o enfermeiro ");
-        menuCadastro.add(menuItemCadPaciente);
-        menuCadastro.add(menuItemCadAtendente);
-        menuCadastro.add(menuItemCadMedico);
-        menuCadastro.add(menuItemCadEnfermeiro);
-
-        super.add(menuCadastro);
-
-        menuConsulta.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/pill_add.png")));
-        menuItemListaConsulta.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/table_gear.png")));
-        menuItemNovaConsulta.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/table_add.png")));
-        menuConsulta.setToolTipText("Cadastro e lista de consultas");
-        menuItemListaConsulta.setToolTipText("Mostra as consultas cadastradas");
-        menuItemNovaConsulta.setToolTipText("Cadastra uma nova consulta");
-        menuConsulta.add(menuItemNovaConsulta);
-        menuConsulta.add(menuItemListaConsulta);
-
-        super.add(menuConsulta);
-
-        menuAjuda.setIcon(new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/help.png")));
-        menuItemSobre.setIcon(
-                new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/information.png")));
-        menuAjuda.setToolTipText("Ajuda do sistema");
-        menuAjuda.add(menuItemSobre);
-
-        super.add(menuAjuda);
+    public void add(MenuActionListener item) {
+        JMenuItem menuItem = new JMenuItem(item.getLabel());
+        menuItem.setIcon(icon(item.getIcon()));
+        menuItem.setToolTipText(item.getTooltip());
+        menuItem.addActionListener(item);
+        menus.get(item.getSection()).add(menuItem);
     }
 
-    public void onRegisterDoctor(ActionListener listener) {
-        menuItemCadMedico.addActionListener(listener);
-    }
-
-    public void onRegisterPatient(ActionListener listener) {
-        menuItemCadPaciente.addActionListener(listener);
-    }
-
-    public void onRegisterNurse(ActionListener listener) {
-        menuItemCadEnfermeiro.addActionListener(listener);
-    }
-
-    public void onRegisterReceptionist(ActionListener listener) {
-        menuItemCadAtendente.addActionListener(listener);
-    }
-
-    public void onRegisterDiagnosis(ActionListener listener) {
-        menuItemCadDiagnostico.addActionListener(listener);
-    }
-
-    public void onRegisterAppointment(ActionListener listener) {
-        menuItemNovaConsulta.addActionListener(listener);
-    }
-
-    public void onListAppointments(ActionListener listener) {
-        menuItemListaConsulta.addActionListener(listener);
-    }
-
-    public void onShowPatientHistory(ActionListener listener) {
-        menuItemCadHistorico.addActionListener(listener);
-    }
-
-    private void adicionaListenersMenu() {
-        menuItemSobre.addActionListener(new MenuSobreListener(frame));
+    private ImageIcon icon(String name) {
+        return new ImageIcon(getClass().getResource("/br.udesc.ceavi.progii.avicena.view.image/" + name));
     }
 }
