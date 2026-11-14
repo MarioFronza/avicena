@@ -20,7 +20,7 @@ toolchain (auto-provisioned through `foojay-resolver-convention`). `mise.toml` p
 `./gradlew test`, `./gradlew clean`.
 
 Entry point: `br.udesc.ceavi.progii.avicena.main.AvicenaMain`. It calls
-`PersistenceConfig.initialize()` before opening `FrameSistema`, so Flyway runs and the
+`PersistenceConfig.initialize()` before opening `MainFrame`, so Flyway runs and the
 `EntityManagerFactory` boots once, at startup. A failure shows an error dialog and
 exits with status 1.
 
@@ -133,9 +133,9 @@ Deviates from the person template on purpose:
 - `infrastructure/controller/`: `AppointmentController`, `DiagnosisController` and
   `PatientHistoryController` (CPF search over appointments).
 - `infrastructure/ui/swing/`: `AppointmentRegistrationFrame`, `AppointmentListFrame`
-  (extends `FrameSemCRUD`, read-only table), `DiagnosisRegistrationFrame` (two-panel
+  (extends `ReadOnlyFrame`, read-only table), `DiagnosisRegistrationFrame` (two-panel
   `CardLayout`: primary/final diagnosis), `PatientHistoryFrame`, and
-  `BtGerarReceiraListener` (prescription PDF via iText, triggered from
+  `GeneratePrescriptionListener` (prescription PDF via iText, triggered from
   `DiagnosisRegistrationFrame`).
 
 ### `auth/`: persistence only
@@ -153,11 +153,11 @@ sessions and permission checks are unbuilt.
 `PersistenceConfig.initialize()` it builds every repository, use case, frame, controller
 and menu listener once, and hands each one its collaborators through constructors.
 **Screens receive dependencies, never fetch them**: no class under `infrastructure/ui`,
-`view/` or `control/listenersMenu` creates a repository or uses a static `getInstance()`.
+`view/` or `control/menu` creates a repository or uses a static `getInstance()`.
 Frames are created once and reused, so a menu item for an open screen just brings it to
 the front. Each vertical describes its own main menu items: every `*MenuListener`
-extends `MenuActionListener` and passes its `MenuPrincipal.Section`, label, icon and
-tooltip to the base constructor. `MenuPrincipal` only knows the sections (fixed bar
+extends `MenuActionListener` and passes its `MainMenu.Section`, label, icon and
+tooltip to the base constructor. `MainMenu` only knows the sections (fixed bar
 order) and a single `add(MenuActionListener)`. `AvicenaMain` adds items in display
 order, which is why its vertical blocks run Patient, Receptionist, Doctor, Nurse.
 
@@ -171,31 +171,34 @@ web front end should reuse them unchanged. Controller tests drive them directly 
 frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
 
 `AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
-`BtGerarReceiraListener` still query `AppointmentEntity` directly through
+`GeneratePrescriptionListener` still query `AppointmentEntity` directly through
 `PersistenceConfig.entityManagerFactory()`. Removing that needs new use cases and
 repository queries.
 
 ### Outside the six packages
 
 - **`control/dao/`**: `PersistenceConfig` and `DotenvLoader`.
-- **`control/listenersMenu/`**: `MenuActionListener` (abstract base for menu items)
-  and `MenuSobreListener` ("About" dialog).
-- **`view/frames/`**: `FrameCRUD` (abstract template for CRUD screens) and
-  `FrameSemCRUD` (read-only screens), base classes for every screen.
-  `view/painels/CRUDActionPanel` is the shared Novo/Gravar/Excluir/Cancelar bar.
-- **`view/principal/`**: `FrameSistema` (MDI main window) and `MenuPrincipal` (menu
+- **`control/menu/`**: `MenuActionListener` (abstract base for menu items)
+  and `AboutMenuListener` ("About" dialog).
+- **`view/frames/`**: `CrudFrame` (abstract template for CRUD screens) and
+  `ReadOnlyFrame` (read-only screens), base classes for every screen.
+  `view/panels/CrudActionPanel` is the shared Novo/Gravar/Excluir/Cancelar bar.
+- **`view/main/`**: `MainFrame` (MDI main window) and `MainMenu` (menu
   bar: fixed sections, items added from `AvicenaMain`).
+
+## Conventions
+
+- **All code is English**: identifiers, packages, comments and test names. Only
+  user-facing text (labels, dialogs, PDF content) stays in Portuguese.
 
 ## Known issues / refactor targets
 
 - **UI layer is the least refactored part.** Doctor got a cleanup (#85): an `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
   boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
-- `FrameCRUD` hooks keep Portuguese names (`limparCampos`, `carregarCampos`) while
-  everything around them is English.
 - `DotenvLoader` splits each line on every `=`, so a value containing `=` is truncated.
   No quote handling either.
-- `BtGerarReceiraListener` writes to a hardcoded relative path, and both the class and
-  the file (`Receira-Avicena.pdf`) carry the transposed-letters typo for "Receita".
+- `GeneratePrescriptionListener` writes to a hardcoded relative path, and the file
+  name (`Receira-Avicena.pdf`) carries the transposed-letters typo for "Receita".
 - `AppointmentRegistrationFrame` stores patient/doctor/nurse by ID only; names are
   shown at selection time but not re-displayed afterwards. `AppointmentListFrame` gets
   names through the JPA relationships instead.
@@ -204,7 +207,7 @@ repository queries.
 
 1. Build the `auth` vertical (domain, login, role-based menu) on top of the existing
    tables. The menu is ready for it: filter `MenuActionListener`s by role before
-   `MenuPrincipal.add`.
+   `MainMenu.add`.
 2. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
 3. Split the verticals into Gradle modules. Package boundaries already exist; only
    `patient.domain.Address`/`MaritalStatus` and `PersonEntity` cross them.
