@@ -43,4 +43,16 @@ public class PermissionEntity {
     public String getDescription() {
         return description;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (!(other instanceof PermissionEntity that) || id == null) return false;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return PermissionEntity.class.hashCode();
+    }
 }
