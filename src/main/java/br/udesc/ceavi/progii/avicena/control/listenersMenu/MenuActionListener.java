@@ -5,8 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.control.listenersMenu;
 
-import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
-import br.udesc.ceavi.progii.avicena.view.frames.FrameSemCRUD;
 import br.udesc.ceavi.progii.avicena.view.principal.FrameSistema;
 import java.awt.event.ActionListener;
 
@@ -17,9 +15,6 @@ import java.awt.event.ActionListener;
  * @version 1.0
  */
 public abstract class MenuActionListener implements ActionListener {
-
-    protected FrameCRUD frame;
-    protected FrameSemCRUD frame2;
 
     protected final FrameSistema tela;
 
