@@ -142,6 +142,23 @@ Deviates from the person template on purpose:
 `@ManyToMany @JoinTable`s. There is no `auth/domain`, `usecase` or `ui`: login,
 sessions and permission checks are unbuilt.
 
+### Composition root
+
+`AvicenaMain` is the only place that creates `*JpaRepository` instances. After
+`PersistenceConfig.initialize()` it builds every repository, use case, frame, controller
+and menu listener once, and hands each one its collaborators through constructors.
+**Screens receive dependencies, never fetch them**: no class under `infrastructure/ui`,
+`view/` or `control/listenersMenu` creates a repository or uses a static `getInstance()`.
+Frames are created once and reused, so a menu item for an open screen just brings it to
+the front. `MenuPrincipal` exposes `on*(ActionListener)` hooks that `AvicenaMain` fills.
+Each CRUD controller exposes `register()`/`delete()`, tested against `InMemory*Repository`
+copies in its `infrastructure/ui` test package, with no Postgres.
+
+`AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
+`BtGerarReceiraListener` still query `AppointmentEntity` directly through
+`PersistenceConfig.entityManagerFactory()`. Removing that needs new use cases and
+repository queries.
+
 ### Outside the six packages
 
 - **`control/dao/`**: `PersistenceConfig` and `DotenvLoader`.
@@ -151,17 +168,14 @@ sessions and permission checks are unbuilt.
   `FrameSemCRUD` (read-only screens), base classes for every screen.
   `view/painels/CRUDActionPanel` is the shared Novo/Gravar/Excluir/Cancelar bar.
 - **`view/principal/`**: `FrameSistema` (MDI main window) and `MenuPrincipal` (menu
-  bar wiring every `Register*`/`List*` menu listener).
+  bar, listeners attached from `AvicenaMain`).
 
 ## Known issues / refactor targets
 
 - **UI layer is the least refactored part.** Doctor got a cleanup (#85): pure
   `DoctorCrudController.toDoctor(...)` covered by `DoctorCrudControllerTest`, and an
   `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
-  boilerplate. Patient, Nurse and Receptionist UIs have neither, and no controller
-  tests.
-- Nearly every frame and controller is a static `getInstance()` singleton, which makes
-  them hard to test in isolation.
+  boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
 - `FrameCRUD` hooks keep Portuguese names (`limparCampos`, `carregarCampos`) while
   everything around them is English.
 - `DotenvLoader` splits each line on every `=`, so a value containing `=` is truncated.
@@ -174,8 +188,10 @@ sessions and permission checks are unbuilt.
 
 ### Next steps
 
-1. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
-2. Split the verticals into Gradle modules. Package boundaries already exist; only
+1. Menu registry: each vertical contributes its own menu items instead of
+   `MenuPrincipal` hardcoding them. Next step after the #108 composition root.
+2. Build the `auth` vertical (domain, login, role-based menu) on top of the existing
+   tables and the menu registry.
+3. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
+4. Split the verticals into Gradle modules. Package boundaries already exist; only
    `patient.domain.Address`/`MaritalStatus` and `PersonEntity` cross them.
-3. Build the `auth` vertical (domain, login, permission checks) on top of the existing
-   tables.
