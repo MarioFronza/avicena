@@ -11,10 +11,12 @@ final class DotenvLoader {
     static Map<String, String> load(Path path) throws IOException {
         Map<String, String> entries = new HashMap<>();
         for (String line : Files.readAllLines(path)) {
-            if (line.isEmpty()) continue;
-            if (line.startsWith("#")) continue;
-            String[] parts = line.split("=");
-            entries.put(parts[0], parts[1]);
+            String trimmed = line.strip();
+            int separator = trimmed.indexOf('=');
+            if (trimmed.startsWith("#") || separator < 0) continue;
+            entries.put(
+                    trimmed.substring(0, separator).strip(),
+                    trimmed.substring(separator + 1).strip());
         }
         return entries;
     }

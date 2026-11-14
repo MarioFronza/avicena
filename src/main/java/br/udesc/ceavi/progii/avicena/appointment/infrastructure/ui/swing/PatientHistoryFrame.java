@@ -52,7 +52,7 @@ public class PatientHistoryFrame extends ReadOnlyFrame {
     private void initializeComponents() {
         cpfLabel = new JLabel("Cpf: ");
         cpfField = new JTextField();
-        searchButton = new JButton("Buscar");
+        searchButton = new JButton("Search");
         table = new JTable();
         table.setModel(new DefaultTableModel(new Object[][] {}, new String[] {"Date", "Symptoms"}));
         tableModel = (DefaultTableModel) table.getModel();

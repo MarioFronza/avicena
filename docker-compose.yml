@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: AvicenaBD
+      POSTGRES_DB: avicena
       POSTGRES_USER: ${AVICENA_DB_USER}
       POSTGRES_PASSWORD: ${AVICENA_DB_PASSWORD}
     ports:

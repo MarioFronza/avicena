@@ -7,15 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 
 class UserEntityTest {
 
     @Test
     void persistsAUserForAnExistingPersonAndRoundTripsItsFields() {
-        EntityManagerFactory entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         try {
             PersonEntity person = new PersonEntity(null, "Login Test", "10101010101", "48900000000", null, null);
             UserEntity user = new UserEntity(null, person, "login.test", "hashed-password", true);
@@ -32,7 +30,6 @@ class UserEntityTest {
             assertTrue(found.isActive());
         } finally {
             entityManager.close();
-            entityManagerFactory.close();
         }
     }
 }

@@ -26,20 +26,20 @@ class DiagnosisJpaRepositoryTest {
         Diagnosis saved = repository.save(diagnosis);
 
         assertNotNull(saved.getId());
-        assertEquals("Flu", findByCodigo(saved.getId()).getFinalDiagnosis().getDisease());
+        assertEquals("Flu", findEntityById(saved.getId()).getFinalDiagnosis().getDisease());
     }
 
     @Test
     void deleteRemovesAPreviouslyPersistedDiagnosis() {
         Appointment appointment = anAppointment();
         Diagnosis diagnosis = new Diagnosis(
-                appointment.getId(), 110f, 36, 165, 60, "Default", "Cough", "Xarope", "Default exam", "Default");
+                appointment.getId(), 110f, 36, 165, 60, "Default", "Cough", "Syrup", "Default exam", "Default");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Diagnosis saved = repository.save(diagnosis);
 
         repository.delete(saved);
 
-        assertFalse(findByCodigoExists(saved.getId()));
+        assertFalse(existsById(saved.getId()));
     }
 
     private Appointment anAppointment() {
@@ -50,9 +50,8 @@ class DiagnosisJpaRepositoryTest {
                         "05/08/2026", "16:00", "Fever", patient.getId(), null, null, UrgencyStatus.NOT_URGENT));
     }
 
-    private DiagnosisEntity findByCodigo(Long id) {
-        EntityManager entityManager =
-                PersistenceConfig.createEntityManagerFactory().createEntityManager();
+    private DiagnosisEntity findEntityById(Long id) {
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         try {
             return entityManager.find(DiagnosisEntity.class, id);
         } finally {
@@ -60,7 +59,7 @@ class DiagnosisJpaRepositoryTest {
         }
     }
 
-    private boolean findByCodigoExists(Long id) {
-        return findByCodigo(id) != null;
+    private boolean existsById(Long id) {
+        return findEntityById(id) != null;
     }
 }

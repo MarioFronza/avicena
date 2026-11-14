@@ -13,7 +13,7 @@ import org.flywaydb.core.api.FlywayException;
 
 public final class PersistenceConfig {
 
-    private static final String PERSISTENCE_UNIT = "AvicenaBD";
+    private static final String PERSISTENCE_UNIT = "avicena";
 
     private static EntityManagerFactory shared;
 

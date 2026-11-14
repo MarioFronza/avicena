@@ -31,6 +31,11 @@ Build and run the app:
 The first run creates the database schema automatically. Data persists across
 container restarts (named volume).
 
+The database is named `avicena`. Volumes created before that rename hold a
+database called `AvicenaBD` instead: either point `AVICENA_DB_URL` at
+`.../AvicenaBD` in your `.env`, or recreate the volume with
+`docker compose down -v` (this deletes its data).
+
 ## Configuration
 
 No credentials are committed anywhere in this repo. Connection settings are

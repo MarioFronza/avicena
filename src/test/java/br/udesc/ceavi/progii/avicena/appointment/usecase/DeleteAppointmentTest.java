@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
+import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
 import org.junit.jupiter.api.Test;
 
 class DeleteAppointmentTest {

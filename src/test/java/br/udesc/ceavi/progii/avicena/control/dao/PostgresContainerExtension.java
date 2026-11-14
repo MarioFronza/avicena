@@ -18,9 +18,9 @@ public class PostgresContainerExtension implements BeforeAllCallback, BeforeEach
             Set.of("marital_statuses", "urgency_statuses", "departments", "roles", "flyway_schema_history");
 
     private static final PostgreSQLContainer CONTAINER = new PostgreSQLContainer("postgres:16-alpine")
-            .withDatabaseName("AvicenaBD")
+            .withDatabaseName("avicena")
             .withUsername("postgres")
-            .withPassword("CasaAmarela");
+            .withPassword("avicena-test");
 
     @Override
     public void beforeAll(ExtensionContext context) {

@@ -15,7 +15,7 @@ class NurseJpaRepositoryTest {
     @Test
     void savePersistsANurseThatIsRetrievableAfterward() {
         Nurse nurse =
-                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Tecnico", 1200);
+                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Technician", 1200);
         NurseJpaRepository repository = new NurseJpaRepository();
 
         Nurse saved = repository.save(nurse);
@@ -26,14 +26,14 @@ class NurseJpaRepositoryTest {
                 .findFirst();
         assertTrue(found.isPresent());
         assertEquals("Joana Test", found.get().getName());
-        assertEquals("Tecnico", found.get().getFormation());
+        assertEquals("Technician", found.get().getFormation());
         assertEquals(1200, found.get().getHoursCompleted());
     }
 
     @Test
     void savePersistsANurseWithAMaritalStatusThatRoundTripsCorrectly() {
         Nurse nurse =
-                new Nurse("Married Test", "44444444444", "48966660000", null, MaritalStatus.MARRIED, "Tecnico", 900);
+                new Nurse("Married Test", "44444444444", "48966660000", null, MaritalStatus.MARRIED, "Technician", 900);
         NurseJpaRepository repository = new NurseJpaRepository();
 
         repository.save(nurse);

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -15,7 +16,7 @@ class PatientJpaRepositoryTest {
 
     @Test
     void savePersistsAPatientWithAFreshlyEnteredAddress() {
-        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        Address address = Fixtures.address();
         Patient patient = new Patient("Address Test", "77777777777", "48977770000", address, MaritalStatus.SINGLE);
         PatientJpaRepository repository = new PatientJpaRepository();
 

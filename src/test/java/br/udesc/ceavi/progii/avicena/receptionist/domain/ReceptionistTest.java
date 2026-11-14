@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import org.junit.jupiter.api.Test;
 
 class ReceptionistTest {
@@ -19,7 +20,7 @@ class ReceptionistTest {
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Address address = new Address(100, "Apt 2", "88000000", "Main St", "Downtown", "Florianopolis");
+        Address address = Fixtures.address();
 
         Receptionist receptionist = new Receptionist(
                 "Ana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
