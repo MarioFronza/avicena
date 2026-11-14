@@ -3,12 +3,12 @@ package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.controller;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
-import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
+import br.udesc.ceavi.progii.avicena.receptionist.usecase.FindReceptionistByCpf;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.shared.infrastructure.controller.FormNumbers;
 import java.util.Optional;
-import java.util.function.Function;
 
 public class ReceptionistController {
 
@@ -25,15 +25,15 @@ public class ReceptionistController {
 
     private final RegisterReceptionist registerReceptionist;
     private final DeleteReceptionist deleteReceptionist;
-    private final ListReceptionists listReceptionists;
+    private final FindReceptionistByCpf findReceptionistByCpf;
 
     public ReceptionistController(
             RegisterReceptionist registerReceptionist,
             DeleteReceptionist deleteReceptionist,
-            ListReceptionists listReceptionists) {
+            FindReceptionistByCpf findReceptionistByCpf) {
         this.registerReceptionist = registerReceptionist;
         this.deleteReceptionist = deleteReceptionist;
-        this.listReceptionists = listReceptionists;
+        this.findReceptionistByCpf = findReceptionistByCpf;
     }
 
     public Receptionist register(Form form) {
@@ -43,10 +43,19 @@ public class ReceptionistController {
                 form.phone(),
                 form.address(),
                 form.maritalStatus(),
-                parseNumber(form.workHours(), "Work hours", Integer::parseInt),
-                parseNumber(form.salary(), "Salary", Float::parseFloat),
-                parseNumber(form.overtimeHours(), "Overtime hours", Integer::parseInt),
-                parseNumber(form.laborCardNumber(), "Labor card number", Integer::parseInt)));
+                FormNumbers.parse(
+                        form.workHours(), "Work hours", Integer::parseInt, InvalidReceptionistDataException::new),
+                FormNumbers.parse(form.salary(), "Salary", Float::parseFloat, InvalidReceptionistDataException::new),
+                FormNumbers.parse(
+                        form.overtimeHours(),
+                        "Overtime hours",
+                        Integer::parseInt,
+                        InvalidReceptionistDataException::new),
+                FormNumbers.parse(
+                        form.laborCardNumber(),
+                        "Labor card number",
+                        Integer::parseInt,
+                        InvalidReceptionistDataException::new)));
     }
 
     public void delete(Receptionist receptionist) {
@@ -54,16 +63,6 @@ public class ReceptionistController {
     }
 
     public Optional<Receptionist> findByCpf(String cpf) {
-        return listReceptionists.list().stream()
-                .filter(receptionist -> cpf.equals(receptionist.getCpf()))
-                .findFirst();
-    }
-
-    private static <T> T parseNumber(String text, String field, Function<String, T> parser) {
-        try {
-            return parser.apply(text);
-        } catch (NumberFormatException e) {
-            throw new InvalidReceptionistDataException(field + " must be a number");
-        }
+        return findReceptionistByCpf.find(cpf);
     }
 }

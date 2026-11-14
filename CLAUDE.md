@@ -39,8 +39,9 @@ docker compose up -d   # postgres:16-alpine, reads the same AVICENA_DB_* vars
 
 `PersistenceConfig.entityManagerFactory()` returns one lazily created, shared
 `EntityManagerFactory` (closed by a shutdown hook registered in `initialize()`). Every
-`*JpaRepository` grabs it in its constructor and opens/closes an `EntityManager` per
-call. `createEntityManagerFactory()` still builds a fresh, unshared factory.
+`*JpaRepository` goes through `JpaTransactions.read`/`write`, which open an
+`EntityManager` per call on that factory, roll back a failed write and always close it.
+`createEntityManagerFactory()` still builds a fresh, unshared factory.
 
 ### Schema
 
@@ -87,10 +88,11 @@ Clean Architecture packages. Only a small Swing shell sits outside them.
 Four uniform slices, none importing another's `domain`:
 
 - **`domain/`**: plain domain class, its `*Repository` interface, and an
-  `Invalid*DataException`. `Address` and `MaritalStatus` live in `patient.domain` and
-  are imported by the other three. This is the one deliberate cross-package dependency;
-  reuse it rather than duplicating an address-like value object.
-- **`usecase/`**: thin `Register*`, `List*`, `Delete*` wrappers around the repository.
+  `Invalid*DataException` (extends `shared.domain.InvalidDataException`). Constructors
+  check invariants through `shared.domain.Invariants`. `Address` and `MaritalStatus`
+  live in `shared.domain`, used by all four person verticals.
+- **`usecase/`**: `Register*` (rejects a cpf another record already uses), `List*`,
+  `Delete*` and `Find*ByCpf` (blank cpf finds nothing).
 - **`infrastructure/persistence/`**: `*Entity` (JPA), package-private `*Mapper`
   (domain to entity), `*JpaRepository`. Each role entity (`patients`, `doctors`,
   `nurses`, `receptionists`) holds a `@OneToOne(cascade = {PERSIST, REMOVE})
@@ -102,7 +104,8 @@ Four uniform slices, none importing another's `domain`:
   `formation`/`hoursCompleted`, Receptionist
   `workHours`/`salary`/`overtimeHours`/`laborCardNumber`.
 - **`infrastructure/controller/`**: `*Controller` (`register(Form)`, `delete`,
-  `findByCpf` as list-all-then-filter). UI-agnostic interface adapter, see
+  `findByCpf` through `Find*ByCpf`). Numbers are parsed by
+  `shared.infrastructure.controller.FormNumbers`. UI-agnostic interface adapter, see
   "Composition root".
 - **`infrastructure/ui/swing/`**: `*RegistrationFrame` (Swing form, owns its buttons,
   dialogs and the record on screen) and `Register*MenuListener`. Each UI technology
@@ -225,4 +228,4 @@ it finishes, code that doesn't match yet is a target, not a precedent.
    `MainMenu.add`.
 2. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
 3. Split the verticals into Gradle modules. Package boundaries already exist; only
-   `patient.domain.Address`/`MaritalStatus` and `PersonEntity` cross them.
+   `shared` and `PersonEntity` cross them.

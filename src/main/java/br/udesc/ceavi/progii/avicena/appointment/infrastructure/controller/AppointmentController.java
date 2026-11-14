@@ -10,7 +10,7 @@ import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
-import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
+import br.udesc.ceavi.progii.avicena.patient.usecase.FindPatientByCpf;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -36,19 +36,19 @@ public class AppointmentController {
 
     private final RegisterAppointment registerAppointment;
     private final DeleteAppointment deleteAppointment;
-    private final ListPatients listPatients;
+    private final FindPatientByCpf findPatientByCpf;
     private final ListDoctors listDoctors;
     private final ListNurses listNurses;
 
     public AppointmentController(
             RegisterAppointment registerAppointment,
             DeleteAppointment deleteAppointment,
-            ListPatients listPatients,
+            FindPatientByCpf findPatientByCpf,
             ListDoctors listDoctors,
             ListNurses listNurses) {
         this.registerAppointment = registerAppointment;
         this.deleteAppointment = deleteAppointment;
-        this.listPatients = listPatients;
+        this.findPatientByCpf = findPatientByCpf;
         this.listDoctors = listDoctors;
         this.listNurses = listNurses;
     }
@@ -77,11 +77,14 @@ public class AppointmentController {
     }
 
     private Long findPatientIdByCpf(String cpf) {
-        return listPatients.list().stream()
-                .filter(patient -> cpf.equals(patient.getCpf()))
-                .findFirst()
+        if (cpf == null || cpf.isBlank()) {
+            throw new InvalidAppointmentDataException("Appointment patient CPF must not be blank");
+        }
+        return findPatientByCpf
+                .find(cpf)
                 .map(Patient::getId)
-                .orElse(null);
+                .orElseThrow(
+                        () -> new InvalidAppointmentDataException("No patient registered with CPF " + cpf.strip()));
     }
 
     private static <T> T parse(

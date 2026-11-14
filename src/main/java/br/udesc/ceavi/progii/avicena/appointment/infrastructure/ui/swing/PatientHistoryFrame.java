@@ -1,8 +1,8 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
+import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.PatientHistoryController;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.ReadOnlyFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -39,14 +39,14 @@ public class PatientHistoryFrame extends ReadOnlyFrame {
         addComponents();
     }
 
-    private void showAppointments(List<AppointmentEntity> appointments) {
+    private void showAppointments(List<Appointment> appointments) {
         tableModel.setRowCount(0);
-        for (AppointmentEntity appointment : appointments) {
+        for (Appointment appointment : appointments) {
             tableModel.addRow(toTableRow(appointment));
         }
     }
 
-    static String[] toTableRow(AppointmentEntity appointment) {
+    static String[] toTableRow(Appointment appointment) {
         return new String[] {appointment.getDate().format(AppointmentController.DATE_FORMAT), appointment.getSymptoms()
         };
     }

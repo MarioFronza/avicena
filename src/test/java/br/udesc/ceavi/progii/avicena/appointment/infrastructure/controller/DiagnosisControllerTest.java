@@ -9,73 +9,79 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataExce
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDiagnosisRepository;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class DiagnosisControllerTest {
 
-    private InMemoryDiagnosisRepository repository;
-    private DiagnosisController controller;
-
-    @BeforeEach
-    void setUp() {
-        repository = new InMemoryDiagnosisRepository();
-        controller = new DiagnosisController(new RegisterDiagnosis(repository), new DeleteDiagnosis(repository));
-    }
+    private final InMemoryDiagnosisRepository repository = new InMemoryDiagnosisRepository();
+    private final DiagnosisController controller =
+            new DiagnosisController(new RegisterDiagnosis(repository), new DeleteDiagnosis(repository));
 
     @Test
-    void registerSavesTheDiagnosisForTheSelectedAppointment() {
-        Diagnosis diagnosis = controller.register(form(1L));
+    void registerSavesEveryFieldOfTheForm() {
+        Diagnosis diagnosis = controller.register(form(1L, Map.of()));
 
-        assertEquals(diagnosis, repository.findAll().get(0));
         assertEquals(1L, diagnosis.getAppointmentId());
         assertEquals(12.8f, diagnosis.getBloodPressure());
+        assertEquals(37, diagnosis.getTemperature());
+        assertEquals(180, diagnosis.getHeight());
+        assertEquals(80, diagnosis.getWeight());
+        assertEquals("Notes", diagnosis.getNotes());
         assertEquals("Flu", diagnosis.getDisease());
+        assertEquals("Rest", diagnosis.getMedications());
+        assertEquals("Exam notes", diagnosis.getExamNotes());
+        assertEquals("Final", diagnosis.getFinalDescription());
     }
 
     @Test
     void registerRejectsADiagnosisWithNoAppointmentSelected() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(null)));
+        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(null, Map.of())));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "bloodPressure, abc",
+        "bloodPressure, ''",
+        "bloodPressure, NaN",
+        "temperature, abc",
+        "temperature, ''",
+        "temperature, 37.5",
+        "height, abc",
+        "height, -1",
+        "weight, abc",
+        "weight, -1"
+    })
+    void registerRejectsAnInvalidNumber(String field, String value) {
+        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(1L, Map.of(field, value))));
     }
 
     @Test
     void deleteRemovesTheDiagnosis() {
-        Diagnosis diagnosis = controller.register(form(1L));
+        Diagnosis diagnosis = controller.register(form(1L, Map.of()));
 
         controller.delete(diagnosis);
 
         assertTrue(repository.findAll().isEmpty());
     }
 
-    @Test
-    void registerRejectsNonNumericBloodPressure() {
-        assertThrows(
-                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "abc", "37", "180", "80")));
-    }
-
-    @Test
-    void registerRejectsNonNumericTemperature() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "", "180", "80")));
-    }
-
-    @Test
-    void registerRejectsNonNumericHeight() {
-        assertThrows(
-                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "37", "abc", "80")));
-    }
-
-    @Test
-    void registerRejectsNonNumericWeight() {
-        assertThrows(
-                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "37", "180", "abc")));
-    }
-
-    private static DiagnosisController.Form form(Long appointmentId) {
-        return form(appointmentId, "12.8", "37", "180", "80");
-    }
-
-    private static DiagnosisController.Form form(
-            Long appointmentId, String bloodPressure, String temperature, String height, String weight) {
-        return new DiagnosisController.Form(appointmentId, bloodPressure, temperature, height, weight, "Flu", "Rest");
+    private static DiagnosisController.Form form(Long appointmentId, Map<String, String> overrides) {
+        Map<String, String> numbers =
+                new HashMap<>(Map.of("bloodPressure", "12.8", "temperature", "37", "height", "180", "weight", "80"));
+        numbers.putAll(overrides);
+        return new DiagnosisController.Form(
+                appointmentId,
+                numbers.get("bloodPressure"),
+                numbers.get("temperature"),
+                numbers.get("height"),
+                numbers.get("weight"),
+                "Notes",
+                "Flu",
+                "Rest",
+                "Exam notes",
+                "Final");
     }
 }

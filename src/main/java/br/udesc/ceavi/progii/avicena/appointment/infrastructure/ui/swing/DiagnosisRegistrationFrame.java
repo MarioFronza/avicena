@@ -122,8 +122,11 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
                     temperatureField.getText(),
                     heightField.getText(),
                     weightField.getText(),
+                    notesArea.getText(),
                     diseaseField.getText(),
-                    medicationsField.getText()));
+                    medicationsField.getText(),
+                    examNotesField.getText(),
+                    finalDescriptionArea.getText()));
             JOptionPane.showMessageDialog(this, "Diagnosis saved");
         } catch (InvalidDiagnosisDataException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());

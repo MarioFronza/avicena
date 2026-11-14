@@ -2,7 +2,7 @@ package br.udesc.ceavi.progii.avicena.patient.infrastructure.controller;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
-import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
+import br.udesc.ceavi.progii.avicena.patient.usecase.FindPatientByCpf;
 import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
@@ -14,12 +14,13 @@ public class PatientController {
 
     private final RegisterPatient registerPatient;
     private final DeletePatient deletePatient;
-    private final ListPatients listPatients;
+    private final FindPatientByCpf findPatientByCpf;
 
-    public PatientController(RegisterPatient registerPatient, DeletePatient deletePatient, ListPatients listPatients) {
+    public PatientController(
+            RegisterPatient registerPatient, DeletePatient deletePatient, FindPatientByCpf findPatientByCpf) {
         this.registerPatient = registerPatient;
         this.deletePatient = deletePatient;
-        this.listPatients = listPatients;
+        this.findPatientByCpf = findPatientByCpf;
     }
 
     public Patient register(Form form) {
@@ -32,8 +33,6 @@ public class PatientController {
     }
 
     public Optional<Patient> findByCpf(String cpf) {
-        return listPatients.list().stream()
-                .filter(patient -> cpf.equals(patient.getCpf()))
-                .findFirst();
+        return findPatientByCpf.find(cpf);
     }
 }

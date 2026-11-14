@@ -14,57 +14,91 @@ import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
-import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
-import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.usecase.FindPatientByCpf;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDoctorRepository;
 import br.udesc.ceavi.progii.avicena.support.InMemoryNurseRepository;
 import br.udesc.ceavi.progii.avicena.support.InMemoryPatientRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class AppointmentControllerTest {
 
-    private InMemoryAppointmentRepository appointments;
-    private InMemoryPatientRepository patients;
-    private InMemoryDoctorRepository doctors;
-    private InMemoryNurseRepository nurses;
-    private AppointmentController controller;
+    private final InMemoryAppointmentRepository appointments = new InMemoryAppointmentRepository();
+    private final InMemoryPatientRepository patients = new InMemoryPatientRepository();
+    private final InMemoryDoctorRepository doctors = new InMemoryDoctorRepository();
+    private final InMemoryNurseRepository nurses = new InMemoryNurseRepository();
+    private final AppointmentController controller = new AppointmentController(
+            new RegisterAppointment(appointments),
+            new DeleteAppointment(appointments),
+            new FindPatientByCpf(patients),
+            new ListDoctors(doctors),
+            new ListNurses(nurses));
+    private Patient patient;
 
     @BeforeEach
-    void setUp() {
-        appointments = new InMemoryAppointmentRepository();
-        patients = new InMemoryPatientRepository();
-        doctors = new InMemoryDoctorRepository();
-        nurses = new InMemoryNurseRepository();
-        controller = new AppointmentController(
-                new RegisterAppointment(appointments),
-                new DeleteAppointment(appointments),
-                new ListPatients(patients),
-                new ListDoctors(doctors),
-                new ListNurses(nurses));
-        patients.save(new Patient(7L, "Patient Test", "11111111111", "48999990000", null, MaritalStatus.SINGLE));
+    void savePatient() {
+        patient = patients.save(Fixtures.patient("11111111111"));
     }
 
     @Test
     void registerSavesTheAppointmentForThePatientWithTheTypedCpf() {
-        Appointment appointment = controller.register(form("11111111111"));
+        Appointment appointment = controller.register(form("11111111111", "05/08/2026", "14:30"));
 
-        assertEquals(appointment, appointments.findAll().get(0));
-        assertEquals(7L, appointment.getPatientId());
-        assertEquals(3L, appointment.getDoctorId());
-        assertEquals(5L, appointment.getNurseId());
+        assertEquals(patient.getId(), appointment.getPatientId());
+        assertEquals(LocalDate.of(2026, 8, 5), appointment.getDate());
+        assertEquals(LocalTime.of(14, 30), appointment.getTime());
+        assertEquals(List.of(appointment), appointments.findAll());
     }
 
     @Test
     void registerRejectsACpfWithNoPatient() {
-        assertThrows(InvalidAppointmentDataException.class, () -> controller.register(form("00000000000")));
+        InvalidAppointmentDataException error = assertThrows(
+                InvalidAppointmentDataException.class,
+                () -> controller.register(form("00000000000", "05/08/2026", "14:30")));
+
+        assertEquals("No patient registered with CPF 00000000000", error.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void registerRejectsABlankPatientCpf(String cpf) {
+        assertThrows(
+                InvalidAppointmentDataException.class, () -> controller.register(form(cpf, "05/08/2026", "14:30")));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"2026-08-05", "32/08/2026", "5/8/26", "  /  /    "})
+    void registerRejectsADateNotInDayMonthYearFormat(String date) {
+        assertThrows(
+                InvalidAppointmentDataException.class, () -> controller.register(form("11111111111", date, "14:30")));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"25:00", "2pm", "  :  "})
+    void registerRejectsATimeNotInHourMinuteFormat(String time) {
+        assertThrows(
+                InvalidAppointmentDataException.class,
+                () -> controller.register(form("11111111111", "05/08/2026", time)));
+    }
+
+    @Test
+    void registerRejectsAMissingDate() {
+        assertThrows(
+                InvalidAppointmentDataException.class, () -> controller.register(form("11111111111", "", "14:30")));
     }
 
     @Test
     void deleteRemovesTheAppointment() {
-        Appointment appointment = controller.register(form("11111111111"));
+        Appointment appointment = controller.register(form("11111111111", "05/08/2026", "14:30"));
 
         controller.delete(appointment);
 
@@ -73,18 +107,14 @@ class AppointmentControllerTest {
 
     @Test
     void listsDoctorsAndNursesFromTheInjectedUseCases() {
-        Doctor doctor =
-                new Doctor(3L, "Doctor Test", "22222222222", "48999990001", null, MaritalStatus.SINGLE, "123", "GP");
-        Nurse nurse =
-                new Nurse(5L, "Nurse Test", "33333333333", "48999990002", null, MaritalStatus.SINGLE, "Nursing", 100);
-        doctors.save(doctor);
-        nurses.save(nurse);
+        Doctor doctor = doctors.save(Fixtures.doctor("22222222222"));
+        Nurse nurse = nurses.save(Fixtures.nurse("33333333333"));
 
         assertEquals(List.of(doctor), controller.doctors());
         assertEquals(List.of(nurse), controller.nurses());
     }
 
-    private static AppointmentController.Form form(String patientCpf) {
-        return new AppointmentController.Form("01/01/2026", "10:00", "Fever", patientCpf, 3L, 5L, UrgencyStatus.URGENT);
+    private static AppointmentController.Form form(String patientCpf, String date, String time) {
+        return new AppointmentController.Form(date, time, "Fever", patientCpf, null, null, UrgencyStatus.URGENT);
     }
 }

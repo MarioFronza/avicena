@@ -2,7 +2,7 @@ package br.udesc.ceavi.progii.avicena.doctor.infrastructure.controller;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
-import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
+import br.udesc.ceavi.progii.avicena.doctor.usecase.FindDoctorByCpf;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
@@ -21,12 +21,12 @@ public class DoctorController {
 
     private final RegisterDoctor registerDoctor;
     private final DeleteDoctor deleteDoctor;
-    private final ListDoctors listDoctors;
+    private final FindDoctorByCpf findDoctorByCpf;
 
-    public DoctorController(RegisterDoctor registerDoctor, DeleteDoctor deleteDoctor, ListDoctors listDoctors) {
+    public DoctorController(RegisterDoctor registerDoctor, DeleteDoctor deleteDoctor, FindDoctorByCpf findDoctorByCpf) {
         this.registerDoctor = registerDoctor;
         this.deleteDoctor = deleteDoctor;
-        this.listDoctors = listDoctors;
+        this.findDoctorByCpf = findDoctorByCpf;
     }
 
     public Doctor register(Form form) {
@@ -45,8 +45,6 @@ public class DoctorController {
     }
 
     public Optional<Doctor> findByCpf(String cpf) {
-        return listDoctors.list().stream()
-                .filter(doctor -> cpf.equals(doctor.getCpf()))
-                .findFirst();
+        return findDoctorByCpf.find(cpf);
     }
 }

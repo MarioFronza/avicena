@@ -2,33 +2,14 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
-import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.UrgencyStatusEntity;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientEntity;
-import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PersonEntity;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import org.junit.jupiter.api.Test;
 
 class PatientHistoryFrameTest {
 
-    private static final UrgencyStatusEntity NOT_URGENT = new UrgencyStatusEntity(4L, "NOT_URGENT", "Not urgent");
-
     @Test
-    void buildsARowWithDateAndSymptoms() {
-        PatientEntity patient = newPatient("Patient Test", "11111111111", "48900000000");
-        AppointmentEntity appointment = new AppointmentEntity(
-                null, LocalDate.of(2026, 8, 2), LocalTime.of(10, 0), "Fever", patient, null, null, NOT_URGENT);
-
-        String[] row = PatientHistoryFrame.toTableRow(appointment);
-
-        assertArrayEquals(new String[] {"02/08/2026", "Fever"}, row);
-    }
-
-    private static PatientEntity newPatient(String name, String cpf, String phone) {
-        PersonEntity person =
-                new PersonEntity(null, name, cpf, phone, null, new MaritalStatusEntity(1L, "SINGLE", "Single"));
-        return new PatientEntity(null, person);
+    void buildsARowWithTheFormattedDateAndTheSymptoms() {
+        assertArrayEquals(
+                new String[] {"05/08/2026", "Fever"}, PatientHistoryFrame.toTableRow(Fixtures.appointment(1L)));
     }
 }
