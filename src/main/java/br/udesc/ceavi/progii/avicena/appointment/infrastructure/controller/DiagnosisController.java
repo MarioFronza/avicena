@@ -5,6 +5,7 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataExce
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.shared.infrastructure.controller.FormNumbers;
+import java.math.BigDecimal;
 
 public class DiagnosisController {
 
@@ -34,7 +35,7 @@ public class DiagnosisController {
                 FormNumbers.parse(
                         form.bloodPressure(), "Blood pressure", Float::parseFloat, InvalidDiagnosisDataException::new),
                 FormNumbers.parse(
-                        form.temperature(), "Temperature", Integer::parseInt, InvalidDiagnosisDataException::new),
+                        form.temperature(), "Temperature", BigDecimal::new, InvalidDiagnosisDataException::new),
                 FormNumbers.parse(form.height(), "Height", Integer::parseInt, InvalidDiagnosisDataException::new),
                 FormNumbers.parse(form.weight(), "Weight", Integer::parseInt, InvalidDiagnosisDataException::new),
                 form.notes(),

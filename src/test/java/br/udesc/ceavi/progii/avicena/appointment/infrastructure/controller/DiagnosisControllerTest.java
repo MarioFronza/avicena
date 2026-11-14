@@ -9,6 +9,7 @@ import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataExce
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDiagnosisRepository;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class DiagnosisControllerTest {
 
         assertEquals(1L, diagnosis.getAppointmentId());
         assertEquals(12.8f, diagnosis.getBloodPressure());
-        assertEquals(37, diagnosis.getTemperature());
+        assertEquals(new BigDecimal("37"), diagnosis.getTemperature());
         assertEquals(180, diagnosis.getHeight());
         assertEquals(80, diagnosis.getWeight());
         assertEquals("Notes", diagnosis.getNotes());
@@ -49,7 +50,7 @@ class DiagnosisControllerTest {
         "bloodPressure, NaN",
         "temperature, abc",
         "temperature, ''",
-        "temperature, 37.5",
+        "temperature, '37,5'",
         "height, abc",
         "height, -1",
         "weight, abc",
@@ -57,6 +58,13 @@ class DiagnosisControllerTest {
     })
     void registerRejectsAnInvalidNumber(String field, String value) {
         assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(1L, Map.of(field, value))));
+    }
+
+    @Test
+    void registerAcceptsADecimalTemperature() {
+        Diagnosis diagnosis = controller.register(form(1L, Map.of("temperature", "37.5")));
+
+        assertEquals(new BigDecimal("37.5"), diagnosis.getTemperature());
     }
 
     @Test

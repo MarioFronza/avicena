@@ -27,16 +27,16 @@ public class NurseRegistrationFrame extends CrudFrame {
     private JLabel nameLabel;
     private JLabel cpfLabel;
     private JLabel phoneLabel;
-    private JLabel formationLabel;
-    private JLabel hoursCompletedLabel;
+    private JLabel qualificationLabel;
+    private JLabel trainingHoursLabel;
     private JLabel addressLabel;
     private JLabel maritalStatusLabel;
     private JButton searchButton;
     private JTextField nameField;
     private JTextField cpfField;
     private JTextField phoneField;
-    private JTextField formationField;
-    private JTextField hoursCompletedField;
+    private JTextField qualificationField;
+    private JTextField trainingHoursField;
     private JButton addressButton;
     private JComboBox<MaritalStatus> maritalStatusComboBox;
 
@@ -104,8 +104,8 @@ public class NurseRegistrationFrame extends CrudFrame {
                     phoneField.getText(),
                     address,
                     (MaritalStatus) maritalStatusComboBox.getSelectedItem(),
-                    formationField.getText(),
-                    hoursCompletedField.getText()));
+                    qualificationField.getText(),
+                    trainingHoursField.getText()));
             JOptionPane.showMessageDialog(this, "Nurse saved");
         } catch (InvalidNurseDataException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -126,8 +126,8 @@ public class NurseRegistrationFrame extends CrudFrame {
         address = found.getAddress();
         nameField.setText(found.getName());
         phoneField.setText(found.getPhone());
-        formationField.setText(found.getFormation());
-        hoursCompletedField.setText(String.valueOf(found.getHoursCompleted()));
+        qualificationField.setText(found.getQualification());
+        trainingHoursField.setText(String.valueOf(found.getTrainingHours()));
         maritalStatusComboBox.setSelectedItem(found.getMaritalStatus());
     }
 
@@ -138,16 +138,16 @@ public class NurseRegistrationFrame extends CrudFrame {
         nameField.setText(null);
         cpfField.setText(null);
         phoneField.setText(null);
-        formationField.setText(null);
-        hoursCompletedField.setText(null);
+        qualificationField.setText(null);
+        trainingHoursField.setText(null);
     }
 
     private void initializeComponents() {
         nameLabel = new JLabel("Name:");
         cpfLabel = new JLabel("CPF:");
         phoneLabel = new JLabel("Phone:");
-        formationLabel = new JLabel("Formation:");
-        hoursCompletedLabel = new JLabel("Hours Completed:");
+        qualificationLabel = new JLabel("Qualification:");
+        trainingHoursLabel = new JLabel("Training Hours:");
         addressLabel = new JLabel("Address:");
         maritalStatusLabel = new JLabel("Marital Status:");
         searchButton = new JButton("Search");
@@ -155,8 +155,8 @@ public class NurseRegistrationFrame extends CrudFrame {
         nameField = new JTextField();
         cpfField = new JTextField();
         phoneField = new JTextField();
-        formationField = new JTextField();
-        hoursCompletedField = new JTextField();
+        qualificationField = new JTextField();
+        trainingHoursField = new JTextField();
         addressButton = new JButton("Add");
         addressButton.setSize(100, 20);
         maritalStatusComboBox = new JComboBox<>(MaritalStatus.values());
@@ -235,7 +235,7 @@ public class NurseRegistrationFrame extends CrudFrame {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipadx = 10;
         constraints.ipady = 10;
-        formPanel.add(formationLabel, constraints);
+        formPanel.add(qualificationLabel, constraints);
 
         constraints = new GridBagConstraints();
         constraints.gridx = 1;
@@ -243,7 +243,7 @@ public class NurseRegistrationFrame extends CrudFrame {
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipadx = 50;
-        formPanel.add(formationField, constraints);
+        formPanel.add(qualificationField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.gridx = 0;
@@ -252,7 +252,7 @@ public class NurseRegistrationFrame extends CrudFrame {
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipadx = 10;
         constraints.ipady = 10;
-        formPanel.add(hoursCompletedLabel, constraints);
+        formPanel.add(trainingHoursLabel, constraints);
 
         constraints = new GridBagConstraints();
         constraints.gridx = 1;
@@ -260,7 +260,7 @@ public class NurseRegistrationFrame extends CrudFrame {
         constraints.gridwidth = 2;
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.ipadx = 50;
-        formPanel.add(hoursCompletedField, constraints);
+        formPanel.add(trainingHoursField, constraints);
 
         constraints = new GridBagConstraints();
         constraints.gridx = 0;

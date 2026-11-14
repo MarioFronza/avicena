@@ -31,8 +31,8 @@ class NurseJpaRepositoryTest {
                 .findFirst();
         assertTrue(found.isPresent());
         assertEquals("Joana Test", found.get().getName());
-        assertEquals("Technician", found.get().getFormation());
-        assertEquals(1200, found.get().getHoursCompleted());
+        assertEquals("Technician", found.get().getQualification());
+        assertEquals(1200, found.get().getTrainingHours());
     }
 
     @Test

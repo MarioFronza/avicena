@@ -133,9 +133,9 @@ public class ReceptionistRegistrationFrame extends CrudFrame {
         nameField.setText(found.getName());
         phoneField.setText(found.getPhone());
         workHoursField.setText(String.valueOf(found.getWorkHours()));
-        salaryField.setText(String.valueOf(found.getSalary()));
+        salaryField.setText(found.getSalary().toPlainString());
         overtimeHoursField.setText(String.valueOf(found.getOvertimeHours()));
-        laborCardNumberField.setText(String.valueOf(found.getLaborCardNumber()));
+        laborCardNumberField.setText(found.getLaborCardNumber());
         maritalStatusComboBox.setSelectedItem(found.getMaritalStatus());
     }
 

@@ -3,6 +3,7 @@ package br.udesc.ceavi.progii.avicena.receptionist.domain;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import java.math.BigDecimal;
 
 public class Receptionist {
 
@@ -13,9 +14,9 @@ public class Receptionist {
     private final Address address;
     private final MaritalStatus maritalStatus;
     private final int workHours;
-    private final float salary;
+    private final BigDecimal salary;
     private final int overtimeHours;
-    private final int laborCardNumber;
+    private final String laborCardNumber;
 
     public Receptionist(
             String name,
@@ -24,9 +25,9 @@ public class Receptionist {
             Address address,
             MaritalStatus maritalStatus,
             int workHours,
-            float salary,
+            BigDecimal salary,
             int overtimeHours,
-            int laborCardNumber) {
+            String laborCardNumber) {
         this(null, name, cpf, phone, address, maritalStatus, workHours, salary, overtimeHours, laborCardNumber);
     }
 
@@ -38,9 +39,9 @@ public class Receptionist {
             Address address,
             MaritalStatus maritalStatus,
             int workHours,
-            float salary,
+            BigDecimal salary,
             int overtimeHours,
-            int laborCardNumber) {
+            String laborCardNumber) {
         this.id = id;
         this.name = Invariants.notBlank(name, "Receptionist name", InvalidReceptionistDataException::new);
         this.cpf = Invariants.notBlank(cpf, "Receptionist cpf", InvalidReceptionistDataException::new);
@@ -52,7 +53,7 @@ public class Receptionist {
         this.salary = Invariants.notNegative(salary, "Receptionist salary", InvalidReceptionistDataException::new);
         this.overtimeHours = Invariants.notNegative(
                 overtimeHours, "Receptionist overtime hours", InvalidReceptionistDataException::new);
-        this.laborCardNumber = Invariants.notNegative(
+        this.laborCardNumber = Invariants.notBlank(
                 laborCardNumber, "Receptionist labor card number", InvalidReceptionistDataException::new);
     }
 
@@ -84,7 +85,7 @@ public class Receptionist {
         return workHours;
     }
 
-    public float getSalary() {
+    public BigDecimal getSalary() {
         return salary;
     }
 
@@ -92,7 +93,7 @@ public class Receptionist {
         return overtimeHours;
     }
 
-    public int getLaborCardNumber() {
+    public String getLaborCardNumber() {
         return laborCardNumber;
     }
 }

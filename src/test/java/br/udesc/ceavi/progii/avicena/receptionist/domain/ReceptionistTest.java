@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Fixtures;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -67,14 +68,22 @@ class ReceptionistTest {
         assertDoesNotThrow(() -> receptionistWithNumber("overtimeHours", 0));
     }
 
-    @Test
-    void rejectsANegativeLaborCardNumber() {
-        assertThrows(InvalidReceptionistDataException.class, () -> receptionistWithNumber("laborCardNumber", -1));
-    }
-
-    @Test
-    void acceptsAZeroLaborCardNumber() {
-        assertDoesNotThrow(() -> receptionistWithNumber("laborCardNumber", 0));
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void rejectsABlankLaborCardNumber(String laborCardNumber) {
+        assertThrows(
+                InvalidReceptionistDataException.class,
+                () -> new Receptionist(
+                        "Ana Test",
+                        "12345678900",
+                        "48999990000",
+                        null,
+                        MaritalStatus.SINGLE,
+                        40,
+                        new BigDecimal("3000"),
+                        5,
+                        laborCardNumber));
     }
 
     @Test
@@ -82,7 +91,15 @@ class ReceptionistTest {
         Address address = Fixtures.address();
 
         Receptionist receptionist = new Receptionist(
-                "Ana Test", "12345678900", "48999990000", address, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+                "Ana Test",
+                "12345678900",
+                "48999990000",
+                address,
+                MaritalStatus.SINGLE,
+                40,
+                new BigDecimal("3000"),
+                5,
+                "123456");
 
         assertEquals("Ana Test", receptionist.getName());
         assertEquals("12345678900", receptionist.getCpf());
@@ -90,9 +107,9 @@ class ReceptionistTest {
         assertEquals(address, receptionist.getAddress());
         assertEquals(MaritalStatus.SINGLE, receptionist.getMaritalStatus());
         assertEquals(40, receptionist.getWorkHours());
-        assertEquals(3000f, receptionist.getSalary());
+        assertEquals(new BigDecimal("3000"), receptionist.getSalary());
         assertEquals(5, receptionist.getOvertimeHours());
-        assertEquals(123456, receptionist.getLaborCardNumber());
+        assertEquals("123456", receptionist.getLaborCardNumber());
     }
 
     private static Receptionist receptionistWith(String field, String value) {
@@ -106,14 +123,13 @@ class ReceptionistTest {
                 null,
                 MaritalStatus.SINGLE,
                 40,
-                3000f,
+                new BigDecimal("3000"),
                 5,
-                123456);
+                "123456");
     }
 
     private static Receptionist receptionistWithNumber(String field, int value) {
-        Map<String, Integer> values =
-                new HashMap<>(Map.of("workHours", 40, "salary", 3000, "overtimeHours", 5, "laborCardNumber", 123456));
+        Map<String, Integer> values = new HashMap<>(Map.of("workHours", 40, "salary", 3000, "overtimeHours", 5));
         values.put(field, value);
         return new Receptionist(
                 "Ana Test",
@@ -122,8 +138,8 @@ class ReceptionistTest {
                 null,
                 MaritalStatus.SINGLE,
                 values.get("workHours"),
-                values.get("salary"),
+                BigDecimal.valueOf(values.get("salary")),
                 values.get("overtimeHours"),
-                values.get("laborCardNumber"));
+                "123456");
     }
 }

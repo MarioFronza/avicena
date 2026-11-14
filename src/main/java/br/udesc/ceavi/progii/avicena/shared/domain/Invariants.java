@@ -19,6 +19,7 @@ public final class Invariants {
 
     public static <N extends Number> N notNegative(
             N value, String description, Function<String, InvalidDataException> error) {
+        notNull(value, description, error);
         if (value.doubleValue() < 0) throw error.apply(description + " must not be negative");
         return value;
     }

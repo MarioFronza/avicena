@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "receptionists")
@@ -31,18 +32,18 @@ public class ReceptionistEntity extends AuditedEntity {
     private int workHours;
 
     @Column(name = "salary", nullable = false)
-    private float salary;
+    private BigDecimal salary;
 
     @Column(name = "overtime_hours", nullable = false)
     private int overtimeHours;
 
     @Column(name = "labor_card_number", nullable = false)
-    private int laborCardNumber;
+    private String laborCardNumber;
 
     protected ReceptionistEntity() {}
 
     public ReceptionistEntity(
-            Long id, PersonEntity person, int workHours, float salary, int overtimeHours, int laborCardNumber) {
+            Long id, PersonEntity person, int workHours, BigDecimal salary, int overtimeHours, String laborCardNumber) {
         this.id = id;
         this.person = person;
         this.workHours = workHours;
@@ -51,7 +52,7 @@ public class ReceptionistEntity extends AuditedEntity {
         this.laborCardNumber = laborCardNumber;
     }
 
-    public void update(int workHours, float salary, int overtimeHours, int laborCardNumber) {
+    public void update(int workHours, BigDecimal salary, int overtimeHours, String laborCardNumber) {
         this.workHours = workHours;
         this.salary = salary;
         this.overtimeHours = overtimeHours;
@@ -82,7 +83,7 @@ public class ReceptionistEntity extends AuditedEntity {
         return workHours;
     }
 
-    public float getSalary() {
+    public BigDecimal getSalary() {
         return salary;
     }
 
@@ -90,7 +91,7 @@ public class ReceptionistEntity extends AuditedEntity {
         return overtimeHours;
     }
 
-    public int getLaborCardNumber() {
+    public String getLaborCardNumber() {
         return laborCardNumber;
     }
 }

@@ -45,7 +45,7 @@ docker compose up -d   # postgres:16-alpine, reads the same AVICENA_DB_* vars
 
 ### Schema
 
-Flyway owns the schema (`src/main/resources/db/migration/`, `V1` to `V12`), run by
+Flyway owns the schema (`src/main/resources/db/migration/`, `V1` to `V14`), run by
 `PersistenceConfig` before the persistence unit boots. Hibernate's schema-generation
 action is unset. Flyway runs with `baselineOnMigrate(true)`/`baselineVersion("1")`, so
 a database that already has the pre-Flyway schema baselines instead of re-running `V1`.
@@ -55,6 +55,14 @@ names, all four person roles share `people`, and lookups (`marital_statuses`,
 `urgency_statuses`, `departments`, `specialties`, `roles`) replace raw ordinals and
 free text. Migrations that rename live-referenced tables (`addresses`, `appointments`)
 use `ALTER ... RENAME` to keep data. The others drop and recreate.
+
+`V13`/`V14` finished the schema: columns named for what they hold, money and temperature
+as `numeric`, document numbers as `varchar`, UNIQUE `people.cpf`/`doctors.crm`, NOT NULL
+on every required FK, non-negative checks, an index on every FK, and the orphan
+Portuguese sequences dropped. `SchemaConstraintsTest` pins all of it, including a
+catalog check that every FK is indexed and every sequence has a table. A migration that
+can meet bad existing data checks for it first and aborts with a message instead of
+changing rows.
 
 ### Tests
 
@@ -101,8 +109,9 @@ Four uniform slices, none importing another's `domain`:
   `PersonEntity` has a `@OneToOne(cascade = ALL, orphanRemoval = true)` to
   `AddressEntity` (`addresses`), so deleting a person deletes its address, and a
   `MaritalStatusEntity` (`marital_statuses`). Role-specific columns stay on the role
-  table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse `formation`/`hoursCompleted`,
-  Receptionist `workHours`/`salary`/`overtimeHours`/`laborCardNumber`. The public
+  table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse `qualification`/`trainingHours`,
+  Receptionist `workHours`/`salary` (`BigDecimal`, `numeric(10,2)`)/`overtimeHours`/
+  `laborCardNumber` (`String`). The public
   `PersonMapper` maps the person and address part for all four mappers.
 - **Saving**: `save` inserts when the domain id is null or unknown, otherwise loads the
   entity and calls its `update(...)` (entities have no setters), keeping person and

@@ -49,10 +49,10 @@ final class DiagnosisMapper {
                 entity.getTemperature(),
                 entity.getHeight(),
                 entity.getWeight(),
-                entity.getMedicationHistory(),
+                entity.getNotes(),
                 finalDiagnosis == null ? null : finalDiagnosis.getDisease(),
                 finalDiagnosis == null ? null : finalDiagnosis.getMedications(),
                 finalDiagnosis == null ? null : finalDiagnosis.getExamNotes(),
-                finalDiagnosis == null ? null : finalDiagnosis.getDescription());
+                finalDiagnosis == null ? null : finalDiagnosis.getFinalDescription());
     }
 }

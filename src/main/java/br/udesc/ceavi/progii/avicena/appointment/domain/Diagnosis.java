@@ -1,13 +1,14 @@
 package br.udesc.ceavi.progii.avicena.appointment.domain;
 
 import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
+import java.math.BigDecimal;
 
 public class Diagnosis {
 
     private final Long id;
     private final Long appointmentId;
     private final float bloodPressure;
-    private final int temperature;
+    private final BigDecimal temperature;
     private final int height;
     private final int weight;
     private final String notes;
@@ -19,7 +20,7 @@ public class Diagnosis {
     public Diagnosis(
             Long appointmentId,
             float bloodPressure,
-            int temperature,
+            BigDecimal temperature,
             int height,
             int weight,
             String notes,
@@ -45,7 +46,7 @@ public class Diagnosis {
             Long id,
             Long appointmentId,
             float bloodPressure,
-            int temperature,
+            BigDecimal temperature,
             int height,
             int weight,
             String notes,
@@ -81,7 +82,7 @@ public class Diagnosis {
         return bloodPressure;
     }
 
-    public int getTemperature() {
+    public BigDecimal getTemperature() {
         return temperature;
     }
 

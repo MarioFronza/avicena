@@ -114,23 +114,18 @@ class ReceptionistControllerTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"   ", "abc", "12,5"})
-    void registerRejectsANonNumericLaborCardNumber(String value) {
+    @ValueSource(strings = {"   "})
+    void registerRejectsABlankLaborCardNumber(String value) {
         assertThrows(
                 InvalidReceptionistDataException.class,
                 () -> controller.register(formWithNumber("laborCardNumber", value)));
     }
 
     @Test
-    void registerRejectsANegativeLaborCardNumber() {
-        assertThrows(
-                InvalidReceptionistDataException.class,
-                () -> controller.register(formWithNumber("laborCardNumber", "-1")));
-    }
+    void registerKeepsLeadingZerosInTheLaborCardNumber() {
+        Receptionist receptionist = controller.register(formWithNumber("laborCardNumber", "000123"));
 
-    @Test
-    void registerAcceptsLaborCardNumberWithSurroundingWhitespace() {
-        assertDoesNotThrow(() -> controller.register(formWithNumber("laborCardNumber", " 123 ")));
+        assertEquals("000123", receptionist.getLaborCardNumber());
     }
 
     @Test
