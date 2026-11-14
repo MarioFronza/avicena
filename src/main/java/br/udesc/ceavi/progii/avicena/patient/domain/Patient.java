@@ -1,6 +1,7 @@
 package br.udesc.ceavi.progii.avicena.patient.domain;
 
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 public class Patient {
@@ -17,19 +18,10 @@ public class Patient {
     }
 
     public Patient(Long id, String name, String cpf, String phone, Address address, MaritalStatus maritalStatus) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidPatientDataException("Patient name must not be blank");
-        }
-        if (cpf == null || cpf.isBlank()) {
-            throw new InvalidPatientDataException("Patient cpf must not be blank");
-        }
-        if (phone == null || phone.isBlank()) {
-            throw new InvalidPatientDataException("Patient phone must not be blank");
-        }
         this.id = id;
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
+        this.name = Invariants.notBlank(name, "Patient name", InvalidPatientDataException::new);
+        this.cpf = Invariants.notBlank(cpf, "Patient cpf", InvalidPatientDataException::new);
+        this.phone = Invariants.notBlank(phone, "Patient phone", InvalidPatientDataException::new);
         this.address = address;
         this.maritalStatus = maritalStatus;
     }

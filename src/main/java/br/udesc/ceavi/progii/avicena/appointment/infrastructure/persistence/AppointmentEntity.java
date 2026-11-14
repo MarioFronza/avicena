@@ -13,14 +13,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "appointments")
 public class AppointmentEntity {
-
-    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -77,12 +73,12 @@ public class AppointmentEntity {
         return id;
     }
 
-    public String getDate() {
-        return date == null ? null : date.format(DATE_FORMATTER);
+    public LocalDate getDate() {
+        return date;
     }
 
-    public String getTime() {
-        return time == null ? null : time.format(TIME_FORMATTER);
+    public LocalTime getTime() {
+        return time;
     }
 
     public String getSymptoms() {

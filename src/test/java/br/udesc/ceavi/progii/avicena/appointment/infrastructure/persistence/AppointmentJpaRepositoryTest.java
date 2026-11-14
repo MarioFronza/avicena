@@ -14,6 +14,8 @@ import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRe
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +38,8 @@ class AppointmentJpaRepositoryTest {
                 .save(new Nurse(
                         "Nurse Test", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Technician", 1200));
         Appointment appointment = new Appointment(
-                "05/08/2026",
-                "14:00",
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 0),
                 "Fever",
                 patient.getId(),
                 doctor.getId(),
@@ -62,8 +64,14 @@ class AppointmentJpaRepositoryTest {
     void deleteRemovesAPreviouslyPersistedAppointment() {
         Patient patient = new PatientJpaRepository()
                 .save(new Patient("Second Patient", "44444444444", "480000003", null, MaritalStatus.SINGLE));
-        Appointment appointment =
-                new Appointment("05/08/2026", "15:00", "Cough", patient.getId(), null, null, UrgencyStatus.NOT_URGENT);
+        Appointment appointment = new Appointment(
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(15, 0),
+                "Cough",
+                patient.getId(),
+                null,
+                null,
+                UrgencyStatus.NOT_URGENT);
         AppointmentJpaRepository repository = new AppointmentJpaRepository();
         Appointment saved = repository.save(appointment);
 

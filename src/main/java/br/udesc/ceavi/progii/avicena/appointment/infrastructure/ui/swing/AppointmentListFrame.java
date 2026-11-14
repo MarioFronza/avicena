@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorEntity;
@@ -64,8 +65,8 @@ public class AppointmentListFrame extends ReadOnlyFrame {
 
     static String[] toTableRow(AppointmentEntity appointment) {
         return new String[] {
-            appointment.getDate(),
-            appointment.getTime(),
+            appointment.getDate() == null ? "-" : appointment.getDate().format(AppointmentController.DATE_FORMAT),
+            appointment.getTime() == null ? "-" : appointment.getTime().format(AppointmentController.TIME_FORMAT),
             nameOrPlaceholder(appointment.getPatient()),
             nameOrPlaceholder(appointment.getDoctor()),
             nameOrPlaceholder(appointment.getNurse())

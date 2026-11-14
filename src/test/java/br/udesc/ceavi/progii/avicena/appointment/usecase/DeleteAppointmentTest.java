@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class DeleteAppointmentTest {
@@ -12,7 +14,8 @@ class DeleteAppointmentTest {
     @Test
     void deletesTheAppointmentThroughTheRepository() {
         InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
-        Appointment appointment = new Appointment("05/08/2026", "14:00", "Fever", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
+        Appointment appointment = new Appointment(
+                LocalDate.of(2026, 8, 5), LocalTime.of(14, 0), "Fever", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
         repository.save(appointment);
         DeleteAppointment useCase = new DeleteAppointment(repository);
 

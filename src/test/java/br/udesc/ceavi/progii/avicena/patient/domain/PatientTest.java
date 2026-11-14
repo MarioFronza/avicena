@@ -1,34 +1,40 @@
 package br.udesc.ceavi.progii.avicena.patient.domain;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Fixtures;
+import java.util.HashMap;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class PatientTest {
 
-    @Test
-    void rejectsBlankName() {
-        assertThrows(
-                InvalidPatientDataException.class,
-                () -> new Patient("", "12345678900", "48999990000", null, MaritalStatus.SINGLE));
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void rejectsABlankName(String name) {
+        assertThrows(InvalidPatientDataException.class, () -> patientWith("name", name));
     }
 
-    @Test
-    void rejectsBlankCpf() {
-        assertThrows(
-                InvalidPatientDataException.class,
-                () -> new Patient("Maria Test", "", "48999990000", null, MaritalStatus.SINGLE));
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void rejectsABlankCpf(String cpf) {
+        assertThrows(InvalidPatientDataException.class, () -> patientWith("cpf", cpf));
     }
 
-    @Test
-    void rejectsBlankPhone() {
-        assertThrows(
-                InvalidPatientDataException.class,
-                () -> new Patient("Maria Test", "12345678900", "", null, MaritalStatus.SINGLE));
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"   "})
+    void rejectsABlankPhone(String phone) {
+        assertThrows(InvalidPatientDataException.class, () -> patientWith("phone", phone));
     }
 
     @Test
@@ -42,5 +48,17 @@ class PatientTest {
         assertEquals("48999990000", patient.getPhone());
         assertEquals(address, patient.getAddress());
         assertEquals(MaritalStatus.SINGLE, patient.getMaritalStatus());
+    }
+
+    @Test
+    void acceptsANullAddressAndMaritalStatus() {
+        assertDoesNotThrow(() -> new Patient("Maria Test", "12345678900", "48999990000", null, null));
+    }
+
+    private static Patient patientWith(String field, String value) {
+        Map<String, String> values =
+                new HashMap<>(Map.of("name", "Maria Test", "cpf", "12345678900", "phone", "48999990000"));
+        values.put(field, value);
+        return new Patient(values.get("name"), values.get("cpf"), values.get("phone"), null, MaritalStatus.SINGLE);
     }
 }

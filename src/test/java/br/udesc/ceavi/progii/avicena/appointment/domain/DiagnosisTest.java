@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.domain;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -8,25 +9,59 @@ import org.junit.jupiter.api.Test;
 class DiagnosisTest {
 
     @Test
-    void rejectsNullAppointmentId() {
-        assertThrows(
-                InvalidDiagnosisDataException.class,
-                () -> new Diagnosis(null, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default"));
+    void rejectsANullAppointmentId() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> diagnosis(null, 120f, 37, 170, 70));
+    }
+
+    @Test
+    void rejectsANegativeBloodPressure() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> diagnosis(1L, -1f, 37, 170, 70));
+    }
+
+    @Test
+    void rejectsANegativeTemperature() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> diagnosis(1L, 120f, -1, 170, 70));
+    }
+
+    @Test
+    void rejectsANegativeHeight() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> diagnosis(1L, 120f, 37, -1, 70));
+    }
+
+    @Test
+    void rejectsANegativeWeight() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> diagnosis(1L, 120f, 37, 170, -1));
+    }
+
+    @Test
+    void acceptsZeroVitals() {
+        assertDoesNotThrow(() -> diagnosis(1L, 0f, 0, 0, 0));
+    }
+
+    @Test
+    void acceptsNoNotesOrDescriptions() {
+        assertDoesNotThrow(() -> new Diagnosis(1L, 120f, 37, 170, 70, null, null, null, null, null));
     }
 
     @Test
     void exposesFieldsAfterValidConstruction() {
-        Diagnosis diagnosis = new Diagnosis(1L, 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
+        Diagnosis diagnosis = new Diagnosis(1L, 120f, 37, 170, 70, "Notes", "Flu", "Rest", "Exam notes", "Final");
 
         assertEquals(1L, diagnosis.getAppointmentId());
         assertEquals(120f, diagnosis.getBloodPressure());
         assertEquals(37, diagnosis.getTemperature());
         assertEquals(170, diagnosis.getHeight());
         assertEquals(70, diagnosis.getWeight());
-        assertEquals("Default", diagnosis.getNotes());
+        assertEquals("Notes", diagnosis.getNotes());
         assertEquals("Flu", diagnosis.getDisease());
         assertEquals("Rest", diagnosis.getMedications());
-        assertEquals("Default exam", diagnosis.getExamNotes());
-        assertEquals("Default", diagnosis.getFinalDescription());
+        assertEquals("Exam notes", diagnosis.getExamNotes());
+        assertEquals("Final", diagnosis.getFinalDescription());
+    }
+
+    private static Diagnosis diagnosis(
+            Long appointmentId, float bloodPressure, int temperature, int height, int weight) {
+        return new Diagnosis(
+                appointmentId, bloodPressure, temperature, height, weight, "Notes", "Flu", "Rest", "Exam", "Final");
     }
 }

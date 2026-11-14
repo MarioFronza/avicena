@@ -1,6 +1,7 @@
 package br.udesc.ceavi.progii.avicena.nurse.domain;
 
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 public class Nurse {
@@ -34,17 +35,15 @@ public class Nurse {
             MaritalStatus maritalStatus,
             String formation,
             int hoursCompleted) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidNurseDataException("Nurse name must not be blank");
-        }
         this.id = id;
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
+        this.name = Invariants.notBlank(name, "Nurse name", InvalidNurseDataException::new);
+        this.cpf = Invariants.notBlank(cpf, "Nurse cpf", InvalidNurseDataException::new);
+        this.phone = Invariants.notBlank(phone, "Nurse phone", InvalidNurseDataException::new);
         this.address = address;
         this.maritalStatus = maritalStatus;
-        this.formation = formation;
-        this.hoursCompleted = hoursCompleted;
+        this.formation = Invariants.notBlank(formation, "Nurse formation", InvalidNurseDataException::new);
+        this.hoursCompleted =
+                Invariants.notNegative(hoursCompleted, "Nurse hours completed", InvalidNurseDataException::new);
     }
 
     public Long getId() {

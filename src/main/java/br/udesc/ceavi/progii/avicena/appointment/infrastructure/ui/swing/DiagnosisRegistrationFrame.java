@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.DiagnosisController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
@@ -138,8 +139,8 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
         appointments = findAllAppointments();
         appointmentComboBox.removeAllItems();
         for (AppointmentEntity appointment : appointments) {
-            appointmentComboBox.addItem(
-                    appointment.getTime() + " - " + appointment.getPatient().getName());
+            appointmentComboBox.addItem(appointment.getTime().format(AppointmentController.TIME_FORMAT) + " - "
+                    + appointment.getPatient().getName());
         }
     }
 

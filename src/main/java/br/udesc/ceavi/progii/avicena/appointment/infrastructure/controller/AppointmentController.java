@@ -1,6 +1,7 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
+import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidAppointmentDataException;
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
@@ -10,9 +11,19 @@ import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public class AppointmentController {
+
+    public static final String DATE_PATTERN = "dd/MM/yyyy";
+    public static final String TIME_PATTERN = "HH:mm";
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern(DATE_PATTERN);
+    public static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern(TIME_PATTERN);
 
     public record Form(
             String date,
@@ -44,8 +55,8 @@ public class AppointmentController {
 
     public Appointment register(Form form) {
         return registerAppointment.register(new Appointment(
-                form.date(),
-                form.time(),
+                parse(form.date(), DATE_PATTERN, LocalDate::parse, "Appointment date"),
+                parse(form.time(), TIME_PATTERN, LocalTime::parse, "Appointment time"),
                 form.symptoms(),
                 findPatientIdByCpf(form.patientCpf()),
                 form.doctorId(),
@@ -71,5 +82,15 @@ public class AppointmentController {
                 .findFirst()
                 .map(Patient::getId)
                 .orElse(null);
+    }
+
+    private static <T> T parse(
+            String text, String pattern, BiFunction<String, DateTimeFormatter, T> parser, String field) {
+        if (text == null || text.isBlank()) return null;
+        try {
+            return parser.apply(text.strip(), DateTimeFormatter.ofPattern(pattern));
+        } catch (DateTimeParseException e) {
+            throw new InvalidAppointmentDataException(field + " must be in " + pattern + " format", e);
+        }
     }
 }

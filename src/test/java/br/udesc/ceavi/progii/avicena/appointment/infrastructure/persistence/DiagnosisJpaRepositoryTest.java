@@ -12,6 +12,8 @@ import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
 class DiagnosisJpaRepositoryTest {
@@ -47,7 +49,13 @@ class DiagnosisJpaRepositoryTest {
                 .save(new Patient("Diagnosis Patient", "55555555555", "480000004", null, MaritalStatus.SINGLE));
         return new br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentJpaRepository()
                 .save(new Appointment(
-                        "05/08/2026", "16:00", "Fever", patient.getId(), null, null, UrgencyStatus.NOT_URGENT));
+                        LocalDate.of(2026, 8, 5),
+                        LocalTime.of(16, 0),
+                        "Fever",
+                        patient.getId(),
+                        null,
+                        null,
+                        UrgencyStatus.NOT_URGENT));
     }
 
     private DiagnosisEntity findEntityById(Long id) {

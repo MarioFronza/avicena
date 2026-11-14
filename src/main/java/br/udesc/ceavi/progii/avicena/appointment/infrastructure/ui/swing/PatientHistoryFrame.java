@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.PatientHistoryController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.view.frames.ReadOnlyFrame;
@@ -46,7 +47,8 @@ public class PatientHistoryFrame extends ReadOnlyFrame {
     }
 
     static String[] toTableRow(AppointmentEntity appointment) {
-        return new String[] {appointment.getDate(), appointment.getSymptoms()};
+        return new String[] {appointment.getDate().format(AppointmentController.DATE_FORMAT), appointment.getSymptoms()
+        };
     }
 
     private void initializeComponents() {
