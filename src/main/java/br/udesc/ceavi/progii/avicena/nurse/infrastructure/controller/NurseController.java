@@ -13,13 +13,30 @@ import java.util.Optional;
 public class NurseController {
 
     public record Form(
+            Long id,
             String name,
             String cpf,
             String phone,
             Address address,
             MaritalStatus maritalStatus,
             String formation,
-            String hoursCompleted) {}
+            String hoursCompleted) {
+
+        public Form(
+                String name,
+                String cpf,
+                String phone,
+                Address address,
+                MaritalStatus maritalStatus,
+                String formation,
+                String hoursCompleted) {
+            this(null, name, cpf, phone, address, maritalStatus, formation, hoursCompleted);
+        }
+
+        public Form withId(Long id) {
+            return new Form(id, name, cpf, phone, address, maritalStatus, formation, hoursCompleted);
+        }
+    }
 
     private final RegisterNurse registerNurse;
     private final DeleteNurse deleteNurse;
@@ -33,6 +50,7 @@ public class NurseController {
 
     public Nurse register(Form form) {
         return registerNurse.register(new Nurse(
+                form.id(),
                 form.name(),
                 form.cpf(),
                 form.phone(),

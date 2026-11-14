@@ -64,7 +64,7 @@ public class AppointmentRegistrationFrame extends CrudFrame {
 
     private void addListeners() {
         getCrudActionPanel().getCancelButton().addActionListener(e -> cancel());
-        getCrudActionPanel().getNewButton().addActionListener(e -> register());
+        getCrudActionPanel().getNewButton().addActionListener(e -> clearFields());
         getCrudActionPanel().getDeleteButton().addActionListener(e -> delete());
         getCrudActionPanel().getSaveButton().addActionListener(e -> register());
     }
@@ -89,7 +89,7 @@ public class AppointmentRegistrationFrame extends CrudFrame {
                 "Confirm Deletion",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.QUESTION_MESSAGE);
-        if (response == JOptionPane.YES_OPTION) {
+        if (response == JOptionPane.YES_OPTION && appointment != null) {
             controller.delete(appointment);
             clearFields();
         }

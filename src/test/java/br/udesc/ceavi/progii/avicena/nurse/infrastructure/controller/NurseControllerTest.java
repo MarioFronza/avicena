@@ -68,6 +68,17 @@ class NurseControllerTest {
     }
 
     @Test
+    void registerWithTheIdOfASavedNurseUpdatesIt() {
+        Nurse saved = controller.register(form("Nurse Test", "12345678900"));
+
+        Nurse updated = controller.register(withId(saved.getId(), form("Renamed", "12345678900")));
+
+        assertEquals(saved.getId(), updated.getId());
+        assertEquals("Renamed", repository.findById(saved.getId()).orElseThrow().getName());
+        assertEquals(1, repository.findAll().size());
+    }
+
+    @Test
     void deleteRemovesTheNurse() {
         Nurse nurse = controller.register(form("Nurse Test", "12345678900"));
 
@@ -104,5 +115,9 @@ class NurseControllerTest {
 
     private static NurseController.Form formWithNumber(String field, String value) {
         return form("Nurse Test", "12345678900", value);
+    }
+
+    private static NurseController.Form withId(Long id, NurseController.Form form) {
+        return form.withId(id);
     }
 }

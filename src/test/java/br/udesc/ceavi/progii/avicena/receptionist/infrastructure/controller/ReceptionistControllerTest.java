@@ -134,6 +134,17 @@ class ReceptionistControllerTest {
     }
 
     @Test
+    void registerWithTheIdOfASavedReceptionistUpdatesIt() {
+        Receptionist saved = controller.register(form("Receptionist Test", "12345678900"));
+
+        Receptionist updated = controller.register(withId(saved.getId(), form("Renamed", "12345678900")));
+
+        assertEquals(saved.getId(), updated.getId());
+        assertEquals("Renamed", repository.findById(saved.getId()).orElseThrow().getName());
+        assertEquals(1, repository.findAll().size());
+    }
+
+    @Test
     void deleteRemovesTheReceptionist() {
         Receptionist receptionist = controller.register(form("Receptionist Test", "12345678900"));
 
@@ -183,5 +194,9 @@ class ReceptionistControllerTest {
                 numbers.get("salary"),
                 numbers.get("overtimeHours"),
                 numbers.get("laborCardNumber"));
+    }
+
+    private static ReceptionistController.Form withId(Long id, ReceptionistController.Form form) {
+        return form.withId(id);
     }
 }

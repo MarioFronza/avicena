@@ -45,6 +45,17 @@ class DoctorControllerTest {
     }
 
     @Test
+    void registerWithTheIdOfASavedDoctorUpdatesIt() {
+        Doctor saved = controller.register(form("Doctor Test", "12345678900"));
+
+        Doctor updated = controller.register(withId(saved.getId(), form("Renamed", "12345678900")));
+
+        assertEquals(saved.getId(), updated.getId());
+        assertEquals("Renamed", repository.findById(saved.getId()).orElseThrow().getName());
+        assertEquals(1, repository.findAll().size());
+    }
+
+    @Test
     void deleteRemovesTheDoctor() {
         Doctor doctor = controller.register(form("Doctor Test", "12345678900"));
 
@@ -73,5 +84,9 @@ class DoctorControllerTest {
     private static DoctorController.Form form(String name, String cpf) {
         return new DoctorController.Form(
                 name, cpf, "48999990000", ADDRESS, MaritalStatus.SINGLE, "12345", "Cardiology");
+    }
+
+    private static DoctorController.Form withId(Long id, DoctorController.Form form) {
+        return form.withId(id);
     }
 }
