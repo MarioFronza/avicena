@@ -1,10 +1,12 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
@@ -69,5 +71,45 @@ class ReceptionistCrudControllerTest {
         ctrl.delete();
 
         assertTrue(repo.findAll().isEmpty());
+    }
+
+    @Test
+    void registerRejectsNonNumericWorkHours() {
+        fillNumericFields();
+        frame.getWorkHoursField().setText("abc");
+
+        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register());
+    }
+
+    @Test
+    void registerRejectsNonNumericOvertimeHours() {
+        fillNumericFields();
+        frame.getOvertimeHoursField().setText("");
+
+        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register());
+    }
+
+    @Test
+    void registerRejectsNonNumericLaborCardNumber() {
+        fillNumericFields();
+        frame.getLaborCardNumberField().setText("abc");
+
+        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register());
+    }
+
+    @Test
+    void registerRejectsNonNumericSalary() {
+        fillNumericFields();
+        frame.getSalaryField().setText("abc");
+
+        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register());
+    }
+
+    private void fillNumericFields() {
+        frame.getNameField().setText("Receptionist Test");
+        frame.getWorkHoursField().setText("8");
+        frame.getOvertimeHoursField().setText("2");
+        frame.getSalaryField().setText("1500.5");
+        frame.getLaborCardNumberField().setText("123");
     }
 }
