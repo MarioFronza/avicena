@@ -5,7 +5,6 @@
  */
 package br.udesc.ceavi.progii.avicena.view.frames;
 
-import br.udesc.ceavi.progii.avicena.view.painels.CRUDActionPanel;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -27,8 +26,6 @@ public abstract class FrameSemCRUD extends JInternalFrame {
     private Dimension dimension;
     private LayoutManager layout;
 
-    private CRUDActionPanel panelBotoesCRUD;
-
     public FrameSemCRUD(String titulo, Dimension dimension) throws HeadlessException {
         this.dimension = dimension;
 
@@ -48,8 +45,6 @@ public abstract class FrameSemCRUD extends JInternalFrame {
 
         panelPrincipal.setSize(dimension);
         panelPrincipal.setLayout(layout);
-
-        panelBotoesCRUD = new CRUDActionPanel(this);
     }
 
     private void addComponets() {
@@ -64,12 +59,4 @@ public abstract class FrameSemCRUD extends JInternalFrame {
     public void addFormulario2(String layout, Container container) {
         panelPrincipal.add(layout, container);
     }
-
-    public CRUDActionPanel getPanelBotoesCRUD() {
-        return panelBotoesCRUD;
-    }
-
-    public abstract void limparCampos();
-
-    public abstract void carregarCampos();
 }

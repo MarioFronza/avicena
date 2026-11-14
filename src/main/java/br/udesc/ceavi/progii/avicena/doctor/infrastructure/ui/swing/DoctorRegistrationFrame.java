@@ -135,9 +135,6 @@ public class DoctorRegistrationFrame extends FrameCRUD {
         specialtyField.setText(null);
     }
 
-    @Override
-    public void carregarCampos() {}
-
     private void initializeComponents() {
         nameLabel = new JLabel("Name:");
         cpfLabel = new JLabel("CPF:");

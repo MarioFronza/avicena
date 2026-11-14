@@ -38,12 +38,6 @@ public class PatientHistoryFrame extends FrameSemCRUD {
         addComponents();
     }
 
-    @Override
-    public void limparCampos() {}
-
-    @Override
-    public void carregarCampos() {}
-
     private void showAppointments(List<AppointmentEntity> appointments) {
         tableModel.setRowCount(0);
         for (AppointmentEntity appointment : appointments) {

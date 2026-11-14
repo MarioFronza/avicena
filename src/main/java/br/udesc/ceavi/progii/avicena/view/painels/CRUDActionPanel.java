@@ -9,8 +9,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -20,7 +18,7 @@ import javax.swing.JPanel;
  * @since 13/04/2018
  * @version 1.0
  */
-public class CRUDActionPanel extends JPanel implements ActionListener {
+public class CRUDActionPanel extends JPanel {
 
     private JButton btCancelar;
     private JButton btNovo;
@@ -61,11 +59,6 @@ public class CRUDActionPanel extends JPanel implements ActionListener {
 
         btExcluir = new JButton("Excluir");
         btExcluir.setSize(dimensaoBotao);
-
-        btNovo.addActionListener(this);
-        btCancelar.addActionListener(this);
-        btGravar.addActionListener(this);
-        btExcluir.addActionListener(this);
     }
 
     private void addComponents() {
@@ -90,18 +83,5 @@ public class CRUDActionPanel extends JPanel implements ActionListener {
 
     public JButton getBtExcluir() {
         return btExcluir;
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-
-        /*if(e.getSource() == btCancelar){
-                   int aux = JOptionPane.showConfirmDialog(null,"Deseja realmente sair?","Fechar Janela",JOptionPane.YES_NO_OPTION);
-                   if(aux == 0){
-                        parent.setVisible(false);
-                   }
-
-               }
-        */
     }
 }

@@ -121,9 +121,6 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
         patientCpfField.setText(null);
     }
 
-    @Override
-    public void carregarCampos() {}
-
     public void reloadDoctorsAndNurses() {
         doctors = controller.doctors();
         doctorComboBox.removeAllItems();

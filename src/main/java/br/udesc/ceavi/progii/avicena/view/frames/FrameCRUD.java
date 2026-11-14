@@ -70,6 +70,4 @@ public abstract class FrameCRUD extends JInternalFrame {
     }
 
     public abstract void limparCampos();
-
-    public abstract void carregarCampos();
 }

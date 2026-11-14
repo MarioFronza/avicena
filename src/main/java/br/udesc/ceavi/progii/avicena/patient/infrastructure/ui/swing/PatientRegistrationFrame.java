@@ -125,9 +125,6 @@ public class PatientRegistrationFrame extends FrameCRUD {
         phoneField.setText(null);
     }
 
-    @Override
-    public void carregarCampos() {}
-
     private void initializeComponents() {
         nameLabel = new JLabel("Name:");
         cpfLabel = new JLabel("CPF:");

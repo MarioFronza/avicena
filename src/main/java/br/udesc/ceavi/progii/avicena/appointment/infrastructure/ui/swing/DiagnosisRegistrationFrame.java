@@ -134,9 +134,6 @@ public class DiagnosisRegistrationFrame extends FrameCRUD implements ActionListe
     @Override
     public void limparCampos() {}
 
-    @Override
-    public void carregarCampos() {}
-
     public void reloadAppointments() {
         appointments = findAllAppointments();
         appointmentComboBox.removeAllItems();

@@ -89,9 +89,6 @@ public class AddressEntryFrame extends FrameCRUD {
         cityField.setText(null);
     }
 
-    @Override
-    public void carregarCampos() {}
-
     private void initializeComponents() {
         zipCodeLabel = new JLabel("Zip Code:");
         streetLabel = new JLabel("Street:");

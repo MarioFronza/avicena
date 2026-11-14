@@ -34,12 +34,6 @@ public class AppointmentListFrame extends FrameSemCRUD {
         addComponents();
     }
 
-    @Override
-    public void limparCampos() {}
-
-    @Override
-    public void carregarCampos() {}
-
     private void initializeComponents() {
         table = new JTable();
         table.setModel(
