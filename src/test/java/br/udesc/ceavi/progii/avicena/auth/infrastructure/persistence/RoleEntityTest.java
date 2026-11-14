@@ -4,15 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.Test;
 
 class RoleEntityTest {
 
     @Test
     void grantingAPermissionToASeededRoleRoundTripsTheRolePermissionsJoin() {
-        EntityManagerFactory entityManagerFactory = PersistenceConfig.createEntityManagerFactory();
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager entityManager = PersistenceConfig.entityManagerFactory().createEntityManager();
         try {
             PermissionEntity permission = new PermissionEntity(null, "patient:write", "Create or update a patient");
 
@@ -28,7 +26,6 @@ class RoleEntityTest {
                     reloaded.getPermissions().stream().anyMatch(p -> p.getCode().equals("patient:write")));
         } finally {
             entityManager.close();
-            entityManagerFactory.close();
         }
     }
 }
