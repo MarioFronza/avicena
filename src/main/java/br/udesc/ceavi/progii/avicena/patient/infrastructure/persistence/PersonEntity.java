@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -17,7 +18,8 @@ import jakarta.persistence.Table;
 public class PersonEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "people_seq")
+    @SequenceGenerator(name = "people_seq", sequenceName = "people_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 

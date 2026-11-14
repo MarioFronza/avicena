@@ -13,10 +13,10 @@ public class MaritalStatusEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "code", nullable = false)
+    @Column(name = "code", nullable = false, length = 20)
     private String code;
 
-    @Column(name = "label", nullable = false)
+    @Column(name = "label", nullable = false, length = 50)
     private String label;
 
     protected MaritalStatusEntity() {}

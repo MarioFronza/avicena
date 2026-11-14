@@ -6,6 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
@@ -13,7 +14,8 @@ import jakarta.persistence.Table;
 public class SpecialtyEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "specialties_seq")
+    @SequenceGenerator(name = "specialties_seq", sequenceName = "specialties_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 

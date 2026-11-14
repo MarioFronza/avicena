@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,7 +21,8 @@ import java.time.LocalTime;
 public class AppointmentEntity extends AuditedEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "appointments_seq")
+    @SequenceGenerator(name = "appointments_seq", sequenceName = "appointments_seq", allocationSize = 50)
     @Column(name = "id")
     private Long id;
 
