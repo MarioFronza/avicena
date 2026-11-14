@@ -99,10 +99,13 @@ Four uniform slices, none importing another's `domain`:
   role table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse
   `formation`/`hoursCompleted`, Receptionist
   `workHours`/`salary`/`overtimeHours`/`laborCardNumber`.
-- **`infrastructure/ui/`**: `*RegistrationFrame` (Swing form, owns its buttons,
-  dialogs and the record on screen), `*Controller` (`register(Form)`, `delete`,
-  `findByCpf` as list-all-then-filter), `Register*MenuListener`.
-  `patient.infrastructure.ui` also owns the "Add Address" popup
+- **`infrastructure/controller/`**: `*Controller` (`register(Form)`, `delete`,
+  `findByCpf` as list-all-then-filter). UI-agnostic interface adapter, see
+  "Composition root".
+- **`infrastructure/ui/swing/`**: `*RegistrationFrame` (Swing form, owns its buttons,
+  dialogs and the record on screen) and `Register*MenuListener`. Each UI technology
+  gets its own subpackage under `ui/` (a future `ui/compose` or web adapter sits next to
+  `swing`). `patient.infrastructure.ui.swing` also owns the "Add Address" popup
   (`AddressEntryFrame`/`AddAddressListener`), one instance per registration screen. It
   hands the `Address` it builds to the screen's `useAddress`; the cascade persists it
   with the parent.
@@ -127,12 +130,13 @@ Deviates from the person template on purpose:
   case. `DiagnosisRepository` only exposes `save`/`delete`. `DiagnosisEntity`
   (`diagnoses`) has a `@ManyToOne(cascade = ALL) FinalDiagnosisEntity`
   (`final_diagnoses`), the one cascade in the codebase that also cascades removal.
-- `infrastructure/ui/`: `AppointmentRegistrationFrame`/`AppointmentController`,
-  `AppointmentListFrame` (extends `FrameSemCRUD`, read-only table),
-  `DiagnosisRegistrationFrame`/`DiagnosisController` (two-panel `CardLayout`:
-  primary/final diagnosis), `PatientHistoryFrame`/`PatientHistoryController`
-  (CPF search over appointments), and `BtGerarReceiraListener` (prescription PDF via
-  iText, triggered from `DiagnosisRegistrationFrame`).
+- `infrastructure/controller/`: `AppointmentController`, `DiagnosisController` and
+  `PatientHistoryController` (CPF search over appointments).
+- `infrastructure/ui/swing/`: `AppointmentRegistrationFrame`, `AppointmentListFrame`
+  (extends `FrameSemCRUD`, read-only table), `DiagnosisRegistrationFrame` (two-panel
+  `CardLayout`: primary/final diagnosis), `PatientHistoryFrame`, and
+  `BtGerarReceiraListener` (prescription PDF via iText, triggered from
+  `DiagnosisRegistrationFrame`).
 
 ### `auth/`: persistence only
 
@@ -159,8 +163,8 @@ screen itself. Controllers import no Swing or AWT: they take a `Form` record of 
 input values (strings, as a web form would send them), parse numbers, call the use
 cases and return the domain object or throw the domain's `Invalid*DataException`. A
 web front end should reuse them unchanged. Controller tests drive them directly against
-`InMemory*Repository` copies in the `infrastructure/ui` test package, with no frame and
-no Postgres.
+`InMemory*Repository` copies in the `infrastructure/controller` test package, with no
+frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
 
 `AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
 `BtGerarReceiraListener` still query `AppointmentEntity` directly through
