@@ -1,5 +1,8 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui;
 
+import br.udesc.ceavi.progii.avicena.nurse.domain.InvalidNurseDataException;
+import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
+import br.udesc.ceavi.progii.avicena.patient.domain.Address;
 import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.Dimension;
@@ -11,6 +14,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -39,15 +43,89 @@ public class NurseRegistrationFrame extends FrameCRUD {
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public NurseRegistrationFrame() {
-        this(TITLE, DIMENSION);
-    }
+    private final NurseController controller;
+    private Nurse nurse;
+    private Address address;
 
-    public NurseRegistrationFrame(String title, Dimension dimension) {
-        super(title, dimension);
+    public NurseRegistrationFrame(NurseController controller) {
+        super(TITLE, DIMENSION);
+        this.controller = controller;
 
         initializeComponents();
         addComponents();
+        addListeners();
+    }
+
+    public void useAddress(Address address) {
+        this.address = address;
+    }
+
+    private void addListeners() {
+        getPanelBotoesCRUD().getBtCancelar().addActionListener(e -> cancel());
+        getPanelBotoesCRUD().getBtNovo().addActionListener(e -> register());
+        getPanelBotoesCRUD().getBtExcluir().addActionListener(e -> delete());
+        getPanelBotoesCRUD().getBtGravar().addActionListener(e -> register());
+        searchButton.addActionListener(e -> search());
+    }
+
+    private void cancel() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you really want to close this window?",
+                "Confirm Close",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            dispose();
+            limparCampos();
+        }
+    }
+
+    private void delete() {
+        int response = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to delete this Nurse?",
+                "Confirm Deletion",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (response == JOptionPane.YES_OPTION) {
+            controller.delete(nurse);
+            limparCampos();
+        }
+    }
+
+    private void register() {
+        try {
+            nurse = controller.register(new NurseController.Form(
+                    nameField.getText(),
+                    cpfField.getText(),
+                    phoneField.getText(),
+                    address,
+                    (MaritalStatus) maritalStatusComboBox.getSelectedItem(),
+                    formationField.getText(),
+                    hoursCompletedField.getText()));
+            JOptionPane.showMessageDialog(this, "Nurse saved");
+        } catch (InvalidNurseDataException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+
+        limparCampos();
+    }
+
+    private void search() {
+        controller
+                .findByCpf(cpfField.getText())
+                .ifPresentOrElse(this::show, () -> JOptionPane.showMessageDialog(this, "Nurse not found"));
+    }
+
+    private void show(Nurse found) {
+        JOptionPane.showMessageDialog(this, "Nurse found");
+        nurse = found;
+        nameField.setText(found.getName());
+        phoneField.setText(found.getPhone());
+        formationField.setText(found.getFormation());
+        hoursCompletedField.setText(String.valueOf(found.getHoursCompleted()));
+        maritalStatusComboBox.setSelectedItem(found.getMaritalStatus());
     }
 
     @Override
@@ -214,34 +292,6 @@ public class NurseRegistrationFrame extends FrameCRUD {
         formPanel.add(addressButton, constraints);
 
         super.addFormulario(formPanel);
-    }
-
-    public JTextField getNameField() {
-        return nameField;
-    }
-
-    public JTextField getCpfField() {
-        return cpfField;
-    }
-
-    public JTextField getPhoneField() {
-        return phoneField;
-    }
-
-    public JTextField getFormationField() {
-        return formationField;
-    }
-
-    public JTextField getHoursCompletedField() {
-        return hoursCompletedField;
-    }
-
-    public JComboBox<MaritalStatus> getMaritalStatusComboBox() {
-        return maritalStatusComboBox;
-    }
-
-    public JButton getSearchButton() {
-        return searchButton;
     }
 
     public JButton getAddressButton() {
