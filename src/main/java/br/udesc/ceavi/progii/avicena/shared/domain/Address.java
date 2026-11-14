@@ -1,4 +1,4 @@
-package br.udesc.ceavi.progii.avicena.patient.domain;
+package br.udesc.ceavi.progii.avicena.shared.domain;
 
 import java.util.Objects;
 

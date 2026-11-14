@@ -1,37 +1,62 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence;
 
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
+import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.domain.NurseRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class NurseJpaRepository implements NurseRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    public NurseJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
+    @Override
+    public Nurse save(Nurse nurse) {
+        return JpaTransactions.write(entityManager -> {
+            NurseEntity entity = NurseMapper.toEntity(nurse, findMaritalStatus(entityManager, nurse));
+            entityManager.persist(entity);
+            return NurseMapper.toDomain(entity);
+        });
     }
 
     @Override
-    public Nurse save(Nurse nurse) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, nurse);
-            NurseEntity entity = NurseMapper.toEntity(nurse, maritalStatus);
-            entityManager.getTransaction().begin();
-            entityManager.persist(entity);
-            entityManager.getTransaction().commit();
-            return NurseMapper.toDomain(entity);
-        } finally {
-            entityManager.close();
-        }
+    public List<Nurse> findAll() {
+        return JpaTransactions.read(entityManager ->
+                entityManager
+                        .createQuery("SELECT e FROM NurseEntity e ORDER BY e.id", NurseEntity.class)
+                        .getResultList()
+                        .stream()
+                        .map(NurseMapper::toDomain)
+                        .toList());
     }
 
-    private MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Nurse nurse) {
+    @Override
+    public Optional<Nurse> findById(Long id) {
+        return JpaTransactions.read(entityManager ->
+                Optional.ofNullable(entityManager.find(NurseEntity.class, id)).map(NurseMapper::toDomain));
+    }
+
+    @Override
+    public Optional<Nurse> findByCpf(String cpf) {
+        return JpaTransactions.read(entityManager -> entityManager
+                .createQuery("SELECT e FROM NurseEntity e WHERE e.person.cpf = :cpf ORDER BY e.id", NurseEntity.class)
+                .setParameter("cpf", cpf)
+                .getResultStream()
+                .findFirst()
+                .map(NurseMapper::toDomain));
+    }
+
+    @Override
+    public void delete(Nurse nurse) {
+        JpaTransactions.write(entityManager -> {
+            Optional.ofNullable(nurse.getId())
+                    .map(id -> entityManager.find(NurseEntity.class, id))
+                    .ifPresent(entityManager::remove);
+            return null;
+        });
+    }
+
+    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Nurse nurse) {
         if (nurse.getMaritalStatus() == null) {
             return null;
         }
@@ -39,30 +64,5 @@ public class NurseJpaRepository implements NurseRepository {
                 .createQuery("SELECT m FROM MaritalStatusEntity m WHERE m.code = :code", MaritalStatusEntity.class)
                 .setParameter("code", nurse.getMaritalStatus().name())
                 .getSingleResult();
-    }
-
-    @Override
-    public List<Nurse> findAll() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return entityManager.createQuery("SELECT n FROM NurseEntity n", NurseEntity.class).getResultList().stream()
-                    .map(NurseMapper::toDomain)
-                    .toList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public void delete(Nurse nurse) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            NurseEntity entity = entityManager.find(NurseEntity.class, nurse.getId());
-            entityManager.remove(entity);
-            entityManager.getTransaction().commit();
-        } finally {
-            entityManager.close();
-        }
     }
 }

@@ -16,6 +16,7 @@ import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.Registe
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing.ShowPatientHistoryMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
+import br.udesc.ceavi.progii.avicena.appointment.usecase.ListAppointmentsByPatient;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
@@ -25,6 +26,7 @@ import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpa
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.swing.DoctorRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.ui.swing.RegisterDoctorMenuListener;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.DeleteDoctor;
+import br.udesc.ceavi.progii.avicena.doctor.usecase.FindDoctorByCpf;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.RegisterDoctor;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.controller.NurseController;
@@ -32,6 +34,7 @@ import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRe
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.swing.NurseRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui.swing.RegisterNurseMenuListener;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
+import br.udesc.ceavi.progii.avicena.nurse.usecase.FindNurseByCpf;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.controller.PatientController;
@@ -41,14 +44,14 @@ import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing.AddressEntr
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing.PatientRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing.RegisterPatientMenuListener;
 import br.udesc.ceavi.progii.avicena.patient.usecase.DeletePatient;
-import br.udesc.ceavi.progii.avicena.patient.usecase.ListPatients;
+import br.udesc.ceavi.progii.avicena.patient.usecase.FindPatientByCpf;
 import br.udesc.ceavi.progii.avicena.patient.usecase.RegisterPatient;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.controller.ReceptionistController;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence.ReceptionistJpaRepository;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.swing.ReceptionistRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.swing.RegisterReceptionistMenuListener;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.DeleteReceptionist;
-import br.udesc.ceavi.progii.avicena.receptionist.usecase.ListReceptionists;
+import br.udesc.ceavi.progii.avicena.receptionist.usecase.FindReceptionistByCpf;
 import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import br.udesc.ceavi.progii.avicena.view.main.MainFrame;
 import javax.swing.JOptionPane;
@@ -79,7 +82,7 @@ public class AvicenaMain {
         PatientRegistrationFrame patientFrame = new PatientRegistrationFrame(new PatientController(
                 new RegisterPatient(patientRepository),
                 new DeletePatient(patientRepository),
-                new ListPatients(patientRepository)));
+                new FindPatientByCpf(patientRepository)));
 
         AddressEntryFrame patientAddressFrame = new AddressEntryFrame(patientFrame::useAddress);
 
@@ -91,7 +94,7 @@ public class AvicenaMain {
         ReceptionistRegistrationFrame receptionistFrame = new ReceptionistRegistrationFrame(new ReceptionistController(
                 new RegisterReceptionist(receptionistRepository),
                 new DeleteReceptionist(receptionistRepository),
-                new ListReceptionists(receptionistRepository)));
+                new FindReceptionistByCpf(receptionistRepository)));
 
         AddressEntryFrame receptionistAddressFrame = new AddressEntryFrame(receptionistFrame::useAddress);
 
@@ -105,7 +108,7 @@ public class AvicenaMain {
         DoctorRegistrationFrame doctorFrame = new DoctorRegistrationFrame(new DoctorController(
                 new RegisterDoctor(doctorRepository),
                 new DeleteDoctor(doctorRepository),
-                new ListDoctors(doctorRepository)));
+                new FindDoctorByCpf(doctorRepository)));
 
         AddressEntryFrame doctorAddressFrame = new AddressEntryFrame(doctorFrame::useAddress);
 
@@ -115,7 +118,9 @@ public class AvicenaMain {
 
         NurseJpaRepository nurseRepository = new NurseJpaRepository();
         NurseRegistrationFrame nurseFrame = new NurseRegistrationFrame(new NurseController(
-                new RegisterNurse(nurseRepository), new DeleteNurse(nurseRepository), new ListNurses(nurseRepository)));
+                new RegisterNurse(nurseRepository),
+                new DeleteNurse(nurseRepository),
+                new FindNurseByCpf(nurseRepository)));
 
         AddressEntryFrame nurseAddressFrame = new AddressEntryFrame(nurseFrame::useAddress);
 
@@ -127,7 +132,7 @@ public class AvicenaMain {
         AppointmentRegistrationFrame appointmentFrame = new AppointmentRegistrationFrame(new AppointmentController(
                 new RegisterAppointment(appointmentRepository),
                 new DeleteAppointment(appointmentRepository),
-                new ListPatients(patientRepository),
+                new FindPatientByCpf(patientRepository),
                 new ListDoctors(doctorRepository),
                 new ListNurses(nurseRepository)));
 
@@ -143,7 +148,8 @@ public class AvicenaMain {
         AppointmentListFrame appointmentListFrame = new AppointmentListFrame();
         mainFrame.getMainMenu().add(new ListAppointmentsMenuListener(mainFrame, appointmentListFrame));
 
-        PatientHistoryFrame patientHistoryFrame = new PatientHistoryFrame(new PatientHistoryController());
+        PatientHistoryFrame patientHistoryFrame = new PatientHistoryFrame(
+                new PatientHistoryController(new ListAppointmentsByPatient(patientRepository, appointmentRepository)));
         mainFrame.getMainMenu().add(new ShowPatientHistoryMenuListener(mainFrame, patientHistoryFrame));
 
         mainFrame.getMainMenu().add(new AboutMenuListener(mainFrame));

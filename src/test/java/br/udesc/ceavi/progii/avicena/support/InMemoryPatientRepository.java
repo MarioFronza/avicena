@@ -2,26 +2,30 @@ package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.domain.PatientRepository;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-public class InMemoryPatientRepository implements PatientRepository {
-
-    private final List<Patient> patients = new ArrayList<>();
+public class InMemoryPatientRepository extends InMemoryRepository<Patient> implements PatientRepository {
 
     @Override
-    public Patient save(Patient patient) {
-        patients.add(patient);
-        return patient;
+    protected Long idOf(Patient patient) {
+        return patient.getId();
     }
 
     @Override
-    public List<Patient> findAll() {
-        return patients;
+    protected Patient withId(Patient patient, Long id) {
+        return new Patient(
+                id,
+                patient.getName(),
+                patient.getCpf(),
+                patient.getPhone(),
+                patient.getAddress(),
+                patient.getMaritalStatus());
     }
 
     @Override
-    public void delete(Patient patient) {
-        patients.remove(patient);
+    public Optional<Patient> findByCpf(String cpf) {
+        return findAll().stream()
+                .filter(patient -> patient.getCpf().equals(cpf))
+                .findFirst();
     }
 }

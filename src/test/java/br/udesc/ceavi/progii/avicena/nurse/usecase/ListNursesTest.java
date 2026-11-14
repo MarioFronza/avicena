@@ -4,23 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryNurseRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class ListNursesTest {
 
+    private final InMemoryNurseRepository repository = new InMemoryNurseRepository();
+    private final ListNurses useCase = new ListNurses(repository);
+
     @Test
-    void listsNursesFromTheRepository() {
-        InMemoryNurseRepository repository = new InMemoryNurseRepository();
-        Nurse nurse =
-                new Nurse("Joana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "Technician", 1200);
-        repository.save(nurse);
-        ListNurses useCase = new ListNurses(repository);
+    void listReturnsNothingForAnEmptyRepository() {
+        assertTrue(useCase.list().isEmpty());
+    }
 
-        var nurses = useCase.list();
+    @Test
+    void listReturnsEveryNurseInTheOrderTheyWereSaved() {
+        Nurse first = repository.save(Fixtures.nurse("11111111111"));
+        Nurse second = repository.save(Fixtures.nurse("22222222222"));
 
-        assertEquals(1, nurses.size());
-        assertTrue(nurses.contains(nurse));
+        assertEquals(List.of(first, second), useCase.list());
     }
 }

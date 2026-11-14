@@ -1,7 +1,8 @@
 package br.udesc.ceavi.progii.avicena.receptionist.domain;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 public class Receptionist {
 
@@ -40,19 +41,19 @@ public class Receptionist {
             float salary,
             int overtimeHours,
             int laborCardNumber) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidReceptionistDataException("Receptionist name must not be blank");
-        }
         this.id = id;
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
+        this.name = Invariants.notBlank(name, "Receptionist name", InvalidReceptionistDataException::new);
+        this.cpf = Invariants.notBlank(cpf, "Receptionist cpf", InvalidReceptionistDataException::new);
+        this.phone = Invariants.notBlank(phone, "Receptionist phone", InvalidReceptionistDataException::new);
         this.address = address;
         this.maritalStatus = maritalStatus;
-        this.workHours = workHours;
-        this.salary = salary;
-        this.overtimeHours = overtimeHours;
-        this.laborCardNumber = laborCardNumber;
+        this.workHours =
+                Invariants.notNegative(workHours, "Receptionist work hours", InvalidReceptionistDataException::new);
+        this.salary = Invariants.notNegative(salary, "Receptionist salary", InvalidReceptionistDataException::new);
+        this.overtimeHours = Invariants.notNegative(
+                overtimeHours, "Receptionist overtime hours", InvalidReceptionistDataException::new);
+        this.laborCardNumber = Invariants.notNegative(
+                laborCardNumber, "Receptionist labor card number", InvalidReceptionistDataException::new);
     }
 
     public Long getId() {

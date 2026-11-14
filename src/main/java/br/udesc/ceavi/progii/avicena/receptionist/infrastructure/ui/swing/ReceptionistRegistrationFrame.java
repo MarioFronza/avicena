@@ -1,10 +1,10 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.InvalidReceptionistDataException;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.receptionist.infrastructure.controller.ReceptionistController;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

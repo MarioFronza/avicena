@@ -1,7 +1,8 @@
 package br.udesc.ceavi.progii.avicena.doctor.domain;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 
 public class Doctor {
 
@@ -34,13 +35,10 @@ public class Doctor {
             MaritalStatus maritalStatus,
             String crm,
             String specialty) {
-        if (name == null || name.isBlank()) {
-            throw new InvalidDoctorDataException("Doctor name must not be blank");
-        }
         this.id = id;
-        this.name = name;
-        this.cpf = cpf;
-        this.phone = phone;
+        this.name = Invariants.notBlank(name, "Doctor name", InvalidDoctorDataException::new);
+        this.cpf = Invariants.notBlank(cpf, "Doctor cpf", InvalidDoctorDataException::new);
+        this.phone = Invariants.notBlank(phone, "Doctor phone", InvalidDoctorDataException::new);
         this.address = address;
         this.maritalStatus = maritalStatus;
         this.crm = crm;

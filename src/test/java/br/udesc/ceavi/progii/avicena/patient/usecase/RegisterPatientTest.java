@@ -1,24 +1,42 @@
 package br.udesc.ceavi.progii.avicena.patient.usecase;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.patient.domain.InvalidPatientDataException;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryPatientRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class RegisterPatientTest {
 
+    private final InMemoryPatientRepository repository = new InMemoryPatientRepository();
+    private final RegisterPatient useCase = new RegisterPatient(repository);
+
     @Test
-    void savesThePatientThroughTheRepository() {
-        InMemoryPatientRepository repository = new InMemoryPatientRepository();
-        RegisterPatient useCase = new RegisterPatient(repository);
-        Patient patient = new Patient("Maria Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE);
+    void registerSavesThePatientAndAssignsAnId() {
+        Patient registered = useCase.register(Fixtures.patient("12345678900"));
 
-        Patient registered = useCase.register(patient);
+        assertNotNull(registered.getId());
+        assertEquals(List.of(registered), repository.findAll());
+    }
 
-        assertEquals(patient, registered);
-        assertTrue(repository.findAll().contains(patient));
+    @Test
+    void registerRejectsACpfAnotherPatientAlreadyUses() {
+        useCase.register(Fixtures.patient("12345678900"));
+
+        assertThrows(InvalidPatientDataException.class, () -> useCase.register(Fixtures.patient("12345678900")));
+    }
+
+    @Test
+    void registerAcceptsTheSamePatientAgain() {
+        Patient registered = useCase.register(Fixtures.patient("12345678900"));
+
+        assertDoesNotThrow(() -> useCase.register(registered));
+        assertEquals(1, repository.findAll().size());
     }
 }

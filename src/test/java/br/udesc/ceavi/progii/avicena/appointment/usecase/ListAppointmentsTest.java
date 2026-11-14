@@ -4,22 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Appointment;
-import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryAppointmentRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class ListAppointmentsTest {
 
+    private final InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
+    private final ListAppointments useCase = new ListAppointments(repository);
+
     @Test
-    void listsAppointmentsFromTheRepository() {
-        InMemoryAppointmentRepository repository = new InMemoryAppointmentRepository();
-        Appointment appointment = new Appointment("05/08/2026", "14:00", "Fever", 1L, 2L, 3L, UrgencyStatus.NOT_URGENT);
-        repository.save(appointment);
-        ListAppointments useCase = new ListAppointments(repository);
+    void listReturnsNothingForAnEmptyRepository() {
+        assertTrue(useCase.list().isEmpty());
+    }
 
-        var appointments = useCase.list();
+    @Test
+    void listReturnsEveryAppointmentInTheOrderTheyWereSaved() {
+        Appointment first = repository.save(Fixtures.appointment(1L));
+        Appointment second = repository.save(Fixtures.appointment(2L));
 
-        assertEquals(1, appointments.size());
-        assertTrue(appointments.contains(appointment));
+        assertEquals(List.of(first, second), useCase.list());
     }
 }

@@ -2,9 +2,9 @@ package br.udesc.ceavi.progii.avicena.control.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Database;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.params.ParameterizedTest;

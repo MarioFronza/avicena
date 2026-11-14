@@ -1,10 +1,14 @@
 package br.udesc.ceavi.progii.avicena.appointment.domain;
 
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class Appointment {
 
     private final Long id;
-    private final String date;
-    private final String time;
+    private final LocalDate date;
+    private final LocalTime time;
     private final String symptoms;
     private final Long patientId;
     private final Long doctorId;
@@ -12,8 +16,8 @@ public class Appointment {
     private final UrgencyStatus urgencyStatus;
 
     public Appointment(
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             String symptoms,
             Long patientId,
             Long doctorId,
@@ -24,35 +28,33 @@ public class Appointment {
 
     public Appointment(
             Long id,
-            String date,
-            String time,
+            LocalDate date,
+            LocalTime time,
             String symptoms,
             Long patientId,
             Long doctorId,
             Long nurseId,
             UrgencyStatus urgencyStatus) {
-        if (patientId == null) {
-            throw new InvalidAppointmentDataException("Appointment patientId must not be null");
-        }
         this.id = id;
-        this.date = date;
-        this.time = time;
+        this.date = Invariants.notNull(date, "Appointment date", InvalidAppointmentDataException::new);
+        this.time = Invariants.notNull(time, "Appointment time", InvalidAppointmentDataException::new);
         this.symptoms = symptoms;
-        this.patientId = patientId;
+        this.patientId = Invariants.notNull(patientId, "Appointment patient", InvalidAppointmentDataException::new);
         this.doctorId = doctorId;
         this.nurseId = nurseId;
-        this.urgencyStatus = urgencyStatus;
+        this.urgencyStatus =
+                Invariants.notNull(urgencyStatus, "Appointment urgency status", InvalidAppointmentDataException::new);
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public String getTime() {
+    public LocalTime getTime() {
         return time;
     }
 

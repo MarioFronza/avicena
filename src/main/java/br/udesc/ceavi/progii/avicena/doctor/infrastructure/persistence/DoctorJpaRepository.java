@@ -1,38 +1,63 @@
 package br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence;
 
-import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
+import br.udesc.ceavi.progii.avicena.control.dao.JpaTransactions;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.domain.DoctorRepository;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.MaritalStatusEntity;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
+import java.util.Optional;
 
 public class DoctorJpaRepository implements DoctorRepository {
 
-    private final EntityManagerFactory entityManagerFactory;
-
-    public DoctorJpaRepository() {
-        this.entityManagerFactory = PersistenceConfig.entityManagerFactory();
+    @Override
+    public Doctor save(Doctor doctor) {
+        return JpaTransactions.write(entityManager -> {
+            DoctorEntity entity = DoctorMapper.toEntity(
+                    doctor, findMaritalStatus(entityManager, doctor), findOrCreateSpecialty(entityManager, doctor));
+            entityManager.persist(entity);
+            return DoctorMapper.toDomain(entity);
+        });
     }
 
     @Override
-    public Doctor save(Doctor doctor) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            MaritalStatusEntity maritalStatus = findMaritalStatus(entityManager, doctor);
-            SpecialtyEntity specialty = findOrCreateSpecialty(entityManager, doctor);
-            DoctorEntity entity = DoctorMapper.toEntity(doctor, maritalStatus, specialty);
-            entityManager.persist(entity);
-            entityManager.getTransaction().commit();
-            return DoctorMapper.toDomain(entity);
-        } finally {
-            entityManager.close();
-        }
+    public List<Doctor> findAll() {
+        return JpaTransactions.read(entityManager ->
+                entityManager
+                        .createQuery("SELECT e FROM DoctorEntity e ORDER BY e.id", DoctorEntity.class)
+                        .getResultList()
+                        .stream()
+                        .map(DoctorMapper::toDomain)
+                        .toList());
     }
 
-    private MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Doctor doctor) {
+    @Override
+    public Optional<Doctor> findById(Long id) {
+        return JpaTransactions.read(entityManager ->
+                Optional.ofNullable(entityManager.find(DoctorEntity.class, id)).map(DoctorMapper::toDomain));
+    }
+
+    @Override
+    public Optional<Doctor> findByCpf(String cpf) {
+        return JpaTransactions.read(entityManager -> entityManager
+                .createQuery("SELECT e FROM DoctorEntity e WHERE e.person.cpf = :cpf ORDER BY e.id", DoctorEntity.class)
+                .setParameter("cpf", cpf)
+                .getResultStream()
+                .findFirst()
+                .map(DoctorMapper::toDomain));
+    }
+
+    @Override
+    public void delete(Doctor doctor) {
+        JpaTransactions.write(entityManager -> {
+            Optional.ofNullable(doctor.getId())
+                    .map(id -> entityManager.find(DoctorEntity.class, id))
+                    .ifPresent(entityManager::remove);
+            return null;
+        });
+    }
+
+    private static MaritalStatusEntity findMaritalStatus(EntityManager entityManager, Doctor doctor) {
         if (doctor.getMaritalStatus() == null) {
             return null;
         }
@@ -42,47 +67,19 @@ public class DoctorJpaRepository implements DoctorRepository {
                 .getSingleResult();
     }
 
-    private SpecialtyEntity findOrCreateSpecialty(EntityManager entityManager, Doctor doctor) {
+    private static SpecialtyEntity findOrCreateSpecialty(EntityManager entityManager, Doctor doctor) {
         if (doctor.getSpecialty() == null) {
             return null;
         }
-        List<SpecialtyEntity> existing = entityManager
+        return entityManager
                 .createQuery("SELECT s FROM SpecialtyEntity s WHERE s.name = :name", SpecialtyEntity.class)
                 .setParameter("name", doctor.getSpecialty())
-                .getResultList();
-        if (!existing.isEmpty()) {
-            return existing.get(0);
-        }
-        SpecialtyEntity specialty = new SpecialtyEntity(null, doctor.getSpecialty());
-        entityManager.persist(specialty);
-        return specialty;
-    }
-
-    @Override
-    public List<Doctor> findAll() {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            return entityManager
-                    .createQuery("SELECT d FROM DoctorEntity d", DoctorEntity.class)
-                    .getResultList()
-                    .stream()
-                    .map(DoctorMapper::toDomain)
-                    .toList();
-        } finally {
-            entityManager.close();
-        }
-    }
-
-    @Override
-    public void delete(Doctor doctor) {
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            DoctorEntity entity = entityManager.find(DoctorEntity.class, doctor.getId());
-            entityManager.remove(entity);
-            entityManager.getTransaction().commit();
-        } finally {
-            entityManager.close();
-        }
+                .getResultStream()
+                .findFirst()
+                .orElseGet(() -> {
+                    SpecialtyEntity specialty = new SpecialtyEntity(null, doctor.getSpecialty());
+                    entityManager.persist(specialty);
+                    return specialty;
+                });
     }
 }

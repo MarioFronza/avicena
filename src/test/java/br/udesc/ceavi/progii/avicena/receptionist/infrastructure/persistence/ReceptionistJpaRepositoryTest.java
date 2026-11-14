@@ -1,12 +1,14 @@
 package br.udesc.ceavi.progii.avicena.receptionist.infrastructure.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -59,5 +61,58 @@ class ReceptionistJpaRepositoryTest {
         boolean stillPresent =
                 repository.findAll().stream().anyMatch(r -> r.getCpf().equals("98765432100"));
         assertFalse(stillPresent);
+    }
+
+    @Test
+    void findByIdReturnsTheSavedReceptionist() {
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+        Receptionist saved = repository.save(receptionist("10000000001"));
+
+        assertEquals(
+                "10000000001", repository.findById(saved.getId()).orElseThrow().getCpf());
+    }
+
+    @Test
+    void findByIdIsEmptyForAnUnknownId() {
+        assertTrue(new ReceptionistJpaRepository().findById(999_999L).isEmpty());
+    }
+
+    @Test
+    void findByCpfReturnsTheSavedReceptionist() {
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+        Receptionist saved = repository.save(receptionist("10000000002"));
+
+        assertEquals(
+                saved.getId(), repository.findByCpf("10000000002").orElseThrow().getId());
+    }
+
+    @Test
+    void findByCpfIsEmptyForAnUnknownCpf() {
+        assertTrue(new ReceptionistJpaRepository().findByCpf("00000000000").isEmpty());
+    }
+
+    @Test
+    void findAllIsOrderedById() {
+        ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
+        Receptionist first = repository.save(receptionist("10000000003"));
+        Receptionist second = repository.save(receptionist("10000000004"));
+
+        assertEquals(
+                List.of(first.getId(), second.getId()),
+                repository.findAll().stream().map(Receptionist::getId).toList());
+    }
+
+    @Test
+    void deleteOfAMissingReceptionistIsANoOp() {
+        assertDoesNotThrow(() -> new ReceptionistJpaRepository().delete(receptionist(999_999L, "10000000005")));
+    }
+
+    private static Receptionist receptionist(String cpf) {
+        return receptionist(null, cpf);
+    }
+
+    private static Receptionist receptionist(Long id, String cpf) {
+        return new Receptionist(
+                id, "Receptionist Test", cpf, "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123);
     }
 }

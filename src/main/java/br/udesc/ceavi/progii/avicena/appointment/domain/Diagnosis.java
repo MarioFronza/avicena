@@ -1,5 +1,7 @@
 package br.udesc.ceavi.progii.avicena.appointment.domain;
 
+import br.udesc.ceavi.progii.avicena.shared.domain.Invariants;
+
 public class Diagnosis {
 
     private final Long id;
@@ -51,15 +53,15 @@ public class Diagnosis {
             String medications,
             String examNotes,
             String finalDescription) {
-        if (appointmentId == null) {
-            throw new InvalidDiagnosisDataException("Diagnosis appointmentId must not be null");
-        }
         this.id = id;
-        this.appointmentId = appointmentId;
-        this.bloodPressure = bloodPressure;
-        this.temperature = temperature;
-        this.height = height;
-        this.weight = weight;
+        this.appointmentId =
+                Invariants.notNull(appointmentId, "Diagnosis appointment", InvalidDiagnosisDataException::new);
+        this.bloodPressure =
+                Invariants.notNegative(bloodPressure, "Diagnosis blood pressure", InvalidDiagnosisDataException::new);
+        this.temperature =
+                Invariants.notNegative(temperature, "Diagnosis temperature", InvalidDiagnosisDataException::new);
+        this.height = Invariants.notNegative(height, "Diagnosis height", InvalidDiagnosisDataException::new);
+        this.weight = Invariants.notNegative(weight, "Diagnosis weight", InvalidDiagnosisDataException::new);
         this.notes = notes;
         this.disease = disease;
         this.medications = medications;

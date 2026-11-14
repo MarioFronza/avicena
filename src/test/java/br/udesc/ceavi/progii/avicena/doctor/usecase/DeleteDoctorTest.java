@@ -1,24 +1,33 @@
 package br.udesc.ceavi.progii.avicena.doctor.usecase;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDoctorRepository;
 import org.junit.jupiter.api.Test;
 
 class DeleteDoctorTest {
 
+    private final InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
+    private final DeleteDoctor useCase = new DeleteDoctor(repository);
+
     @Test
-    void deletesTheDoctorThroughTheRepository() {
-        InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
-        Doctor doctor = new Doctor(
-                "Joao Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
-        repository.save(doctor);
-        DeleteDoctor useCase = new DeleteDoctor(repository);
+    void deleteRemovesTheDoctor() {
+        Doctor saved = repository.save(Fixtures.doctor("12345678900"));
 
-        useCase.delete(doctor);
+        useCase.delete(saved);
 
-        assertFalse(repository.findAll().contains(doctor));
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    void deleteOfAnUnsavedDoctorIsANoOp() {
+        repository.save(Fixtures.doctor("12345678900"));
+
+        useCase.delete(Fixtures.doctor("98765432100"));
+
+        assertEquals(1, repository.findAll().size());
     }
 }

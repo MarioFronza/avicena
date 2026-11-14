@@ -1,5 +1,6 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,9 +12,12 @@ import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
 import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRepository;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.patient.infrastructure.persistence.PatientJpaRepository;
+import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +40,8 @@ class AppointmentJpaRepositoryTest {
                 .save(new Nurse(
                         "Nurse Test", "33333333333", "480000002", null, MaritalStatus.SINGLE, "Technician", 1200));
         Appointment appointment = new Appointment(
-                "05/08/2026",
-                "14:00",
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(14, 0),
                 "Fever",
                 patient.getId(),
                 doctor.getId(),
@@ -62,8 +66,14 @@ class AppointmentJpaRepositoryTest {
     void deleteRemovesAPreviouslyPersistedAppointment() {
         Patient patient = new PatientJpaRepository()
                 .save(new Patient("Second Patient", "44444444444", "480000003", null, MaritalStatus.SINGLE));
-        Appointment appointment =
-                new Appointment("05/08/2026", "15:00", "Cough", patient.getId(), null, null, UrgencyStatus.NOT_URGENT);
+        Appointment appointment = new Appointment(
+                LocalDate.of(2026, 8, 5),
+                LocalTime.of(15, 0),
+                "Cough",
+                patient.getId(),
+                null,
+                null,
+                UrgencyStatus.NOT_URGENT);
         AppointmentJpaRepository repository = new AppointmentJpaRepository();
         Appointment saved = repository.save(appointment);
 
@@ -72,5 +82,52 @@ class AppointmentJpaRepositoryTest {
         boolean stillPresent =
                 repository.findAll().stream().anyMatch(a -> a.getId().equals(saved.getId()));
         assertFalse(stillPresent);
+    }
+
+    @Test
+    void findByIdReturnsTheSavedAppointment() {
+        AppointmentJpaRepository repository = new AppointmentJpaRepository();
+        Appointment saved = repository.save(appointmentFor(savedPatient("10000000011")));
+
+        Appointment found = repository.findById(saved.getId()).orElseThrow();
+        assertEquals(LocalDate.of(2026, 8, 5), found.getDate());
+        assertEquals(LocalTime.of(9, 30), found.getTime());
+        assertEquals(UrgencyStatus.URGENT, found.getUrgencyStatus());
+    }
+
+    @Test
+    void findByIdIsEmptyForAnUnknownId() {
+        assertTrue(new AppointmentJpaRepository().findById(999_999L).isEmpty());
+    }
+
+    @Test
+    void findAllIsOrderedById() {
+        AppointmentJpaRepository repository = new AppointmentJpaRepository();
+        Long patientId = savedPatient("10000000012");
+        Appointment first = repository.save(appointmentFor(patientId));
+        Appointment second = repository.save(appointmentFor(patientId));
+
+        assertEquals(
+                List.of(first.getId(), second.getId()),
+                repository.findAll().stream().map(Appointment::getId).toList());
+    }
+
+    @Test
+    void deleteOfAMissingAppointmentIsANoOp() {
+        Appointment missing = new Appointment(
+                999_999L, LocalDate.of(2026, 8, 5), LocalTime.of(9, 30), null, 1L, null, null, UrgencyStatus.URGENT);
+
+        assertDoesNotThrow(() -> new AppointmentJpaRepository().delete(missing));
+    }
+
+    private static Long savedPatient(String cpf) {
+        return new PatientJpaRepository()
+                .save(new Patient("Patient Test", cpf, "48999990000", null, MaritalStatus.SINGLE))
+                .getId();
+    }
+
+    private static Appointment appointmentFor(Long patientId) {
+        return new Appointment(
+                LocalDate.of(2026, 8, 5), LocalTime.of(9, 30), "Fever", patientId, null, null, UrgencyStatus.URGENT);
     }
 }

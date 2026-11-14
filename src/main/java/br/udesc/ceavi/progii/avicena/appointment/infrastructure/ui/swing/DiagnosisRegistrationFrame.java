@@ -2,6 +2,7 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.swing;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.AppointmentController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller.DiagnosisController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentEntity;
 import br.udesc.ceavi.progii.avicena.control.dao.PersistenceConfig;
@@ -121,8 +122,11 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
                     temperatureField.getText(),
                     heightField.getText(),
                     weightField.getText(),
+                    notesArea.getText(),
                     diseaseField.getText(),
-                    medicationsField.getText()));
+                    medicationsField.getText(),
+                    examNotesField.getText(),
+                    finalDescriptionArea.getText()));
             JOptionPane.showMessageDialog(this, "Diagnosis saved");
         } catch (InvalidDiagnosisDataException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -138,8 +142,8 @@ public class DiagnosisRegistrationFrame extends CrudFrame implements ActionListe
         appointments = findAllAppointments();
         appointmentComboBox.removeAllItems();
         for (AppointmentEntity appointment : appointments) {
-            appointmentComboBox.addItem(
-                    appointment.getTime() + " - " + appointment.getPatient().getName());
+            appointmentComboBox.addItem(appointment.getTime().format(AppointmentController.TIME_FORMAT) + " - "
+                    + appointment.getPatient().getName());
         }
     }
 

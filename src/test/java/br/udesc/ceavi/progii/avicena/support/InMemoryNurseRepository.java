@@ -2,26 +2,30 @@ package br.udesc.ceavi.progii.avicena.support;
 
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.domain.NurseRepository;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
-public class InMemoryNurseRepository implements NurseRepository {
-
-    private final List<Nurse> nurses = new ArrayList<>();
+public class InMemoryNurseRepository extends InMemoryRepository<Nurse> implements NurseRepository {
 
     @Override
-    public Nurse save(Nurse nurse) {
-        nurses.add(nurse);
-        return nurse;
+    protected Long idOf(Nurse nurse) {
+        return nurse.getId();
     }
 
     @Override
-    public List<Nurse> findAll() {
-        return nurses;
+    protected Nurse withId(Nurse nurse, Long id) {
+        return new Nurse(
+                id,
+                nurse.getName(),
+                nurse.getCpf(),
+                nurse.getPhone(),
+                nurse.getAddress(),
+                nurse.getMaritalStatus(),
+                nurse.getFormation(),
+                nurse.getHoursCompleted());
     }
 
     @Override
-    public void delete(Nurse nurse) {
-        nurses.remove(nurse);
+    public Optional<Nurse> findByCpf(String cpf) {
+        return findAll().stream().filter(nurse -> nurse.getCpf().equals(cpf)).findFirst();
     }
 }

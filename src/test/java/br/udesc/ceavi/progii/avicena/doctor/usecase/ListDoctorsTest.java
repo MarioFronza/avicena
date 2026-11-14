@@ -4,23 +4,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryDoctorRepository;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class ListDoctorsTest {
 
+    private final InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
+    private final ListDoctors useCase = new ListDoctors(repository);
+
     @Test
-    void listsDoctorsFromTheRepository() {
-        InMemoryDoctorRepository repository = new InMemoryDoctorRepository();
-        Doctor doctor = new Doctor(
-                "Joao Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, "12345", "Cardiology");
-        repository.save(doctor);
-        ListDoctors useCase = new ListDoctors(repository);
+    void listReturnsNothingForAnEmptyRepository() {
+        assertTrue(useCase.list().isEmpty());
+    }
 
-        var doctors = useCase.list();
+    @Test
+    void listReturnsEveryDoctorInTheOrderTheyWereSaved() {
+        Doctor first = repository.save(Fixtures.doctor("11111111111"));
+        Doctor second = repository.save(Fixtures.doctor("22222222222"));
 
-        assertEquals(1, doctors.size());
-        assertTrue(doctors.contains(doctor));
+        assertEquals(List.of(first, second), useCase.list());
     }
 }

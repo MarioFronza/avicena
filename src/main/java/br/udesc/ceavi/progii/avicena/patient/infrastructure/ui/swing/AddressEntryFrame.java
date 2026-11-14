@@ -1,6 +1,6 @@
 package br.udesc.ceavi.progii.avicena.patient.infrastructure.ui.swing;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.Address;
+import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.view.frames.CrudFrame;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;

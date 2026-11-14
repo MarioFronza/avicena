@@ -1,24 +1,33 @@
 package br.udesc.ceavi.progii.avicena.receptionist.usecase;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import br.udesc.ceavi.progii.avicena.patient.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
+import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import br.udesc.ceavi.progii.avicena.support.InMemoryReceptionistRepository;
 import org.junit.jupiter.api.Test;
 
 class DeleteReceptionistTest {
 
+    private final InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
+    private final DeleteReceptionist useCase = new DeleteReceptionist(repository);
+
     @Test
-    void deletesTheReceptionistThroughTheRepository() {
-        InMemoryReceptionistRepository repository = new InMemoryReceptionistRepository();
-        Receptionist receptionist = new Receptionist(
-                "Ana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
-        repository.save(receptionist);
-        DeleteReceptionist useCase = new DeleteReceptionist(repository);
+    void deleteRemovesTheReceptionist() {
+        Receptionist saved = repository.save(Fixtures.receptionist("12345678900"));
 
-        useCase.delete(receptionist);
+        useCase.delete(saved);
 
-        assertFalse(repository.findAll().contains(receptionist));
+        assertTrue(repository.findAll().isEmpty());
+    }
+
+    @Test
+    void deleteOfAnUnsavedReceptionistIsANoOp() {
+        repository.save(Fixtures.receptionist("12345678900"));
+
+        useCase.delete(Fixtures.receptionist("98765432100"));
+
+        assertEquals(1, repository.findAll().size());
     }
 }
