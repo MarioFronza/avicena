@@ -8,12 +8,17 @@ package br.udesc.ceavi.progii.avicena.main;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.AppointmentJpaRepository;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.persistence.DiagnosisJpaRepository;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentCrudController;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentListFrame;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.AppointmentRegistrationFrame;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.BtGerarReceiraListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisCrudController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.DiagnosisRegistrationFrame;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ListAppointmentsMenuListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.PatientHistoryFrame;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.PatientHistorySearchController;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterAppointmentMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.RegisterDiagnosisMenuListener;
+import br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui.ShowPatientHistoryMenuListener;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteAppointment;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterAppointment;
@@ -171,6 +176,19 @@ public class AvicenaMain {
         frameSistema
                 .getMenuPrincipal()
                 .onRegisterDiagnosis(new RegisterDiagnosisMenuListener(frameSistema, diagnosisFrame));
+
+        AppointmentListFrame appointmentListFrame = new AppointmentListFrame();
+        frameSistema
+                .getMenuPrincipal()
+                .onListAppointments(new ListAppointmentsMenuListener(frameSistema, appointmentListFrame));
+
+        PatientHistoryFrame patientHistoryFrame = new PatientHistoryFrame();
+        patientHistoryFrame
+                .getSearchButton()
+                .addActionListener(new PatientHistorySearchController(patientHistoryFrame));
+        frameSistema
+                .getMenuPrincipal()
+                .onShowPatientHistory(new ShowPatientHistoryMenuListener(frameSistema, patientHistoryFrame));
 
         frameSistema.setVisible(true);
     }

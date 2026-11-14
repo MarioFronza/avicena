@@ -6,17 +6,18 @@ import java.awt.event.ActionEvent;
 
 public class ShowPatientHistoryMenuListener extends MenuActionListener {
 
-    public ShowPatientHistoryMenuListener(FrameSistema tela) {
+    private final PatientHistoryFrame patientHistoryFrame;
+
+    public ShowPatientHistoryMenuListener(FrameSistema tela, PatientHistoryFrame patientHistoryFrame) {
         super(tela);
+        this.patientHistoryFrame = patientHistoryFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        frame2 = PatientHistoryFrame.getInstance();
-
-        if (!frame2.isVisible()) {
-            tela.adicionarFrameInterno(frame2);
-            frame2.setVisible(true);
+        if (!patientHistoryFrame.isVisible()) {
+            tela.adicionarFrameInterno(patientHistoryFrame);
+            patientHistoryFrame.setVisible(true);
         }
     }
 }
