@@ -11,7 +11,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JPanel;
 
 /**
- * Base internal frame for CRUD screens, with the shared Novo/Gravar/Excluir/Cancelar bar.
+ * Base internal frame for CRUD screens, with the shared New/Save/Delete/Cancel bar.
  * @author Adroan, Mário, Vini, Raphael
  * @since 13/04/2018
  * @version 1.0

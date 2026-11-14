@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 /**
- * Shared Novo/Gravar/Excluir/Cancelar button bar for CRUD screens.
+ * Shared New/Save/Delete/Cancel button bar for CRUD screens.
  * @author Adroan, Mário, Vini, Raphael
  * @since 13/04/2018
  * @version 1.0

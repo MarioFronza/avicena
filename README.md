@@ -1,7 +1,7 @@
 # Avicena
 
-Java Swing desktop app for clinic management (pacientes, médicos, enfermeiros,
-atendentes, consultas, diagnósticos, receitas).
+Java Swing desktop app for clinic management (patients, doctors, nurses,
+receptionists, appointments, diagnoses, prescriptions).
 
 ## Requirements
 

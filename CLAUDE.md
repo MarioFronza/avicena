@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Avicena is a Java Swing desktop app for clinic management (patients, doctors, nurses,
 receptionists, appointments, diagnoses, prescriptions). It's an academic project
-(UDESC, Programação II course), originally a NetBeans Ant project, persisted via
+(UDESC, Programming II course), originally a NetBeans Ant project, persisted via
 JPA/Hibernate to PostgreSQL. Original requirements are in `REQUIREMENTS.md`.
 
 This repo is used for **refactoring practice/training**, not active feature delivery.
@@ -182,14 +182,16 @@ repository queries.
   and `AboutMenuListener` ("About" dialog).
 - **`view/frames/`**: `CrudFrame` (abstract template for CRUD screens) and
   `ReadOnlyFrame` (read-only screens), base classes for every screen.
-  `view/panels/CrudActionPanel` is the shared Novo/Gravar/Excluir/Cancelar bar.
+  `view/panels/CrudActionPanel` is the shared New/Save/Delete/Cancel bar.
 - **`view/main/`**: `MainFrame` (MDI main window) and `MainMenu` (menu
   bar: fixed sections, items added from `AvicenaMain`).
 
 ## Conventions
 
-- **All code is English**: identifiers, packages, comments and test names. Only
-  user-facing text (labels, dialogs, PDF content) stays in Portuguese.
+- **Everything is English**: identifiers, packages, comments, test names and data,
+  user-facing text (labels, dialogs, PDF content) and docs. No Portuguese anywhere.
+  Already-applied Flyway migrations are the one exception: they reference the old
+  Portuguese table names they renamed, and editing them would break their checksums.
 
 ## Known issues / refactor targets
 
@@ -197,8 +199,8 @@ repository queries.
   boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
 - `DotenvLoader` splits each line on every `=`, so a value containing `=` is truncated.
   No quote handling either.
-- `GeneratePrescriptionListener` writes to a hardcoded relative path, and the file
-  name (`Receira-Avicena.pdf`) carries the transposed-letters typo for "Receita".
+- `GeneratePrescriptionListener` writes `Avicena-Prescription.pdf` to a hardcoded
+  relative path.
 - `AppointmentRegistrationFrame` stores patient/doctor/nurse by ID only; names are
   shown at selection time but not re-displayed afterwards. `AppointmentListFrame` gets
   names through the JPA relationships instead.
