@@ -99,12 +99,16 @@ Four uniform slices, none importing another's `domain`:
   role table: Doctor `crm` plus a `SpecialtyEntity` FK, Nurse
   `formation`/`hoursCompleted`, Receptionist
   `workHours`/`salary`/`overtimeHours`/`laborCardNumber`.
-- **`infrastructure/ui/`**: `*RegistrationFrame` (Swing form), `*CrudController`
-  (wires Novo/Gravar/Excluir/Cancelar to the use cases), `*SearchController` (CPF
-  search, list-all-then-filter), `Register*MenuListener`. `patient.infrastructure.ui`
-  also owns the "Add Address" popup (`AddressEntryFrame`/`AddressEntryController`/
-  `AddAddressListener`) shared by all four registration screens. It only builds an
-  in-memory `Address`; the cascade persists it with the parent.
+- **`infrastructure/controller/`**: `*Controller` (`register(Form)`, `delete`,
+  `findByCpf` as list-all-then-filter). UI-agnostic interface adapter, see
+  "Composition root".
+- **`infrastructure/ui/swing/`**: `*RegistrationFrame` (Swing form, owns its buttons,
+  dialogs and the record on screen) and `Register*MenuListener`. Each UI technology
+  gets its own subpackage under `ui/` (a future `ui/compose` or web adapter sits next to
+  `swing`). `patient.infrastructure.ui.swing` also owns the "Add Address" popup
+  (`AddressEntryFrame`/`AddAddressListener`), one instance per registration screen. It
+  hands the `Address` it builds to the screen's `useAddress`; the cascade persists it
+  with the parent.
 
 Lookup entities that are closed, pre-seeded sets (`MaritalStatusEntity`,
 `UrgencyStatusEntity`, `RoleEntity`) have no `@GeneratedValue` and are only read by
@@ -126,12 +130,13 @@ Deviates from the person template on purpose:
   case. `DiagnosisRepository` only exposes `save`/`delete`. `DiagnosisEntity`
   (`diagnoses`) has a `@ManyToOne(cascade = ALL) FinalDiagnosisEntity`
   (`final_diagnoses`), the one cascade in the codebase that also cascades removal.
-- `infrastructure/ui/`: `AppointmentRegistrationFrame`/`AppointmentCrudController`,
-  `AppointmentListFrame` (extends `FrameSemCRUD`, read-only table),
-  `DiagnosisRegistrationFrame`/`DiagnosisCrudController` (two-panel `CardLayout`:
-  primary/final diagnosis), `PatientHistoryFrame`/`PatientHistorySearchController`
-  (CPF search over appointments), and `BtGerarReceiraListener` (prescription PDF via
-  iText, triggered from `DiagnosisRegistrationFrame`).
+- `infrastructure/controller/`: `AppointmentController`, `DiagnosisController` and
+  `PatientHistoryController` (CPF search over appointments).
+- `infrastructure/ui/swing/`: `AppointmentRegistrationFrame`, `AppointmentListFrame`
+  (extends `FrameSemCRUD`, read-only table), `DiagnosisRegistrationFrame` (two-panel
+  `CardLayout`: primary/final diagnosis), `PatientHistoryFrame`, and
+  `BtGerarReceiraListener` (prescription PDF via iText, triggered from
+  `DiagnosisRegistrationFrame`).
 
 ### `auth/`: persistence only
 
@@ -151,8 +156,15 @@ and menu listener once, and hands each one its collaborators through constructor
 `view/` or `control/listenersMenu` creates a repository or uses a static `getInstance()`.
 Frames are created once and reused, so a menu item for an open screen just brings it to
 the front. `MenuPrincipal` exposes `on*(ActionListener)` hooks that `AvicenaMain` fills.
-Each CRUD controller exposes `register()`/`delete()`, tested against `InMemory*Repository`
-copies in its `infrastructure/ui` test package, with no Postgres.
+
+**The UI knows the controller, never the other way around.** Each frame receives its
+`*Controller` and handles buttons, `JOptionPane` dialogs and the record currently on
+screen itself. Controllers import no Swing or AWT: they take a `Form` record of raw
+input values (strings, as a web form would send them), parse numbers, call the use
+cases and return the domain object or throw the domain's `Invalid*DataException`. A
+web front end should reuse them unchanged. Controller tests drive them directly against
+`InMemory*Repository` copies in the `infrastructure/controller` test package, with no
+frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
 
 `AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
 `BtGerarReceiraListener` still query `AppointmentEntity` directly through
@@ -172,9 +184,7 @@ repository queries.
 
 ## Known issues / refactor targets
 
-- **UI layer is the least refactored part.** Doctor got a cleanup (#85): pure
-  `DoctorCrudController.toDoctor(...)` covered by `DoctorCrudControllerTest`, and an
-  `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
+- **UI layer is the least refactored part.** Doctor got a cleanup (#85): an `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
   boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
 - `FrameCRUD` hooks keep Portuguese names (`limparCampos`, `carregarCampos`) while
   everything around them is English.
