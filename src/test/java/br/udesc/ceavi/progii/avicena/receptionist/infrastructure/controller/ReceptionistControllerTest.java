@@ -20,64 +20,68 @@ class ReceptionistControllerTest {
 
     private static final Address ADDRESS = Fixtures.address();
 
-    private InMemoryReceptionistRepository repo;
-    private ReceptionistController ctrl;
+    private InMemoryReceptionistRepository repository;
+    private ReceptionistController controller;
 
     @BeforeEach
     void setUp() {
-        repo = new InMemoryReceptionistRepository();
-        ctrl = new ReceptionistController(
-                new RegisterReceptionist(repo), new DeleteReceptionist(repo), new ListReceptionists(repo));
+        repository = new InMemoryReceptionistRepository();
+        controller = new ReceptionistController(
+                new RegisterReceptionist(repository),
+                new DeleteReceptionist(repository),
+                new ListReceptionists(repository));
     }
 
     @Test
     void registerSavesTheReceptionistFromTheForm() {
-        Receptionist receptionist = ctrl.register(form("8", "2", "1500.5", "123"));
+        Receptionist receptionist = controller.register(form("8", "2", "1500.5", "123"));
 
-        assertEquals(receptionist, repo.findAll().get(0));
+        assertEquals(receptionist, repository.findAll().get(0));
         assertEquals(1500.5f, receptionist.getSalary());
         assertEquals(ADDRESS, receptionist.getAddress());
     }
 
     @Test
     void registerRejectsNonNumericWorkHours() {
-        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register(form("abc", "2", "1500.5", "123")));
+        assertThrows(
+                InvalidReceptionistDataException.class, () -> controller.register(form("abc", "2", "1500.5", "123")));
     }
 
     @Test
     void registerRejectsNonNumericOvertimeHours() {
-        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register(form("8", "", "1500.5", "123")));
+        assertThrows(InvalidReceptionistDataException.class, () -> controller.register(form("8", "", "1500.5", "123")));
     }
 
     @Test
     void registerRejectsNonNumericSalary() {
-        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register(form("8", "2", "abc", "123")));
+        assertThrows(InvalidReceptionistDataException.class, () -> controller.register(form("8", "2", "abc", "123")));
     }
 
     @Test
     void registerRejectsNonNumericLaborCardNumber() {
-        assertThrows(InvalidReceptionistDataException.class, () -> ctrl.register(form("8", "2", "1500.5", "abc")));
+        assertThrows(
+                InvalidReceptionistDataException.class, () -> controller.register(form("8", "2", "1500.5", "abc")));
     }
 
     @Test
     void deleteRemovesTheReceptionist() {
-        Receptionist receptionist = ctrl.register(form("8", "2", "1500.5", "123"));
+        Receptionist receptionist = controller.register(form("8", "2", "1500.5", "123"));
 
-        ctrl.delete(receptionist);
+        controller.delete(receptionist);
 
-        assertTrue(repo.findAll().isEmpty());
+        assertTrue(repository.findAll().isEmpty());
     }
 
     @Test
     void findByCpfReturnsTheMatchingReceptionist() {
-        Receptionist receptionist = ctrl.register(form("8", "2", "1500.5", "123"));
+        Receptionist receptionist = controller.register(form("8", "2", "1500.5", "123"));
 
-        assertEquals(receptionist, ctrl.findByCpf("12345678900").orElseThrow());
+        assertEquals(receptionist, controller.findByCpf("12345678900").orElseThrow());
     }
 
     @Test
     void findByCpfIsEmptyWhenNoReceptionistMatches() {
-        assertTrue(ctrl.findByCpf("00000000000").isEmpty());
+        assertTrue(controller.findByCpf("00000000000").isEmpty());
     }
 
     private static ReceptionistController.Form form(

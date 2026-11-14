@@ -20,48 +20,49 @@ class PatientControllerTest {
 
     private static final Address ADDRESS = Fixtures.address();
 
-    private InMemoryPatientRepository repo;
-    private PatientController ctrl;
+    private InMemoryPatientRepository repository;
+    private PatientController controller;
 
     @BeforeEach
     void setUp() {
-        repo = new InMemoryPatientRepository();
-        ctrl = new PatientController(new RegisterPatient(repo), new DeletePatient(repo), new ListPatients(repo));
+        repository = new InMemoryPatientRepository();
+        controller = new PatientController(
+                new RegisterPatient(repository), new DeletePatient(repository), new ListPatients(repository));
     }
 
     @Test
     void registerSavesThePatientFromTheForm() {
-        Patient patient = ctrl.register(form("Patient Test"));
+        Patient patient = controller.register(form("Patient Test"));
 
-        assertEquals(patient, repo.findAll().get(0));
+        assertEquals(patient, repository.findAll().get(0));
         assertEquals("12345678900", patient.getCpf());
         assertEquals(ADDRESS, patient.getAddress());
     }
 
     @Test
     void registerRejectsABlankName() {
-        assertThrows(InvalidPatientDataException.class, () -> ctrl.register(form("")));
+        assertThrows(InvalidPatientDataException.class, () -> controller.register(form("")));
     }
 
     @Test
     void deleteRemovesThePatient() {
-        Patient patient = ctrl.register(form("Patient Test"));
+        Patient patient = controller.register(form("Patient Test"));
 
-        ctrl.delete(patient);
+        controller.delete(patient);
 
-        assertTrue(repo.findAll().isEmpty());
+        assertTrue(repository.findAll().isEmpty());
     }
 
     @Test
     void findByCpfReturnsTheMatchingPatient() {
-        Patient patient = ctrl.register(form("Patient Test"));
+        Patient patient = controller.register(form("Patient Test"));
 
-        assertEquals(patient, ctrl.findByCpf("12345678900").orElseThrow());
+        assertEquals(patient, controller.findByCpf("12345678900").orElseThrow());
     }
 
     @Test
     void findByCpfIsEmptyWhenNoPatientMatches() {
-        assertTrue(ctrl.findByCpf("00000000000").isEmpty());
+        assertTrue(controller.findByCpf("00000000000").isEmpty());
     }
 
     private static PatientController.Form form(String name) {

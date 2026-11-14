@@ -30,7 +30,7 @@ class AppointmentControllerTest {
     private InMemoryPatientRepository patients;
     private InMemoryDoctorRepository doctors;
     private InMemoryNurseRepository nurses;
-    private AppointmentController ctrl;
+    private AppointmentController controller;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +38,7 @@ class AppointmentControllerTest {
         patients = new InMemoryPatientRepository();
         doctors = new InMemoryDoctorRepository();
         nurses = new InMemoryNurseRepository();
-        ctrl = new AppointmentController(
+        controller = new AppointmentController(
                 new RegisterAppointment(appointments),
                 new DeleteAppointment(appointments),
                 new ListPatients(patients),
@@ -49,7 +49,7 @@ class AppointmentControllerTest {
 
     @Test
     void registerSavesTheAppointmentForThePatientWithTheTypedCpf() {
-        Appointment appointment = ctrl.register(form("11111111111"));
+        Appointment appointment = controller.register(form("11111111111"));
 
         assertEquals(appointment, appointments.findAll().get(0));
         assertEquals(7L, appointment.getPatientId());
@@ -59,14 +59,14 @@ class AppointmentControllerTest {
 
     @Test
     void registerRejectsACpfWithNoPatient() {
-        assertThrows(InvalidAppointmentDataException.class, () -> ctrl.register(form("00000000000")));
+        assertThrows(InvalidAppointmentDataException.class, () -> controller.register(form("00000000000")));
     }
 
     @Test
     void deleteRemovesTheAppointment() {
-        Appointment appointment = ctrl.register(form("11111111111"));
+        Appointment appointment = controller.register(form("11111111111"));
 
-        ctrl.delete(appointment);
+        controller.delete(appointment);
 
         assertTrue(appointments.findAll().isEmpty());
     }
@@ -80,8 +80,8 @@ class AppointmentControllerTest {
         doctors.save(doctor);
         nurses.save(nurse);
 
-        assertEquals(List.of(doctor), ctrl.doctors());
-        assertEquals(List.of(nurse), ctrl.nurses());
+        assertEquals(List.of(doctor), controller.doctors());
+        assertEquals(List.of(nurse), controller.nurses());
     }
 
     private static AppointmentController.Form form(String patientCpf) {

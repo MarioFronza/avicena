@@ -20,48 +20,49 @@ class NurseControllerTest {
 
     private static final Address ADDRESS = Fixtures.address();
 
-    private InMemoryNurseRepository repo;
-    private NurseController ctrl;
+    private InMemoryNurseRepository repository;
+    private NurseController controller;
 
     @BeforeEach
     void setUp() {
-        repo = new InMemoryNurseRepository();
-        ctrl = new NurseController(new RegisterNurse(repo), new DeleteNurse(repo), new ListNurses(repo));
+        repository = new InMemoryNurseRepository();
+        controller = new NurseController(
+                new RegisterNurse(repository), new DeleteNurse(repository), new ListNurses(repository));
     }
 
     @Test
     void registerSavesTheNurseFromTheForm() {
-        Nurse nurse = ctrl.register(form("Nurse Test", "40"));
+        Nurse nurse = controller.register(form("Nurse Test", "40"));
 
-        assertEquals(nurse, repo.findAll().get(0));
+        assertEquals(nurse, repository.findAll().get(0));
         assertEquals(40, nurse.getHoursCompleted());
         assertEquals(ADDRESS, nurse.getAddress());
     }
 
     @Test
     void registerRejectsNonNumericHoursCompleted() {
-        assertThrows(InvalidNurseDataException.class, () -> ctrl.register(form("Nurse Test", "abc")));
+        assertThrows(InvalidNurseDataException.class, () -> controller.register(form("Nurse Test", "abc")));
     }
 
     @Test
     void deleteRemovesTheNurse() {
-        Nurse nurse = ctrl.register(form("Nurse Test", "40"));
+        Nurse nurse = controller.register(form("Nurse Test", "40"));
 
-        ctrl.delete(nurse);
+        controller.delete(nurse);
 
-        assertTrue(repo.findAll().isEmpty());
+        assertTrue(repository.findAll().isEmpty());
     }
 
     @Test
     void findByCpfReturnsTheMatchingNurse() {
-        Nurse nurse = ctrl.register(form("Nurse Test", "40"));
+        Nurse nurse = controller.register(form("Nurse Test", "40"));
 
-        assertEquals(nurse, ctrl.findByCpf("12345678900").orElseThrow());
+        assertEquals(nurse, controller.findByCpf("12345678900").orElseThrow());
     }
 
     @Test
     void findByCpfIsEmptyWhenNoNurseMatches() {
-        assertTrue(ctrl.findByCpf("00000000000").isEmpty());
+        assertTrue(controller.findByCpf("00000000000").isEmpty());
     }
 
     private static NurseController.Form form(String name, String hoursCompleted) {

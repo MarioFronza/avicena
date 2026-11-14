@@ -14,20 +14,20 @@ import org.junit.jupiter.api.Test;
 
 class DiagnosisControllerTest {
 
-    private InMemoryDiagnosisRepository repo;
-    private DiagnosisController ctrl;
+    private InMemoryDiagnosisRepository repository;
+    private DiagnosisController controller;
 
     @BeforeEach
     void setUp() {
-        repo = new InMemoryDiagnosisRepository();
-        ctrl = new DiagnosisController(new RegisterDiagnosis(repo), new DeleteDiagnosis(repo));
+        repository = new InMemoryDiagnosisRepository();
+        controller = new DiagnosisController(new RegisterDiagnosis(repository), new DeleteDiagnosis(repository));
     }
 
     @Test
     void registerSavesTheDiagnosisForTheSelectedAppointment() {
-        Diagnosis diagnosis = ctrl.register(form(1L));
+        Diagnosis diagnosis = controller.register(form(1L));
 
-        assertEquals(diagnosis, repo.findAll().get(0));
+        assertEquals(diagnosis, repository.findAll().get(0));
         assertEquals(1L, diagnosis.getAppointmentId());
         assertEquals(12.8f, diagnosis.getBloodPressure());
         assertEquals("Flu", diagnosis.getDisease());
@@ -35,36 +35,39 @@ class DiagnosisControllerTest {
 
     @Test
     void registerRejectsADiagnosisWithNoAppointmentSelected() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(null)));
+        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(null)));
     }
 
     @Test
     void deleteRemovesTheDiagnosis() {
-        Diagnosis diagnosis = ctrl.register(form(1L));
+        Diagnosis diagnosis = controller.register(form(1L));
 
-        ctrl.delete(diagnosis);
+        controller.delete(diagnosis);
 
-        assertTrue(repo.findAll().isEmpty());
+        assertTrue(repository.findAll().isEmpty());
     }
 
     @Test
     void registerRejectsNonNumericBloodPressure() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "abc", "37", "180", "80")));
+        assertThrows(
+                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "abc", "37", "180", "80")));
     }
 
     @Test
     void registerRejectsNonNumericTemperature() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "", "180", "80")));
+        assertThrows(InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "", "180", "80")));
     }
 
     @Test
     void registerRejectsNonNumericHeight() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "37", "abc", "80")));
+        assertThrows(
+                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "37", "abc", "80")));
     }
 
     @Test
     void registerRejectsNonNumericWeight() {
-        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "37", "180", "abc")));
+        assertThrows(
+                InvalidDiagnosisDataException.class, () -> controller.register(form(1L, "12.8", "37", "180", "abc")));
     }
 
     private static DiagnosisController.Form form(Long appointmentId) {
