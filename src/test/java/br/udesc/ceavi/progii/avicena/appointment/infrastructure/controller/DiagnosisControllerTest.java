@@ -46,7 +46,32 @@ class DiagnosisControllerTest {
         assertTrue(repo.findAll().isEmpty());
     }
 
+    @Test
+    void registerRejectsNonNumericBloodPressure() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "abc", "37", "180", "80")));
+    }
+
+    @Test
+    void registerRejectsNonNumericTemperature() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "", "180", "80")));
+    }
+
+    @Test
+    void registerRejectsNonNumericHeight() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "37", "abc", "80")));
+    }
+
+    @Test
+    void registerRejectsNonNumericWeight() {
+        assertThrows(InvalidDiagnosisDataException.class, () -> ctrl.register(form(1L, "12.8", "37", "180", "abc")));
+    }
+
     private static DiagnosisController.Form form(Long appointmentId) {
-        return new DiagnosisController.Form(appointmentId, "12.8", "37", "180", "80", "Flu", "Rest");
+        return form(appointmentId, "12.8", "37", "180", "80");
+    }
+
+    private static DiagnosisController.Form form(
+            Long appointmentId, String bloodPressure, String temperature, String height, String weight) {
+        return new DiagnosisController.Form(appointmentId, bloodPressure, temperature, height, weight, "Flu", "Rest");
     }
 }

@@ -1,8 +1,10 @@
 package br.udesc.ceavi.progii.avicena.appointment.infrastructure.controller;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.Diagnosis;
+import br.udesc.ceavi.progii.avicena.appointment.domain.InvalidDiagnosisDataException;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.DeleteDiagnosis;
 import br.udesc.ceavi.progii.avicena.appointment.usecase.RegisterDiagnosis;
+import java.util.function.Function;
 
 public class DiagnosisController {
 
@@ -26,10 +28,10 @@ public class DiagnosisController {
     public Diagnosis register(Form form) {
         return registerDiagnosis.register(new Diagnosis(
                 form.appointmentId(),
-                Float.parseFloat(form.bloodPressure()),
-                Integer.parseInt(form.temperature()),
-                Integer.parseInt(form.height()),
-                Integer.parseInt(form.weight()),
+                parseNumber(form.bloodPressure(), "Blood pressure", Float::parseFloat),
+                parseNumber(form.temperature(), "Temperature", Integer::parseInt),
+                parseNumber(form.height(), "Height", Integer::parseInt),
+                parseNumber(form.weight(), "Weight", Integer::parseInt),
                 "Padrão",
                 form.disease(),
                 form.medications(),
@@ -39,5 +41,13 @@ public class DiagnosisController {
 
     public void delete(Diagnosis diagnosis) {
         deleteDiagnosis.delete(diagnosis);
+    }
+
+    private static <T> T parseNumber(String text, String field, Function<String, T> parser) {
+        try {
+            return parser.apply(text);
+        } catch (NumberFormatException e) {
+            throw new InvalidDiagnosisDataException(field + " must be a number");
+        }
     }
 }
