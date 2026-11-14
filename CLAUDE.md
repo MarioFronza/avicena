@@ -155,7 +155,11 @@ and menu listener once, and hands each one its collaborators through constructor
 **Screens receive dependencies, never fetch them**: no class under `infrastructure/ui`,
 `view/` or `control/listenersMenu` creates a repository or uses a static `getInstance()`.
 Frames are created once and reused, so a menu item for an open screen just brings it to
-the front. `MenuPrincipal` exposes `on*(ActionListener)` hooks that `AvicenaMain` fills.
+the front. Each vertical describes its own main menu items: every `*MenuListener`
+extends `MenuActionListener` and passes its `MenuPrincipal.Section`, label, icon and
+tooltip to the base constructor. `MenuPrincipal` only knows the sections (fixed bar
+order) and a single `add(MenuActionListener)`. `AvicenaMain` adds items in display
+order, which is why its vertical blocks run Patient, Receptionist, Doctor, Nurse.
 
 **The UI knows the controller, never the other way around.** Each frame receives its
 `*Controller` and handles buttons, `JOptionPane` dialogs and the record currently on
@@ -174,13 +178,13 @@ repository queries.
 ### Outside the six packages
 
 - **`control/dao/`**: `PersistenceConfig` and `DotenvLoader`.
-- **`control/listenersMenu/`**: `MenuActionListener` (abstract base for menu actions)
+- **`control/listenersMenu/`**: `MenuActionListener` (abstract base for menu items)
   and `MenuSobreListener` ("About" dialog).
 - **`view/frames/`**: `FrameCRUD` (abstract template for CRUD screens) and
   `FrameSemCRUD` (read-only screens), base classes for every screen.
   `view/painels/CRUDActionPanel` is the shared Novo/Gravar/Excluir/Cancelar bar.
 - **`view/principal/`**: `FrameSistema` (MDI main window) and `MenuPrincipal` (menu
-  bar, listeners attached from `AvicenaMain`).
+  bar: fixed sections, items added from `AvicenaMain`).
 
 ## Known issues / refactor targets
 
@@ -198,10 +202,9 @@ repository queries.
 
 ### Next steps
 
-1. Menu registry: each vertical contributes its own menu items instead of
-   `MenuPrincipal` hardcoding them. Next step after the #108 composition root.
-2. Build the `auth` vertical (domain, login, role-based menu) on top of the existing
-   tables and the menu registry.
-3. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
-4. Split the verticals into Gradle modules. Package boundaries already exist; only
+1. Build the `auth` vertical (domain, login, role-based menu) on top of the existing
+   tables. The menu is ready for it: filter `MenuActionListener`s by role before
+   `MenuPrincipal.add`.
+2. Apply the #85 Doctor UI cleanup to Patient, Nurse and Receptionist.
+3. Split the verticals into Gradle modules. Package boundaries already exist; only
    `patient.domain.Address`/`MaritalStatus` and `PersonEntity` cross them.
