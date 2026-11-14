@@ -66,7 +66,9 @@ listed in `SEEDED_TABLES` (`marital_statuses`, `urgency_statuses`, `departments`
 `roles`, `flyway_schema_history`). **A new migration that seeds a lookup table must
 add it to `SEEDED_TABLES`**, or the seed rows get wiped after the first test.
 
-Use case tests run against `InMemory*Repository` fakes in each `usecase/` test package.
+Use case and controller tests run against the `InMemory*Repository` fakes in the shared
+`support` test package (one copy each), alongside `Fixtures` and the JDBC `Database.count`
+helper.
 
 ### CI
 
@@ -167,8 +169,7 @@ screen itself. Controllers import no Swing or AWT: they take a `Form` record of 
 input values (strings, as a web form would send them), parse numbers, call the use
 cases and return the domain object or throw the domain's `Invalid*DataException`. A
 web front end should reuse them unchanged. Controller tests drive them directly against
-`InMemory*Repository` copies in the `infrastructure/controller` test package, with no
-frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
+the shared `support` `InMemory*Repository` fakes, with no frame and no Postgres. Nothing under `infrastructure/controller` may import from `ui`.
 
 `AppointmentListFrame`, `PatientHistoryFrame`, `DiagnosisRegistrationFrame` and
 `GeneratePrescriptionListener` still query `AppointmentEntity` directly through
@@ -188,6 +189,19 @@ repository queries.
 
 ## Conventions
 
+One standard per layer. The housekeeping series of PRs is applying it everywhere; until
+it finishes, code that doesn't match yet is a target, not a precedent.
+
+| Layer | Standard |
+|---|---|
+| Domain | Constructors validate every invariant and throw the vertical's `Invalid*DataException`. Persons: name, cpf and phone not blank; numbers not negative. Real types: `LocalDate`/`LocalTime`, `BigDecimal` for money and temperature, `String` for document numbers. Value objects (`Address`) have equals/hashCode; entities don't. |
+| Repository | `save` (insert when `id == null`, update otherwise), `findAll` (ordered by id), `findById(Long): Optional`, `delete(T)` (missing row is a no-op). Person repositories add `findByCpf(String): Optional`. |
+| Use case | One class, one verb: `Register*`, `List*`, `Delete*`, `Find*ByCpf`. `Register*` rejects a cpf another record already uses. |
+| Controller | `Form` of raw strings; numbers parsed by one shared null-safe helper; lookups through use cases; never returns JPA entities. |
+| Persistence | One transaction helper with rollback; one shared person/address mapper and lookup resolver; entities with no public setters and `nullable`/`length` matching the DB; timestamps mapped; `EntityManager` only under `infrastructure/persistence` and `control/dao`. |
+| Database | Constraint names `<table>_<col>_{fkey,key,idx,check}`; every FK indexed; required FKs NOT NULL; checks for non-negative numbers; applied migrations never edited. |
+| Tests | Method names are camelCase sentences, `<action><Expectation>` (`registerRejectsABlankCpf`); locals named `repository`, `controller`, `useCase`; plain JUnit assertions, expected value first; `@ParameterizedTest` for per-field rejections; fakes and fixtures only in `support`; `@TempDir` for files; no test depends on another's order. |
+
 - **Everything is English**: identifiers, packages, comments, test names and data,
   user-facing text (labels, dialogs, PDF content) and docs. No Portuguese anywhere.
   Already-applied Flyway migrations are the one exception: they reference the old
@@ -197,8 +211,7 @@ repository queries.
 
 - **UI layer is the least refactored part.** Doctor got a cleanup (#85): an `addField` helper in `DoctorRegistrationFrame` replacing `GridBagConstraints`
   boilerplate. Patient, Nurse and Receptionist UIs don't have the helper yet.
-- `DotenvLoader` splits each line on every `=`, so a value containing `=` is truncated.
-  No quote handling either.
+- `DotenvLoader` has no quote handling: `KEY="value"` keeps the quotes.
 - `GeneratePrescriptionListener` writes `Avicena-Prescription.pdf` to a hardcoded
   relative path.
 - `AppointmentRegistrationFrame` stores patient/doctor/nurse by ID only; names are
