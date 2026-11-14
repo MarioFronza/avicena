@@ -53,18 +53,17 @@ class NurseControllerTest {
     @ValueSource(strings = {"   ", "abc", "12,5"})
     void registerRejectsANonNumericHoursCompleted(String value) {
         assertThrows(
-                InvalidNurseDataException.class, () -> controller.register(formWithNumber("hoursCompleted", value)));
+                InvalidNurseDataException.class, () -> controller.register(formWithNumber("trainingHours", value)));
     }
 
     @Test
     void registerRejectsANegativeHoursCompleted() {
-        assertThrows(
-                InvalidNurseDataException.class, () -> controller.register(formWithNumber("hoursCompleted", "-1")));
+        assertThrows(InvalidNurseDataException.class, () -> controller.register(formWithNumber("trainingHours", "-1")));
     }
 
     @Test
     void registerAcceptsHoursCompletedWithSurroundingWhitespace() {
-        assertDoesNotThrow(() -> controller.register(formWithNumber("hoursCompleted", " 40 ")));
+        assertDoesNotThrow(() -> controller.register(formWithNumber("trainingHours", " 40 ")));
     }
 
     @Test
@@ -108,9 +107,9 @@ class NurseControllerTest {
         return form(name, cpf, "40");
     }
 
-    private static NurseController.Form form(String name, String cpf, String hoursCompleted) {
+    private static NurseController.Form form(String name, String cpf, String trainingHours) {
         return new NurseController.Form(
-                name, cpf, "48999990000", ADDRESS, MaritalStatus.SINGLE, "Technician", hoursCompleted);
+                name, cpf, "48999990000", ADDRESS, MaritalStatus.SINGLE, "Technician", trainingHours);
     }
 
     private static NurseController.Form formWithNumber(String field, String value) {

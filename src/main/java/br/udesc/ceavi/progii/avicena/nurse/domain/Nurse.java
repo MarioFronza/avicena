@@ -12,8 +12,8 @@ public class Nurse {
     private final String phone;
     private final Address address;
     private final MaritalStatus maritalStatus;
-    private final String formation;
-    private final int hoursCompleted;
+    private final String qualification;
+    private final int trainingHours;
 
     public Nurse(
             String name,
@@ -21,9 +21,9 @@ public class Nurse {
             String phone,
             Address address,
             MaritalStatus maritalStatus,
-            String formation,
-            int hoursCompleted) {
-        this(null, name, cpf, phone, address, maritalStatus, formation, hoursCompleted);
+            String qualification,
+            int trainingHours) {
+        this(null, name, cpf, phone, address, maritalStatus, qualification, trainingHours);
     }
 
     public Nurse(
@@ -33,17 +33,17 @@ public class Nurse {
             String phone,
             Address address,
             MaritalStatus maritalStatus,
-            String formation,
-            int hoursCompleted) {
+            String qualification,
+            int trainingHours) {
         this.id = id;
         this.name = Invariants.notBlank(name, "Nurse name", InvalidNurseDataException::new);
         this.cpf = Invariants.notBlank(cpf, "Nurse cpf", InvalidNurseDataException::new);
         this.phone = Invariants.notBlank(phone, "Nurse phone", InvalidNurseDataException::new);
         this.address = address;
         this.maritalStatus = maritalStatus;
-        this.formation = Invariants.notBlank(formation, "Nurse formation", InvalidNurseDataException::new);
-        this.hoursCompleted =
-                Invariants.notNegative(hoursCompleted, "Nurse hours completed", InvalidNurseDataException::new);
+        this.qualification = Invariants.notBlank(qualification, "Nurse qualification", InvalidNurseDataException::new);
+        this.trainingHours =
+                Invariants.notNegative(trainingHours, "Nurse training hours", InvalidNurseDataException::new);
     }
 
     public Long getId() {
@@ -70,11 +70,11 @@ public class Nurse {
         return maritalStatus;
     }
 
-    public String getFormation() {
-        return formation;
+    public String getQualification() {
+        return qualification;
     }
 
-    public int getHoursCompleted() {
-        return hoursCompleted;
+    public int getTrainingHours() {
+        return trainingHours;
     }
 }

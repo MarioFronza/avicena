@@ -8,6 +8,7 @@ import br.udesc.ceavi.progii.avicena.receptionist.usecase.RegisterReceptionist;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.shared.infrastructure.controller.FormNumbers;
+import java.math.BigDecimal;
 import java.util.Optional;
 
 public class ReceptionistController {
@@ -66,17 +67,13 @@ public class ReceptionistController {
                 form.maritalStatus(),
                 FormNumbers.parse(
                         form.workHours(), "Work hours", Integer::parseInt, InvalidReceptionistDataException::new),
-                FormNumbers.parse(form.salary(), "Salary", Float::parseFloat, InvalidReceptionistDataException::new),
+                FormNumbers.parse(form.salary(), "Salary", BigDecimal::new, InvalidReceptionistDataException::new),
                 FormNumbers.parse(
                         form.overtimeHours(),
                         "Overtime hours",
                         Integer::parseInt,
                         InvalidReceptionistDataException::new),
-                FormNumbers.parse(
-                        form.laborCardNumber(),
-                        "Labor card number",
-                        Integer::parseInt,
-                        InvalidReceptionistDataException::new)));
+                form.laborCardNumber()));
     }
 
     public void delete(Receptionist receptionist) {

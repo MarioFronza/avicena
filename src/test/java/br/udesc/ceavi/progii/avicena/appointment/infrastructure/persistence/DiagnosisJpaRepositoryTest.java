@@ -16,6 +16,7 @@ import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Database;
 import br.udesc.ceavi.progii.avicena.support.Fixtures;
 import jakarta.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -27,7 +28,16 @@ class DiagnosisJpaRepositoryTest {
     void savePersistsADiagnosisThatCascadesTheLinkedFinalDiagnosis() {
         Appointment appointment = anAppointment();
         Diagnosis diagnosis = new Diagnosis(
-                appointment.getId(), 120f, 37, 170, 70, "Default", "Flu", "Rest", "Default exam", "Default");
+                appointment.getId(),
+                120f,
+                new BigDecimal("37"),
+                170,
+                70,
+                "Default",
+                "Flu",
+                "Rest",
+                "Default exam",
+                "Default");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
 
         Diagnosis saved = repository.save(diagnosis);
@@ -40,7 +50,16 @@ class DiagnosisJpaRepositoryTest {
     void deleteRemovesAPreviouslyPersistedDiagnosis() {
         Appointment appointment = anAppointment();
         Diagnosis diagnosis = new Diagnosis(
-                appointment.getId(), 110f, 36, 165, 60, "Default", "Cough", "Syrup", "Default exam", "Default");
+                appointment.getId(),
+                110f,
+                new BigDecimal("36"),
+                165,
+                60,
+                "Default",
+                "Cough",
+                "Syrup",
+                "Default exam",
+                "Default");
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Diagnosis saved = repository.save(diagnosis);
 
@@ -80,11 +99,20 @@ class DiagnosisJpaRepositoryTest {
     void findByIdReturnsEveryFieldOfTheSavedDiagnosis() {
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Diagnosis saved = repository.save(new Diagnosis(
-                anAppointment().getId(), 12.5f, 38, 180, 80, "Notes", "Flu", "Rest", "Exam notes", "Final"));
+                anAppointment().getId(),
+                12.5f,
+                new BigDecimal("37.5"),
+                180,
+                80,
+                "Notes",
+                "Flu",
+                "Rest",
+                "Exam notes",
+                "Final"));
 
         Diagnosis found = repository.findById(saved.getId()).orElseThrow();
         assertEquals(12.5f, found.getBloodPressure());
-        assertEquals(38, found.getTemperature());
+        assertEquals(new BigDecimal("37.5"), found.getTemperature());
         assertEquals(180, found.getHeight());
         assertEquals(80, found.getWeight());
         assertEquals("Notes", found.getNotes());
@@ -103,10 +131,10 @@ class DiagnosisJpaRepositoryTest {
     void findAllReturnsSavedDiagnosesOrderedById() {
         DiagnosisJpaRepository repository = new DiagnosisJpaRepository();
         Long appointmentId = anAppointment().getId();
-        Diagnosis first =
-                repository.save(new Diagnosis(appointmentId, 120f, 37, 170, 70, null, "Flu", null, null, null));
-        Diagnosis second =
-                repository.save(new Diagnosis(appointmentId, 110f, 36, 165, 60, null, "Cough", null, null, null));
+        Diagnosis first = repository.save(
+                new Diagnosis(appointmentId, 120f, new BigDecimal("37"), 170, 70, null, "Flu", null, null, null));
+        Diagnosis second = repository.save(
+                new Diagnosis(appointmentId, 110f, new BigDecimal("36"), 165, 60, null, "Cough", null, null, null));
 
         assertEquals(
                 List.of(first.getId(), second.getId()),
@@ -115,7 +143,8 @@ class DiagnosisJpaRepositoryTest {
 
     @Test
     void deleteOfAMissingDiagnosisIsANoOp() {
-        Diagnosis missing = new Diagnosis(999_999L, 1L, 120f, 37, 170, 70, null, null, null, null, null);
+        Diagnosis missing =
+                new Diagnosis(999_999L, 1L, 120f, new BigDecimal("37"), 170, 70, null, null, null, null, null);
 
         assertDoesNotThrow(() -> new DiagnosisJpaRepository().delete(missing));
     }
@@ -129,7 +158,7 @@ class DiagnosisJpaRepositoryTest {
                 saved.getId(),
                 saved.getAppointmentId(),
                 13f,
-                39,
+                new BigDecimal("39"),
                 175,
                 75,
                 "New notes",
@@ -139,7 +168,7 @@ class DiagnosisJpaRepositoryTest {
                 "Done"));
 
         Diagnosis reloaded = repository.findById(saved.getId()).orElseThrow();
-        assertEquals(39, reloaded.getTemperature());
+        assertEquals(new BigDecimal("39.0"), reloaded.getTemperature());
         assertEquals("Covid", reloaded.getDisease());
         assertEquals("Done", reloaded.getFinalDescription());
         assertEquals(1, Database.count("SELECT COUNT(*) FROM diagnoses"));

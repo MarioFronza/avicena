@@ -14,8 +14,8 @@ final class NurseMapper {
                 null,
                 PersonMapper.toEntity(
                         nurse.getName(), nurse.getCpf(), nurse.getPhone(), nurse.getAddress(), maritalStatus),
-                nurse.getFormation(),
-                nurse.getHoursCompleted());
+                nurse.getQualification(),
+                nurse.getTrainingHours());
     }
 
     static void update(NurseEntity entity, Nurse nurse, MaritalStatusEntity maritalStatus) {
@@ -26,7 +26,7 @@ final class NurseMapper {
                 nurse.getPhone(),
                 nurse.getAddress(),
                 maritalStatus);
-        entity.update(nurse.getFormation(), nurse.getHoursCompleted());
+        entity.update(nurse.getQualification(), nurse.getTrainingHours());
     }
 
     static Nurse toDomain(NurseEntity entity) {
@@ -38,7 +38,7 @@ final class NurseMapper {
                 person.getPhone(),
                 PersonMapper.toDomain(person.getAddress()),
                 PersonMapper.toDomain(person.getMaritalStatus()),
-                entity.getFormation(),
-                entity.getHoursCompleted());
+                entity.getQualification(),
+                entity.getTrainingHours());
     }
 }

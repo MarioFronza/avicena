@@ -12,6 +12,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "diagnoses")
@@ -27,7 +28,7 @@ public class DiagnosisEntity extends AuditedEntity {
     private float bloodPressure;
 
     @Column(name = "temperature")
-    private int temperature;
+    private BigDecimal temperature;
 
     @Column(name = "height")
     private int height;
@@ -35,8 +36,8 @@ public class DiagnosisEntity extends AuditedEntity {
     @Column(name = "weight")
     private int weight;
 
-    @Column(name = "medication_history")
-    private String medicationHistory;
+    @Column(name = "notes")
+    private String notes;
 
     @ManyToOne
     @JoinColumn(name = "appointment_id")
@@ -51,10 +52,10 @@ public class DiagnosisEntity extends AuditedEntity {
     public DiagnosisEntity(
             Long id,
             float bloodPressure,
-            int temperature,
+            BigDecimal temperature,
             int height,
             int weight,
-            String medicationHistory,
+            String notes,
             AppointmentEntity appointment,
             FinalDiagnosisEntity finalDiagnosis) {
         this.id = id;
@@ -62,23 +63,23 @@ public class DiagnosisEntity extends AuditedEntity {
         this.temperature = temperature;
         this.height = height;
         this.weight = weight;
-        this.medicationHistory = medicationHistory;
+        this.notes = notes;
         this.appointment = appointment;
         this.finalDiagnosis = finalDiagnosis;
     }
 
     public void update(
             float bloodPressure,
-            int temperature,
+            BigDecimal temperature,
             int height,
             int weight,
-            String medicationHistory,
+            String notes,
             AppointmentEntity appointment) {
         this.bloodPressure = bloodPressure;
         this.temperature = temperature;
         this.height = height;
         this.weight = weight;
-        this.medicationHistory = medicationHistory;
+        this.notes = notes;
         this.appointment = appointment;
     }
 
@@ -90,7 +91,7 @@ public class DiagnosisEntity extends AuditedEntity {
         return bloodPressure;
     }
 
-    public int getTemperature() {
+    public BigDecimal getTemperature() {
         return temperature;
     }
 
@@ -102,8 +103,8 @@ public class DiagnosisEntity extends AuditedEntity {
         return weight;
     }
 
-    public String getMedicationHistory() {
-        return medicationHistory;
+    public String getNotes() {
+        return notes;
     }
 
     public AppointmentEntity getAppointment() {

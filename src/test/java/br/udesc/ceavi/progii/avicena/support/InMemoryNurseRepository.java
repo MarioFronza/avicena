@@ -20,8 +20,8 @@ public class InMemoryNurseRepository extends InMemoryRepository<Nurse> implement
                 nurse.getPhone(),
                 nurse.getAddress(),
                 nurse.getMaritalStatus(),
-                nurse.getFormation(),
-                nurse.getHoursCompleted());
+                nurse.getQualification(),
+                nurse.getTrainingHours());
     }
 
     @Override

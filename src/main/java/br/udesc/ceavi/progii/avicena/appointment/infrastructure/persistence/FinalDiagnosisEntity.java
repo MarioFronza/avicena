@@ -25,26 +25,27 @@ public class FinalDiagnosisEntity extends AuditedEntity {
     @Column(name = "medications")
     private String medications;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "final_description")
+    private String finalDescription;
 
     @Column(name = "exam_notes")
     private String examNotes;
 
     protected FinalDiagnosisEntity() {}
 
-    public FinalDiagnosisEntity(Long id, String disease, String medications, String description, String examNotes) {
+    public FinalDiagnosisEntity(
+            Long id, String disease, String medications, String finalDescription, String examNotes) {
         this.id = id;
         this.disease = disease;
         this.medications = medications;
-        this.description = description;
+        this.finalDescription = finalDescription;
         this.examNotes = examNotes;
     }
 
-    public void update(String disease, String medications, String description, String examNotes) {
+    public void update(String disease, String medications, String finalDescription, String examNotes) {
         this.disease = disease;
         this.medications = medications;
-        this.description = description;
+        this.finalDescription = finalDescription;
         this.examNotes = examNotes;
     }
 
@@ -60,8 +61,8 @@ public class FinalDiagnosisEntity extends AuditedEntity {
         return medications;
     }
 
-    public String getDescription() {
-        return description;
+    public String getFinalDescription() {
+        return finalDescription;
     }
 
     public String getExamNotes() {

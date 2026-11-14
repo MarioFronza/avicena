@@ -9,6 +9,7 @@ import br.udesc.ceavi.progii.avicena.patient.domain.Patient;
 import br.udesc.ceavi.progii.avicena.receptionist.domain.Receptionist;
 import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -36,7 +37,15 @@ public final class Fixtures {
 
     public static Receptionist receptionist(String cpf) {
         return new Receptionist(
-                "Receptionist Test", cpf, "48999990000", address(), MaritalStatus.SINGLE, 40, 3000f, 5, 123);
+                "Receptionist Test",
+                cpf,
+                "48999990000",
+                address(),
+                MaritalStatus.SINGLE,
+                40,
+                new BigDecimal("3000"),
+                5,
+                "123");
     }
 
     public static Appointment appointment(Long patientId) {
@@ -51,6 +60,7 @@ public final class Fixtures {
     }
 
     public static Diagnosis diagnosis(Long appointmentId) {
-        return new Diagnosis(appointmentId, 120f, 37, 170, 70, "Notes", "Flu", "Rest", "Exam notes", "Final");
+        return new Diagnosis(
+                appointmentId, 120f, new BigDecimal("37"), 170, 70, "Notes", "Flu", "Rest", "Exam notes", "Final");
     }
 }

@@ -131,7 +131,7 @@ public class AppointmentRegistrationFrame extends CrudFrame {
         nurses = controller.nurses();
         nurseComboBox.removeAllItems();
         for (Nurse nurse : nurses) {
-            nurseComboBox.addItem(nurse.getName() + " - " + nurse.getFormation());
+            nurseComboBox.addItem(nurse.getName() + " - " + nurse.getQualification());
         }
     }
 

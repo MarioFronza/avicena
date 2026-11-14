@@ -27,24 +27,24 @@ public class NurseEntity extends AuditedEntity {
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
-    @Column(name = "formation", nullable = false)
-    private String formation;
+    @Column(name = "qualification", nullable = false)
+    private String qualification;
 
-    @Column(name = "hours_completed", nullable = false)
-    private int hoursCompleted;
+    @Column(name = "training_hours", nullable = false)
+    private int trainingHours;
 
     protected NurseEntity() {}
 
-    public NurseEntity(Long id, PersonEntity person, String formation, int hoursCompleted) {
+    public NurseEntity(Long id, PersonEntity person, String qualification, int trainingHours) {
         this.id = id;
         this.person = person;
-        this.formation = formation;
-        this.hoursCompleted = hoursCompleted;
+        this.qualification = qualification;
+        this.trainingHours = trainingHours;
     }
 
-    public void update(String formation, int hoursCompleted) {
-        this.formation = formation;
-        this.hoursCompleted = hoursCompleted;
+    public void update(String qualification, int trainingHours) {
+        this.qualification = qualification;
+        this.trainingHours = trainingHours;
     }
 
     public Long getId() {
@@ -67,11 +67,11 @@ public class NurseEntity extends AuditedEntity {
         return person.getPhone();
     }
 
-    public String getFormation() {
-        return formation;
+    public String getQualification() {
+        return qualification;
     }
 
-    public int getHoursCompleted() {
-        return hoursCompleted;
+    public int getTrainingHours() {
+        return trainingHours;
     }
 }

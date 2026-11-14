@@ -40,18 +40,18 @@ class NurseTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"   "})
-    void rejectsABlankFormation(String formation) {
-        assertThrows(InvalidNurseDataException.class, () -> nurseWith("formation", formation));
+    void rejectsABlankFormation(String qualification) {
+        assertThrows(InvalidNurseDataException.class, () -> nurseWith("qualification", qualification));
     }
 
     @Test
     void rejectsANegativeHoursCompleted() {
-        assertThrows(InvalidNurseDataException.class, () -> nurseWithNumber("hoursCompleted", -1));
+        assertThrows(InvalidNurseDataException.class, () -> nurseWithNumber("trainingHours", -1));
     }
 
     @Test
     void acceptsAZeroHoursCompleted() {
-        assertDoesNotThrow(() -> nurseWithNumber("hoursCompleted", 0));
+        assertDoesNotThrow(() -> nurseWithNumber("trainingHours", 0));
     }
 
     @Test
@@ -66,13 +66,13 @@ class NurseTest {
         assertEquals("48999990000", nurse.getPhone());
         assertEquals(address, nurse.getAddress());
         assertEquals(MaritalStatus.SINGLE, nurse.getMaritalStatus());
-        assertEquals("Technician", nurse.getFormation());
-        assertEquals(1200, nurse.getHoursCompleted());
+        assertEquals("Technician", nurse.getQualification());
+        assertEquals(1200, nurse.getTrainingHours());
     }
 
     private static Nurse nurseWith(String field, String value) {
-        Map<String, String> values = new HashMap<>(
-                Map.of("name", "Joana Test", "cpf", "12345678900", "phone", "48999990000", "formation", "Technician"));
+        Map<String, String> values = new HashMap<>(Map.of(
+                "name", "Joana Test", "cpf", "12345678900", "phone", "48999990000", "qualification", "Technician"));
         values.put(field, value);
         return new Nurse(
                 values.get("name"),
@@ -80,7 +80,7 @@ class NurseTest {
                 values.get("phone"),
                 null,
                 MaritalStatus.SINGLE,
-                values.get("formation"),
+                values.get("qualification"),
                 1200);
     }
 

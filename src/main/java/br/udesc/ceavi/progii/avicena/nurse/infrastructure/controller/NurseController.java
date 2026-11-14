@@ -19,8 +19,8 @@ public class NurseController {
             String phone,
             Address address,
             MaritalStatus maritalStatus,
-            String formation,
-            String hoursCompleted) {
+            String qualification,
+            String trainingHours) {
 
         public Form(
                 String name,
@@ -28,13 +28,13 @@ public class NurseController {
                 String phone,
                 Address address,
                 MaritalStatus maritalStatus,
-                String formation,
-                String hoursCompleted) {
-            this(null, name, cpf, phone, address, maritalStatus, formation, hoursCompleted);
+                String qualification,
+                String trainingHours) {
+            this(null, name, cpf, phone, address, maritalStatus, qualification, trainingHours);
         }
 
         public Form withId(Long id) {
-            return new Form(id, name, cpf, phone, address, maritalStatus, formation, hoursCompleted);
+            return new Form(id, name, cpf, phone, address, maritalStatus, qualification, trainingHours);
         }
     }
 
@@ -56,9 +56,9 @@ public class NurseController {
                 form.phone(),
                 form.address(),
                 form.maritalStatus(),
-                form.formation(),
+                form.qualification(),
                 FormNumbers.parse(
-                        form.hoursCompleted(), "Hours completed", Integer::parseInt, InvalidNurseDataException::new)));
+                        form.trainingHours(), "Training hours", Integer::parseInt, InvalidNurseDataException::new)));
     }
 
     public void delete(Nurse nurse) {

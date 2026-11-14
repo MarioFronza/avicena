@@ -11,6 +11,7 @@ import br.udesc.ceavi.progii.avicena.shared.domain.Address;
 import br.udesc.ceavi.progii.avicena.shared.domain.MaritalStatus;
 import br.udesc.ceavi.progii.avicena.support.Database;
 import br.udesc.ceavi.progii.avicena.support.Fixtures;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -20,7 +21,15 @@ class ReceptionistJpaRepositoryTest {
     @Test
     void savePersistsAReceptionistThatIsRetrievableAfterward() {
         Receptionist receptionist = new Receptionist(
-                "Ana Test", "12345678900", "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123456);
+                "Ana Test",
+                "12345678900",
+                "48999990000",
+                null,
+                MaritalStatus.SINGLE,
+                40,
+                new BigDecimal("3000"),
+                5,
+                "123456");
         ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
 
         Receptionist saved = repository.save(receptionist);
@@ -32,15 +41,23 @@ class ReceptionistJpaRepositoryTest {
         assertTrue(found.isPresent());
         assertEquals("Ana Test", found.get().getName());
         assertEquals(40, found.get().getWorkHours());
-        assertEquals(3000f, found.get().getSalary());
+        assertEquals(new BigDecimal("3000.00"), found.get().getSalary());
         assertEquals(5, found.get().getOvertimeHours());
-        assertEquals(123456, found.get().getLaborCardNumber());
+        assertEquals("123456", found.get().getLaborCardNumber());
     }
 
     @Test
     void savePersistsAReceptionistWithAMaritalStatusThatRoundTripsCorrectly() {
         Receptionist receptionist = new Receptionist(
-                "Married Test", "77777777777", "48966660000", null, MaritalStatus.MARRIED, 40, 3200f, 2, 987654);
+                "Married Test",
+                "77777777777",
+                "48966660000",
+                null,
+                MaritalStatus.MARRIED,
+                40,
+                new BigDecimal("3200"),
+                2,
+                "987654");
         ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
 
         repository.save(receptionist);
@@ -55,7 +72,15 @@ class ReceptionistJpaRepositoryTest {
     @Test
     void deleteRemovesAPreviouslyPersistedReceptionist() {
         Receptionist receptionist = new Receptionist(
-                "Bruna Test", "98765432100", "48988880000", null, MaritalStatus.SINGLE, 30, 2500f, 0, 654321);
+                "Bruna Test",
+                "98765432100",
+                "48988880000",
+                null,
+                MaritalStatus.SINGLE,
+                30,
+                new BigDecimal("2500"),
+                0,
+                "654321");
         ReceptionistJpaRepository repository = new ReceptionistJpaRepository();
         Receptionist saved = repository.save(receptionist);
 
@@ -116,7 +141,16 @@ class ReceptionistJpaRepositoryTest {
 
     private static Receptionist receptionist(Long id, String cpf) {
         return new Receptionist(
-                id, "Receptionist Test", cpf, "48999990000", null, MaritalStatus.SINGLE, 40, 3000f, 5, 123);
+                id,
+                "Receptionist Test",
+                cpf,
+                "48999990000",
+                null,
+                MaritalStatus.SINGLE,
+                40,
+                new BigDecimal("3000"),
+                5,
+                "123");
     }
 
     @Test
@@ -133,9 +167,9 @@ class ReceptionistJpaRepositoryTest {
                 moved,
                 MaritalStatus.MARRIED,
                 30,
-                2000f,
+                new BigDecimal("2000"),
                 1,
-                456));
+                "456"));
 
         Receptionist reloaded = repository.findById(saved.getId()).orElseThrow();
         assertEquals("Renamed", reloaded.getName());
