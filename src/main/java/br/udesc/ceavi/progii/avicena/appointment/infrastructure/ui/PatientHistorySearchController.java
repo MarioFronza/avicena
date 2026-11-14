@@ -5,9 +5,14 @@ import java.awt.event.ActionListener;
 
 public class PatientHistorySearchController implements ActionListener {
 
+    private final PatientHistoryFrame frame;
+
+    public PatientHistorySearchController(PatientHistoryFrame frame) {
+        this.frame = frame;
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        PatientHistoryFrame frame = PatientHistoryFrame.getInstance();
         String cpf = frame.getCpfField().getText();
 
         frame.showAppointments(PatientHistoryFrame.filterByPatientCpf(PatientHistoryFrame.findAll(), cpf));

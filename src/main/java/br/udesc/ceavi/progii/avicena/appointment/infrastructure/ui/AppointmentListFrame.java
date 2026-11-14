@@ -18,8 +18,6 @@ import javax.swing.table.DefaultTableModel;
 
 public class AppointmentListFrame extends FrameSemCRUD {
 
-    private static AppointmentListFrame instance;
-
     private static final String TITLE = "Appointment List";
     private static final Dimension DIMENSION = new Dimension(800, 500);
 
@@ -29,8 +27,8 @@ public class AppointmentListFrame extends FrameSemCRUD {
 
     DefaultTableModel tableModel;
 
-    public AppointmentListFrame(String title, Dimension dimension) throws HeadlessException {
-        super(title, dimension);
+    public AppointmentListFrame() throws HeadlessException {
+        super(TITLE, DIMENSION);
 
         initializeComponents();
         addComponents();
@@ -50,7 +48,10 @@ public class AppointmentListFrame extends FrameSemCRUD {
         backgroundPanel = new JPanel();
         backgroundPanel.setLayout(new GridLayout(1, 1));
         scrollPane = new JScrollPane(table);
+    }
 
+    public void reloadAppointments() {
+        tableModel.setRowCount(0);
         for (AppointmentEntity appointment : findAll()) {
             tableModel.addRow(toTableRow(appointment));
         }
@@ -87,13 +88,6 @@ public class AppointmentListFrame extends FrameSemCRUD {
 
     private static String nomeOuPlaceholder(NurseEntity nurse) {
         return nurse == null ? "-" : nurse.getName();
-    }
-
-    public static AppointmentListFrame getInstance() {
-        if (instance == null) {
-            instance = new AppointmentListFrame(TITLE, DIMENSION);
-        }
-        return instance;
     }
 
     private void addComponents() {

@@ -2,10 +2,8 @@ package br.udesc.ceavi.progii.avicena.appointment.infrastructure.ui;
 
 import br.udesc.ceavi.progii.avicena.appointment.domain.UrgencyStatus;
 import br.udesc.ceavi.progii.avicena.doctor.domain.Doctor;
-import br.udesc.ceavi.progii.avicena.doctor.infrastructure.persistence.DoctorJpaRepository;
 import br.udesc.ceavi.progii.avicena.doctor.usecase.ListDoctors;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
-import br.udesc.ceavi.progii.avicena.nurse.infrastructure.persistence.NurseJpaRepository;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.ListNurses;
 import br.udesc.ceavi.progii.avicena.view.frames.FrameCRUD;
 import java.awt.Dimension;
@@ -25,7 +23,6 @@ import javax.swing.text.MaskFormatter;
 
 public class AppointmentRegistrationFrame extends FrameCRUD {
 
-    private static AppointmentRegistrationFrame instance;
     private static final String TITLE = "New Appointment";
     private static final Dimension DIMENSION = new Dimension(630, 260);
 
@@ -45,6 +42,8 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     private JComboBox<String> nurseComboBox;
     private JComboBox<UrgencyStatus> urgencyComboBox;
 
+    private final ListDoctors listDoctors;
+    private final ListNurses listNurses;
     private List<Doctor> doctors;
     private List<Nurse> nurses;
 
@@ -52,18 +51,13 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     private LayoutManager layout;
     private GridBagConstraints constraints;
 
-    public AppointmentRegistrationFrame(String title, Dimension dimension) {
-        super(title, dimension);
+    public AppointmentRegistrationFrame(ListDoctors listDoctors, ListNurses listNurses) {
+        super(TITLE, DIMENSION);
+        this.listDoctors = listDoctors;
+        this.listNurses = listNurses;
 
         initializeComponents();
         addComponents();
-    }
-
-    public static AppointmentRegistrationFrame getInstance() {
-        if (instance == null) {
-            instance = new AppointmentRegistrationFrame(TITLE, DIMENSION);
-        }
-        return instance;
     }
 
     @Override
@@ -78,13 +72,13 @@ public class AppointmentRegistrationFrame extends FrameCRUD {
     public void carregarCampos() {}
 
     public void reloadDoctorsAndNurses() {
-        doctors = new ListDoctors(new DoctorJpaRepository()).list();
+        doctors = listDoctors.list();
         doctorComboBox.removeAllItems();
         for (Doctor doctor : doctors) {
             doctorComboBox.addItem(doctor.getName() + " - " + doctor.getSpecialty());
         }
 
-        nurses = new ListNurses(new NurseJpaRepository()).list();
+        nurses = listNurses.list();
         nurseComboBox.removeAllItems();
         for (Nurse nurse : nurses) {
             nurseComboBox.addItem(nurse.getName() + " - " + nurse.getFormation());

@@ -6,17 +6,20 @@ import java.awt.event.ActionEvent;
 
 public class ListAppointmentsMenuListener extends MenuActionListener {
 
-    public ListAppointmentsMenuListener(FrameSistema tela) {
+    private final AppointmentListFrame appointmentListFrame;
+
+    public ListAppointmentsMenuListener(FrameSistema tela, AppointmentListFrame appointmentListFrame) {
         super(tela);
+        this.appointmentListFrame = appointmentListFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        frame2 = AppointmentListFrame.getInstance();
+        appointmentListFrame.reloadAppointments();
 
-        if (!frame2.isVisible()) {
-            tela.adicionarFrameInterno(frame2);
-            frame2.setVisible(true);
+        if (!appointmentListFrame.isVisible()) {
+            tela.adicionarFrameInterno(appointmentListFrame);
+            appointmentListFrame.setVisible(true);
         }
     }
 }

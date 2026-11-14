@@ -6,21 +6,20 @@ import java.awt.event.ActionEvent;
 
 public class RegisterDiagnosisMenuListener extends MenuActionListener {
 
-    public RegisterDiagnosisMenuListener(FrameSistema tela) {
+    private final DiagnosisRegistrationFrame diagnosisFrame;
+
+    public RegisterDiagnosisMenuListener(FrameSistema tela, DiagnosisRegistrationFrame diagnosisFrame) {
         super(tela);
+        this.diagnosisFrame = diagnosisFrame;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        DiagnosisRegistrationFrame registrationFrame = DiagnosisRegistrationFrame.getInstance();
-        frame = registrationFrame;
+        diagnosisFrame.reloadAppointments();
 
-        DiagnosisCrudController.getInstance(registrationFrame);
-        registrationFrame.reloadAppointments();
-
-        if (!frame.isVisible()) {
-            tela.adicionarFrameInterno(frame);
-            frame.setVisible(true);
+        if (!diagnosisFrame.isVisible()) {
+            tela.adicionarFrameInterno(diagnosisFrame);
+            diagnosisFrame.setVisible(true);
         }
     }
 }

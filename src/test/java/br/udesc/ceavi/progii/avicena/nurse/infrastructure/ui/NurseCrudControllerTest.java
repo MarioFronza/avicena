@@ -1,8 +1,10 @@
 package br.udesc.ceavi.progii.avicena.nurse.infrastructure.ui;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import br.udesc.ceavi.progii.avicena.nurse.domain.InvalidNurseDataException;
 import br.udesc.ceavi.progii.avicena.nurse.domain.Nurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.DeleteNurse;
 import br.udesc.ceavi.progii.avicena.nurse.usecase.RegisterNurse;
@@ -64,5 +66,13 @@ class NurseCrudControllerTest {
         ctrl.delete();
 
         assertTrue(repo.findAll().isEmpty());
+    }
+
+    @Test
+    void registerRejectsNonNumericHoursCompleted() {
+        frame.getNameField().setText("Nurse Test");
+        frame.getHoursCompletedField().setText("abc");
+
+        assertThrows(InvalidNurseDataException.class, () -> ctrl.register());
     }
 }
