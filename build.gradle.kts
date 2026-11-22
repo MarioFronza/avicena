@@ -22,7 +22,7 @@ dependencies {
     implementation("org.flywaydb:flyway-core:13.12.1")
     implementation("org.flywaydb:flyway-database-postgresql:13.11.1")
     implementation("org.postgresql:postgresql:42.7.14")
-    implementation("com.itextpdf:itextpdf:5.5.13.6")
+    implementation("com.itextpdf:itextpdf:5.5.13.7")
 
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
